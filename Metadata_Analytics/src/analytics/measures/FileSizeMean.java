@@ -29,7 +29,7 @@ public class FileSizeMean extends Metric {
 			//System.out.println("Files size log2(bytes):" + c);
 			i++;
 		}
-		System.out.println("File size mean:" + c2 / i);
+		System.out.println("File size mean:" + c2 / i+" bytes");
 	}
 
 	@Override
