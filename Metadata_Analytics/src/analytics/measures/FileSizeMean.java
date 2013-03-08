@@ -24,8 +24,8 @@ public class FileSizeMean extends Metric {
 			File file = iterator.next();
 			//c = (float) (Math.log(file.length()) / Math.log(2));
 			c2 = c2 + file.length();
-			System.out.println("File:" + file.getName());
-			System.out.println("File size(bytes):" + file.length());
+			//System.out.println("File:" + file.getName());
+			//System.out.println("File size(bytes):" + file.length());
 			//System.out.println("Files size log2(bytes):" + c);
 			i++;
 		}

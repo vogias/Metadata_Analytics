@@ -106,17 +106,14 @@ public class Main {
 				// repo.showAttributes();
 				System.out.println("-------Done-------");
 
-				
 				System.out.println("Computing Elements' relative entropy...");
 				repo.computeElementEntropy();
 				System.out.println("Done...");
-				
-				/*
-				 * System.out .println(
-				 * "-------Computing Repository Level File Size Distribution-------"
-				 * ); repo.getFileSizeDistribution(xmls);
-				 * System.out.println("-------Done-------"); // FileSizeMean
-				 */
+
+				System.out
+						.println("-------Computing Repository Level File Size Mean-------");
+				repo.getFileSizeDistribution(xmls);
+				System.out.println("-------Done-------"); // FileSizeMean
 
 			}
 
