@@ -95,12 +95,7 @@ public class XMLHandler extends DefaultHandler {
 			e.printStackTrace();
 		}
 
-		// techincal format statistics
-
-		String format = props.getProperty(constants.formatElement);
-		if (qName.equals(format)) {
-			
-		}
+	
 
 	}
 

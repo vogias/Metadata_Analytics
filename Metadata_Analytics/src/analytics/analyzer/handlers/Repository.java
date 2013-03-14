@@ -15,12 +15,14 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.io.FileUtils;
 import org.xml.sax.SAXException;
@@ -48,7 +50,8 @@ public class Repository {
 	String repoName;
 	Properties props;
 
-	public Repository(Collection<File> xmls) throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+	public Repository(Collection<File> xmls) throws FileNotFoundException,
+			IOException, SAXException, ParserConfigurationException {
 
 		// TODO Auto-generated constructor stub
 		xmlElements = new Vector<>();
@@ -60,6 +63,7 @@ public class Repository {
 		recordsNum = 0;
 		elementEntropy = new Vector<>();
 		props = new Properties();
+
 		props.load(new FileInputStream("configure.properties"));
 		Iterator<File> iterator = xmls.iterator();
 		int j = 0;
@@ -73,7 +77,6 @@ public class Repository {
 
 	}
 
-	
 	private Storage getStorageClass() throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
 
@@ -147,7 +150,9 @@ public class Repository {
 		return data;
 	}
 
-	public void computeElementEntropy() throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public void computeElementEntropy() throws IOException,
+			InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
 
 		Vector<String> elementsDistinct = getXmlElementsDistinct();
 
@@ -155,19 +160,36 @@ public class Repository {
 		for (int i = 0; i < elementsDistinct.size(); i++) {
 			String element = elementsDistinct.elementAt(i);
 			System.out.println("Element:" + element);
+
 			Vector<String> vectorFromFile = getVectorFromFile(element);
 			RelativeEntropy entropy = new RelativeEntropy();
 			data.put(element, entropy.compute(vectorFromFile));
 		}
 
-		deleteAllFiles();
+		
 		Storage storageClass = getStorageClass();
-		storageClass.storeElementData(data, "Entropy", this.getRepoName(),true);
+		storageClass.storeElementData(data, "Entropy", this.getRepoName(),"_Element_Analysis","Element Name");
 
 	}
 
-	private void deleteAllFiles() throws IOException {
-		FileUtils.deleteDirectory(new File("buffer"));
+	public void computeElementValueFreq(String elementName) throws IOException,
+			InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
+
+		HashMap<String, Double> data = new HashMap<>();
+
+		System.out.println("Element:" + elementName);
+
+		Vector<String> vectorFromFile = getVectorFromFile(elementName);
+		Map cardinalityMap = CollectionUtils.getCardinalityMap(vectorFromFile);
+
+		
+		if (elementName.contains(":"))
+			elementName = elementName.replace(":", "_");
+
+		Storage storageClass = getStorageClass();
+		storageClass.storeElementValueData((HashMap<String, Integer>) cardinalityMap, "Frequency", this.getRepoName(),"_"+elementName+"_ElementValue_Analysis","Element Value");
+
 	}
 
 	/**
@@ -224,7 +246,7 @@ public class Repository {
 			data.put(key, (double) elementDims.get(key));
 		}
 		Storage storageClass = getStorageClass();
-		storageClass.storeElementData(data, "Dimensions", this.getRepoName(),true);
+		storageClass.storeElementData(data, "Dimensions", this.getRepoName(),"_Element_Analysis","Element Name");
 
 	}
 
@@ -356,13 +378,13 @@ public class Repository {
 				getXmlElementsDistinct());
 		HashMap<String, Double> data = elFrequency.compute(xmlElements);
 		Storage storageClass = getStorageClass();
-		storageClass.storeElementData(data, "Frequency", this.getRepoName(),true);
+		storageClass.storeElementData(data, "Frequency", this.getRepoName(),"_Element_Analysis","Element Name");
 	}
 
 	public void getAttributeFrequency() {
 
 		ElementFrequency atFrequency = new ElementFrequency(getDistinctAtts());
-		atFrequency.compute(attributes,getRepoName());
+		atFrequency.compute(attributes, getRepoName());
 	}
 
 	public void getElementCompleteness() throws InstantiationException,
@@ -372,6 +394,7 @@ public class Repository {
 		HashMap<String, Double> map = completeness
 				.compute(getElementCompletnessMatrix());
 		Storage storageClass = getStorageClass();
-		storageClass.storeElementData(map, "Completeness(%)", this.getRepoName(),true);
+		storageClass.storeElementData(map, "Completeness(%)",
+				this.getRepoName(),"_Element_Analysis","Element Name");
 	}
 }

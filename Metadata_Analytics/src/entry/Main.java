@@ -100,7 +100,12 @@ public class Main {
 
 				System.out.println("Computing Elements' relative entropy...");
 				repo.computeElementEntropy();
+				// FileUtils.deleteDirectory(new File("buffer"));
 				System.out.println("Done...");
+
+				repo.computeElementValueFreq(props
+						.getProperty(constants.elementValues));
+				FileUtils.deleteDirectory(new File("buffer"));
 
 				System.out
 						.println("-------Computing Repository Level Attribute Frequency-------");
