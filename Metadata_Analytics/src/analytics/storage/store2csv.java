@@ -42,7 +42,7 @@ public class store2csv extends Storage {
 		// TODO Auto-generated method stub
 
 		if (append) {
-			String sFileName = dataProvider + "Element_Analysis" + ".csv";
+			String sFileName = dataProvider + "_Element_Analysis" + ".csv";
 			File file = new File(sFileName);
 
 			try {

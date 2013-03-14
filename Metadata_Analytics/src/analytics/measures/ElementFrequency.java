@@ -3,6 +3,10 @@
  */
 package analytics.measures;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,27 +60,44 @@ public class ElementFrequency extends Metric {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void compute(MultiHashMap data) {
+	public void compute(MultiHashMap data, String provider) {
 
 		Set keySet = data.keySet();
 
 		Iterator iterator = keySet.iterator();
-		while (iterator.hasNext()) {
-			String attName = (String) iterator.next();
+		File attInfo = new File(provider + "_Attribute_Analysis" + ".txt");
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(attInfo));
 
-			Collection attValues = data.getCollection(attName);
+			while (iterator.hasNext()) {
+				String attName = (String) iterator.next();
 
-			System.out.println("----------------------------------");
-			System.out.println("Attribute:" + attName + ", Frequency:"
-					+ attValues.size());
-			System.out.println("----------------------------------");
-			Collection distinctAttsValues = atts.getCollection(attName);
-			computeDominantAttValue(attValues, distinctAttsValues);
+				Collection attValues = data.getCollection(attName);
+
+				System.out.println("----------------------------------");
+				writer.write("----------------------------------");
+				writer.newLine();
+
+				System.out.println("Attribute:" + attName + ", Frequency:"
+						+ attValues.size());
+				writer.write("Attribute:" + attName + ", Frequency:"
+						+ attValues.size());
+				writer.newLine();
+				writer.write("----------------------------------");
+				writer.newLine();
+				System.out.println("----------------------------------");
+				Collection distinctAttsValues = atts.getCollection(attName);
+				computeDominantAttValue(attValues, distinctAttsValues, writer);
+			}
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
 	private void computeDominantAttValue(Collection attValues,
-			Collection distinctAV) {
+			Collection distinctAV, BufferedWriter writer) throws IOException {
 
 		Iterator iterator = distinctAV.iterator();
 
@@ -84,8 +105,12 @@ public class ElementFrequency extends Metric {
 
 			String key = (String) iterator.next();
 
+			int frequency = Collections.frequency(attValues, key);
+			writer.write("\tAttribute value:" + key + ", Frequency:"
+					+ frequency);
+			writer.newLine();
 			System.out.println("\tAttribute value:" + key + ", Frequency:"
-					+ Collections.frequency(attValues, key));
+					+ frequency);
 
 		}
 

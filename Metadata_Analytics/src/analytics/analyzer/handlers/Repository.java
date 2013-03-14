@@ -348,7 +348,7 @@ public class Repository {
 	public void getAttributeFrequency() {
 
 		ElementFrequency atFrequency = new ElementFrequency(getDistinctAtts());
-		atFrequency.compute(attributes);
+		atFrequency.compute(attributes,getRepoName());
 	}
 
 	public void getElementCompleteness() throws InstantiationException,
