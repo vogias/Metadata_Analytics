@@ -21,12 +21,10 @@ import java.util.Vector;
 import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.io.FileUtils;
 
-import analytics.constants.AnalysisType;
 import analytics.constants.AnalyticsConstants;
 import analytics.measures.ElementCompleteness;
 import analytics.measures.ElementFrequency;
 import analytics.measures.FileSizeMean;
-import analytics.measures.Metric;
 import analytics.measures.RelativeEntropy;
 import analytics.storage.Storage;
 
