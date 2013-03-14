@@ -70,21 +70,18 @@ public class Main {
 				Collection<File> xmls = utils.listFiles(dp.get(i), extensions,
 						true);
 
-				Repository repo = new Repository();
+				Repository repo = new Repository(xmls);
 				repo.setRepoName(dp.get(i).getName());
 				repo.setRecordsNum(xmls.size());
 				System.out.println("Data Provider:" + repo.getRepoName());
 				System.out.println("Number Of Records:" + repo.getRecordsNum());
 
-				Iterator<File> iterator = xmls.iterator();
-				int j = 0;
-				while (iterator.hasNext()) {
-					File xml = iterator.next();
-					XMLHandler xmlHandler = new XMLHandler(repo);
-					InputStream inS = new FileInputStream(xml);
-					xmlHandler.parseDocument(inS);
-					j++;
-				}
+				/*
+				 * Iterator<File> iterator = xmls.iterator(); int j = 0; while
+				 * (iterator.hasNext()) { File xml = iterator.next(); XMLHandler
+				 * xmlHandler = new XMLHandler(repo); InputStream inS = new
+				 * FileInputStream(xml); xmlHandler.parseDocument(inS); j++; }
+				 */
 
 				System.out
 						.println("-------Computing Repository Level Element Frequency-------");
@@ -100,12 +97,11 @@ public class Main {
 						.println("---------------Computing Element Maximum dimensionality--------------");
 				repo.getElementDimensions();
 				System.out.println("---------------Done--------------");
-				
+
 				System.out.println("Computing Elements' relative entropy...");
 				repo.computeElementEntropy();
 				System.out.println("Done...");
-				
-				
+
 				System.out
 						.println("-------Computing Repository Level Attribute Frequency-------");
 				repo.getAttributeFrequency();

@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,8 +19,11 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.io.FileUtils;
+import org.xml.sax.SAXException;
 
 import analytics.constants.AnalyticsConstants;
 import analytics.measures.ElementCompleteness;
@@ -44,7 +48,7 @@ public class Repository {
 	String repoName;
 	Properties props;
 
-	public Repository() throws FileNotFoundException, IOException {
+	public Repository(Collection<File> xmls) throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
 
 		// TODO Auto-generated constructor stub
 		xmlElements = new Vector<>();
@@ -57,9 +61,19 @@ public class Repository {
 		elementEntropy = new Vector<>();
 		props = new Properties();
 		props.load(new FileInputStream("configure.properties"));
+		Iterator<File> iterator = xmls.iterator();
+		int j = 0;
+		while (iterator.hasNext()) {
+			File xml = iterator.next();
+			XMLHandler xmlHandler = new XMLHandler(this);
+			InputStream inS = new FileInputStream(xml);
+			xmlHandler.parseDocument(inS);
+			j++;
+		}
 
 	}
 
+	
 	private Storage getStorageClass() throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
 

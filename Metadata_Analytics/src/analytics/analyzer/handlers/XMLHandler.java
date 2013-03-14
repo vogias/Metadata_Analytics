@@ -3,11 +3,13 @@
  */
 package analytics.analyzer.handlers;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
@@ -15,11 +17,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import analytics.constants.AnalyticsConstants;
 
 /**
  * @author vogias
@@ -31,11 +33,24 @@ public class XMLHandler extends DefaultHandler {
 	Repository repositoryHandler;
 	HashMap<String, Integer> dimensionalityMap;
 	Vector<String> elements;
+	Properties props;
+	AnalyticsConstants constants;
 
 	public XMLHandler(Repository repositoryHandler) {
 		// TODO Auto-generated constructor stub
 		this.repositoryHandler = repositoryHandler;
 		elements = new Vector<>();
+		constants = new AnalyticsConstants();
+		props = new Properties();
+		try {
+			props.load(new FileInputStream("configure.properties"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void startElement(String uri, String localName, String qName,
@@ -72,7 +87,7 @@ public class XMLHandler extends DefaultHandler {
 			repositoryHandler.addCompletenessElement(qName);
 		}
 
-		//entropy calculation
+		// entropy calculation
 		try {
 			repositoryHandler.addEvalue2File(qName, tmpValue);
 		} catch (IOException e) {
@@ -80,9 +95,15 @@ public class XMLHandler extends DefaultHandler {
 			e.printStackTrace();
 		}
 
+		// techincal format statistics
+
+		String format = props.getProperty(constants.formatElement);
+		if (qName.equals(format)) {
+			
+		}
+
 	}
 
-	
 	public void startDocument() {
 
 		dimensionalityMap = new HashMap<>();
