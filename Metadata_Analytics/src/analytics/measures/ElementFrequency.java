@@ -5,6 +5,7 @@ package analytics.measures;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -32,15 +33,18 @@ public class ElementFrequency extends Metric {
 	}
 
 	@Override
-	public void compute(Collection<?> data) {
+	public HashMap<String, Double> compute(Collection<?> data) {
 
+		HashMap<String, Double> freq = new HashMap<>();
 		Iterator<?> iterator = dData.iterator();
 		while (iterator.hasNext()) {
 			String element = (String) iterator.next();
+			freq.put(element, (double) Collections.frequency(data, element));
 			System.out.println("Element:" + element + ", Frequency:"
 					+ Collections.frequency(data, element));
 		}
 
+		return freq;
 	}
 
 	@Override
@@ -82,7 +86,7 @@ public class ElementFrequency extends Metric {
 
 			System.out.println("Attribute value:" + key + ", Frequency:"
 					+ Collections.frequency(attValues, key));
-			
+
 		}
 
 	}

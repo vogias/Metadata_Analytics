@@ -5,6 +5,7 @@ package analytics.measures;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Iterator;
 public class FileSizeMean extends Metric {
 
 	@Override
-	public void compute(Collection<?> data) {
+	public HashMap<String,Double>  compute(Collection<?> data) {
 		// TODO Auto-generated method stub
 		Iterator<File> iterator = (Iterator<File>) data.iterator();
 		//float c = 0;
@@ -30,6 +31,7 @@ public class FileSizeMean extends Metric {
 			i++;
 		}
 		System.out.println("File size mean:" + c2 / i+" bytes");
+		return null;
 	}
 
 	@Override

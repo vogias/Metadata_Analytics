@@ -11,5 +11,5 @@ import java.util.HashMap;
  */
 public abstract class Storage {
 
-	public abstract void storeData(HashMap<String,Double>data);
+	public abstract void storeData(HashMap<String,Double>data,String metricName);
 }

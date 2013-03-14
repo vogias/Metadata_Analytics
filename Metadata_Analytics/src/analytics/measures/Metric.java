@@ -4,6 +4,7 @@
 package analytics.measures;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * @author vogias
@@ -11,6 +12,6 @@ import java.util.Collection;
  */
 public abstract class Metric {
 
-	public abstract void compute(Collection<?> data);
+	public abstract HashMap<String,Double> compute(Collection<?> data);
 	public abstract void compute(Collection<?> data,String elementName);
 }

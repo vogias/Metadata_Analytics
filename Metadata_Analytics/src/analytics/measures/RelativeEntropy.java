@@ -5,6 +5,7 @@ package analytics.measures;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +21,7 @@ import org.apache.lucene.util.CollectionUtil;
 public class RelativeEntropy extends Metric {
 
 	@Override
-	public void compute(Collection<?> data) {
+	public HashMap<String,Double>  compute(Collection<?> data) {
 		// TODO Auto-generated method stub
 		Map cardinalityMap = CollectionUtils.getCardinalityMap(data);
 		
@@ -42,6 +43,7 @@ public class RelativeEntropy extends Metric {
 
 		System.out.println("Relative Entropy:" + result
 				+ "(number of observations:" + size + ")");
+		return null;
 
 	}
 

@@ -6,6 +6,7 @@ package analytics.analyzer.handlers;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -13,16 +14,20 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
 import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.io.FileUtils;
 
+import analytics.constants.AnalyticsConstants;
 import analytics.measures.ElementCompleteness;
 import analytics.measures.ElementFrequency;
 import analytics.measures.FileSizeMean;
+import analytics.measures.Metric;
 import analytics.measures.RelativeEntropy;
+import analytics.storage.Storage;
 
 /**
  * @author vogias
@@ -38,8 +43,9 @@ public class Repository {
 	Vector<String> elementEntropy;
 	int recordsNum;
 	String repoName;
+	Properties props;
 
-	public Repository() {
+	public Repository() throws FileNotFoundException, IOException {
 
 		// TODO Auto-generated constructor stub
 		xmlElements = new Vector<>();
@@ -50,12 +56,32 @@ public class Repository {
 		elementDims = new HashMap<>();
 		recordsNum = 0;
 		elementEntropy = new Vector<>();
+		props = new Properties();
+		props.load(new FileInputStream("configure.properties"));
 
+	}
+
+	private Storage getStorageClass() throws InstantiationException,
+			IllegalAccessException, ClassNotFoundException {
+
+		AnalyticsConstants constants = new AnalyticsConstants();
+		String storageClass = props.getProperty(constants.storageClass);
+
+		System.out.println("Storage class:" + storageClass);
+		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
+
+		Class myClass = myClassLoader.loadClass(storageClass);
+
+		Object whatInstance = myClass.newInstance();
+		Storage metric = (Storage) whatInstance;
+
+		return metric;
 	}
 
 	/**
 	 * @return the elementEntropy
 	 */
+
 	public Vector<String> getElementEntropy() {
 		return elementEntropy;
 	}
@@ -301,11 +327,14 @@ public class Repository {
 		this.xmlElements = xmlElements;
 	}
 
-	public void getElementFrequency() {
+	public void getElementFrequency() throws InstantiationException,
+			IllegalAccessException, ClassNotFoundException {
 
 		ElementFrequency elFrequency = new ElementFrequency(
 				getXmlElementsDistinct());
-		elFrequency.compute(xmlElements);
+		HashMap<String, Double> data = elFrequency.compute(xmlElements);
+		Storage storageClass = getStorageClass();
+		storageClass.storeData(data, "Frequency");
 
 	}
 

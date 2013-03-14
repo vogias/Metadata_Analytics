@@ -22,7 +22,8 @@ public class ElementCompleteness extends Metric {
 	}
 
 	@Override
-	public void compute(Collection<?> data) {
+	public HashMap<String,Double>  compute(Collection<?> data) {
+		return null;
 
 	}
 
