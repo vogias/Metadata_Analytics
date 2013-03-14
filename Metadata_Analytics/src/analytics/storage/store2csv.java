@@ -37,12 +37,12 @@ public class store2csv extends Storage {
 	}
 
 	@Override
-	public void storeData(HashMap<String, Double> data, String metricName,
+	public void storeElementData(HashMap<String, Double> data, String metricName,
 			String dataProvider, boolean append) {
 		// TODO Auto-generated method stub
 
 		if (append) {
-			String sFileName = dataProvider + "_StatisticalAnalysis" + ".csv";
+			String sFileName = dataProvider + "Element_Analysis" + ".csv";
 			File file = new File(sFileName);
 
 			try {

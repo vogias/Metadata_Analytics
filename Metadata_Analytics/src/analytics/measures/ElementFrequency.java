@@ -84,7 +84,7 @@ public class ElementFrequency extends Metric {
 
 			String key = (String) iterator.next();
 
-			System.out.println("Attribute value:" + key + ", Frequency:"
+			System.out.println("\tAttribute value:" + key + ", Frequency:"
 					+ Collections.frequency(attValues, key));
 
 		}

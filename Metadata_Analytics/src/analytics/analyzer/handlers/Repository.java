@@ -21,6 +21,7 @@ import java.util.Vector;
 import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.io.FileUtils;
 
+import analytics.constants.AnalysisType;
 import analytics.constants.AnalyticsConstants;
 import analytics.measures.ElementCompleteness;
 import analytics.measures.ElementFrequency;
@@ -149,7 +150,7 @@ public class Repository {
 
 		deleteAllFiles();
 		Storage storageClass = getStorageClass();
-		storageClass.storeData(data, "Entropy", this.getRepoName(),true);
+		storageClass.storeElementData(data, "Entropy", this.getRepoName(),true);
 
 	}
 
@@ -211,7 +212,7 @@ public class Repository {
 			data.put(key, (double) elementDims.get(key));
 		}
 		Storage storageClass = getStorageClass();
-		storageClass.storeData(data, "Dimensions", this.getRepoName(),true);
+		storageClass.storeElementData(data, "Dimensions", this.getRepoName(),true);
 
 	}
 
@@ -343,7 +344,7 @@ public class Repository {
 				getXmlElementsDistinct());
 		HashMap<String, Double> data = elFrequency.compute(xmlElements);
 		Storage storageClass = getStorageClass();
-		storageClass.storeData(data, "Frequency", this.getRepoName(),true);
+		storageClass.storeElementData(data, "Frequency", this.getRepoName(),true);
 	}
 
 	public void getAttributeFrequency() {
@@ -359,6 +360,6 @@ public class Repository {
 		HashMap<String, Double> map = completeness
 				.compute(getElementCompletnessMatrix());
 		Storage storageClass = getStorageClass();
-		storageClass.storeData(map, "Completeness(%)", this.getRepoName(),true);
+		storageClass.storeElementData(map, "Completeness(%)", this.getRepoName(),true);
 	}
 }
