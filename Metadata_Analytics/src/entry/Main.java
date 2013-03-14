@@ -100,15 +100,17 @@ public class Main {
 						.println("---------------Computing Element Maximum dimensionality--------------");
 				repo.getElementDimensions();
 				System.out.println("---------------Done--------------");
+				
+				System.out.println("Computing Elements' relative entropy...");
+				repo.computeElementEntropy();
+				System.out.println("Done...");
+				
+				
 				System.out
 						.println("-------Computing Repository Level Attribute Frequency-------");
 				repo.getAttributeFrequency();
 				// repo.showAttributes();
 				System.out.println("-------Done-------");
-
-				System.out.println("Computing Elements' relative entropy...");
-				repo.computeElementEntropy();
-				System.out.println("Done...");
 
 				System.out
 						.println("-------Computing Repository Level File Size Mean-------");
