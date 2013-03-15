@@ -128,26 +128,41 @@ public class Repository {
 		}
 	}
 
-	private Vector<String> getVectorFromFile(String filename)
-			throws IOException {
+	private Vector<String> getVectorFromFile(String filename) {
 
 		if (filename.contains(":"))
 			filename = filename.replace(":", "_");
 
 		File f = new File("buffer/" + filename + ".txt");
 
-		BufferedReader br = new BufferedReader(new FileReader(f));
-		String line = br.readLine();
-		Vector<String> data = new Vector<>();
+		BufferedReader br;
+		try {
+			br = new BufferedReader(new FileReader(f));
+			String line = br.readLine();
+			Vector<String> data = new Vector<>();
 
-		while (line != null) {
-			data.add(line);
-			line = br.readLine();
+			while (line != null) {
+				data.add(line);
+				line = br.readLine();
+			}
+
+			br.close();
+
+			return data;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+
+			Vector<String> data = new Vector<>();
+			data.addElement("Element not found");
+			return data;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+
+			Vector<String> data = new Vector<>();
+			data.addElement("Element not found");
+			return data;
 		}
 
-		br.close();
-
-		return data;
 	}
 
 	public void computeElementEntropy() throws IOException,
@@ -159,16 +174,16 @@ public class Repository {
 		HashMap<String, Double> data = new HashMap<>();
 		for (int i = 0; i < elementsDistinct.size(); i++) {
 			String element = elementsDistinct.elementAt(i);
-			System.out.println("Element:" + element);
+			//System.out.println("Element:" + element);
 
 			Vector<String> vectorFromFile = getVectorFromFile(element);
 			RelativeEntropy entropy = new RelativeEntropy();
 			data.put(element, entropy.compute(vectorFromFile));
 		}
 
-		
 		Storage storageClass = getStorageClass();
-		storageClass.storeElementData(data, "Entropy", this.getRepoName(),"_Element_Analysis","Element Name");
+		storageClass.storeElementData(data, "Entropy", this.getRepoName(),
+				"_Element_Analysis", "Element Name");
 
 	}
 
@@ -183,12 +198,14 @@ public class Repository {
 		Vector<String> vectorFromFile = getVectorFromFile(elementName);
 		Map cardinalityMap = CollectionUtils.getCardinalityMap(vectorFromFile);
 
-		
 		if (elementName.contains(":"))
 			elementName = elementName.replace(":", "_");
 
 		Storage storageClass = getStorageClass();
-		storageClass.storeElementValueData((HashMap<String, Integer>) cardinalityMap, "Frequency", this.getRepoName(),"_"+elementName+"_ElementValue_Analysis","Element Value");
+		storageClass.storeElementValueData(
+				(HashMap<String, Integer>) cardinalityMap, "Frequency",
+				this.getRepoName(), "_" + elementName
+						+ "_ElementValue_Analysis", "Element Value");
 
 	}
 
@@ -241,12 +258,13 @@ public class Repository {
 		HashMap<String, Double> data = new HashMap<>();
 		while (iterator.hasNext()) {
 			String key = iterator.next();
-			System.out.println("Element:" + key + ", Dimensions:"
-					+ elementDims.get(key));
+			//System.out.println("Element:" + key + ", Dimensions:"
+			//		+ elementDims.get(key));
 			data.put(key, (double) elementDims.get(key));
 		}
 		Storage storageClass = getStorageClass();
-		storageClass.storeElementData(data, "Dimensions", this.getRepoName(),"_Element_Analysis","Element Name");
+		storageClass.storeElementData(data, "Dimensions", this.getRepoName(),
+				"_Element_Analysis", "Element Name");
 
 	}
 
@@ -378,7 +396,8 @@ public class Repository {
 				getXmlElementsDistinct());
 		HashMap<String, Double> data = elFrequency.compute(xmlElements);
 		Storage storageClass = getStorageClass();
-		storageClass.storeElementData(data, "Frequency", this.getRepoName(),"_Element_Analysis","Element Name");
+		storageClass.storeElementData(data, "Frequency", this.getRepoName(),
+				"_Element_Analysis", "Element Name");
 	}
 
 	public void getAttributeFrequency() {
@@ -395,6 +414,6 @@ public class Repository {
 				.compute(getElementCompletnessMatrix());
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(map, "Completeness(%)",
-				this.getRepoName(),"_Element_Analysis","Element Name");
+				this.getRepoName(), "_Element_Analysis", "Element Name");
 	}
 }
