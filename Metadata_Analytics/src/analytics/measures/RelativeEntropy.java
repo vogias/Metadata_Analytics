@@ -67,8 +67,8 @@ public class RelativeEntropy extends Metric {
 			result -= frequency * (Math.log(frequency) / Math.log(2));
 		}
 
-		System.out.println("Relative Entropy:" + result
-				+ "(number of observations:" + size + ")");
+		//System.out.println("Relative Entropy:" + result
+		//		+ "(number of observations:" + size + ")");
 		return result;
 
 	}

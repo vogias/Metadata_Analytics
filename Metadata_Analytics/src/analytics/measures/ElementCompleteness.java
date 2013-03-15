@@ -42,8 +42,8 @@ public class ElementCompleteness extends Metric {
 
 			float percentage = ((float) value / records) * 100;
 
-			System.out.println("Element:" + key + ", Completeness:"
-					+ percentage + "%");
+			//System.out.println("Element:" + key + ", Completeness:"
+					//+ percentage + "%");
 			output.put(key, (double) percentage);
 		}
 
