@@ -174,7 +174,7 @@ public class Repository {
 		HashMap<String, Double> data = new HashMap<>();
 		for (int i = 0; i < elementsDistinct.size(); i++) {
 			String element = elementsDistinct.elementAt(i);
-			//System.out.println("Element:" + element);
+			// System.out.println("Element:" + element);
 
 			Vector<String> vectorFromFile = getVectorFromFile(element);
 			RelativeEntropy entropy = new RelativeEntropy();
@@ -191,21 +191,26 @@ public class Repository {
 			InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
-		HashMap<String, Double> data = new HashMap<>();
+		String[] strings = elementName.split(",");
 
-		System.out.println("Element:" + elementName);
+		for (int i = 0; i < strings.length; i++) {
+			HashMap<String, Double> data = new HashMap<>();
 
-		Vector<String> vectorFromFile = getVectorFromFile(elementName);
-		Map cardinalityMap = CollectionUtils.getCardinalityMap(vectorFromFile);
+			System.out.println("Element:" + strings[i]);
 
-		if (elementName.contains(":"))
-			elementName = elementName.replace(":", "_");
+			Vector<String> vectorFromFile = getVectorFromFile(strings[i]);
+			Map cardinalityMap = CollectionUtils
+					.getCardinalityMap(vectorFromFile);
 
-		Storage storageClass = getStorageClass();
-		storageClass.storeElementValueData(
-				(HashMap<String, Integer>) cardinalityMap, "Frequency",
-				this.getRepoName(), "_" + elementName
-						+ "_ElementValue_Analysis", "Element Value");
+			if (strings[i].contains(":"))
+				strings[i] = strings[i].replace(":", "_");
+
+			Storage storageClass = getStorageClass();
+			storageClass.storeElementValueData(
+					(HashMap<String, Integer>) cardinalityMap, "Frequency",
+					this.getRepoName(), "_" + strings[i]
+							+ "_ElementValue_Analysis", "Element Value");
+		}
 
 	}
 
@@ -258,8 +263,8 @@ public class Repository {
 		HashMap<String, Double> data = new HashMap<>();
 		while (iterator.hasNext()) {
 			String key = iterator.next();
-			//System.out.println("Element:" + key + ", Dimensions:"
-			//		+ elementDims.get(key));
+			// System.out.println("Element:" + key + ", Dimensions:"
+			// + elementDims.get(key));
 			data.put(key, (double) elementDims.get(key));
 		}
 		Storage storageClass = getStorageClass();
