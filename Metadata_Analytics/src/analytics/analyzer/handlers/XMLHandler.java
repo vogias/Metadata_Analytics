@@ -43,7 +43,7 @@ public class XMLHandler extends DefaultHandler {
 		elements = new Vector<>();
 		constants = new AnalyticsConstants();
 		props = new Properties();
-		branche="";
+		branche = "";
 		try {
 			props.load(new FileInputStream("configure.properties"));
 		} catch (FileNotFoundException e) {
@@ -58,7 +58,7 @@ public class XMLHandler extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 
-		branche += qName.toLowerCase();
+		branche += qName;
 		for (int i = 0; i < attributes.getLength(); i++) {
 
 			String name = attributes.getLocalName(i);
@@ -71,11 +71,18 @@ public class XMLHandler extends DefaultHandler {
 			}
 		}
 
+		System.out.println(branche);
 		branche += ".";
+
 	}
 
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
+
+		if (branche.endsWith(qName + "" + "."))
+			branche = branche.substring(0, branche.length() - qName.length()
+					- 1);
+
 		repositoryHandler.addxmlElements(qName);
 
 		if (!dimensionalityMap.containsKey(qName)) {
@@ -98,9 +105,6 @@ public class XMLHandler extends DefaultHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		System.out.println(branche);
-	
 
 	}
 
