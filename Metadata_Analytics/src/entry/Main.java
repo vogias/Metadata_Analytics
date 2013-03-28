@@ -73,8 +73,9 @@ public class Main {
 				Repository repo = new Repository(xmls);
 				repo.setRepoName(dp.get(i).getName());
 				repo.setRecordsNum(xmls.size());
-				//System.out.println("Data Provider:" + repo.getRepoName());
-				//System.out.println("Number Of Records:" + repo.getRecordsNum());
+				// System.out.println("Data Provider:" + repo.getRepoName());
+				// System.out.println("Number Of Records:" +
+				// repo.getRecordsNum());
 
 				/*
 				 * Iterator<File> iterator = xmls.iterator(); int j = 0; while
@@ -83,40 +84,44 @@ public class Main {
 				 * FileInputStream(xml); xmlHandler.parseDocument(inS); j++; }
 				 */
 
-			//	System.out
-				//		.println("-------Computing Repository Level Element Frequency-------");
+				// System.out
+				// .println("-------Computing Repository Level Element Frequency-------");
+				System.out
+						.println("Analysing repository:" + repo.getRepoName());
 				repo.getElementFrequency();
-			//	System.out.println("-------Done-------");
+				// System.out.println("-------Done-------");
 
-			//	System.out
-			//			.println("-------Computing Repository Level Element Completeness-------");
+				// System.out
+				// .println("-------Computing Repository Level Element Completeness-------");
 				repo.getElementCompleteness();
-			//	System.out.println("-------Done-------");
+				// System.out.println("-------Done-------");
 
-			//	System.out
-			//			.println("---------------Computing Element Maximum dimensionality--------------");
+				// System.out
+				// .println("---------------Computing Element Maximum dimensionality--------------");
 				repo.getElementDimensions();
-			//	System.out.println("---------------Done--------------");
+				// System.out.println("---------------Done--------------");
 
-			//	System.out.println("Computing Elements' relative entropy...");
+				// System.out.println("Computing Elements' relative entropy...");
 				repo.computeElementEntropy();
 				// FileUtils.deleteDirectory(new File("buffer"));
-			//	System.out.println("Done...");
+				// System.out.println("Done...");
 
 				repo.computeElementValueFreq(props
 						.getProperty(constants.elementValues));
 				FileUtils.deleteDirectory(new File("buffer"));
 
-				//System.out
-				//		.println("-------Computing Repository Level Attribute Frequency-------");
+				// System.out
+				// .println("-------Computing Repository Level Attribute Frequency-------");
 				repo.getAttributeFrequency();
-			//	// repo.showAttributes();
-			//	System.out.println("-------Done-------");
+				// // repo.showAttributes();
+				// System.out.println("-------Done-------");
 
-			//	System.out
-			//			.println("-------Computing Repository Level File Size Mean-------");
+				// System.out
+				// .println("-------Computing Repository Level File Size Mean-------");
 				repo.getFileSizeDistribution(xmls);
-			//	System.out.println("-------Done-------"); // FileSizeMean
+				System.out.println("Repository:" + repo.getRepoName()
+						+ " completed.");
+				// System.out.println("-------Done-------"); // FileSizeMean
 
 			}
 
