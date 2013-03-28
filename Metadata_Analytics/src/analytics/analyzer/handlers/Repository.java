@@ -374,9 +374,11 @@ public class Repository {
 	public void addAttributes(String name, String value) {
 
 		// if (!attributes.containsValue(value))
+		
 		attributes.put(name, value);
 		if (!distinctAtts.containsValue(value))
 			distinctAtts.put(name, value);
+		
 	}
 
 	/**

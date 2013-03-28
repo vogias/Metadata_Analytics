@@ -44,8 +44,8 @@ public class ElementFrequency extends Metric {
 		while (iterator.hasNext()) {
 			String element = (String) iterator.next();
 			freq.put(element, (double) Collections.frequency(data, element));
-		//	System.out.println("Element:" + element + ", Frequency:"
-			//		+ Collections.frequency(data, element));
+			// System.out.println("Element:" + element + ", Frequency:"
+			// + Collections.frequency(data, element));
 		}
 
 		return freq;
@@ -54,8 +54,8 @@ public class ElementFrequency extends Metric {
 	@Override
 	public void compute(Collection<?> data, String elementName) {
 
-		//System.out.println("Element:" + elementName + ", Frequency:"
-			//	+ Collections.frequency(data, elementName));
+		// System.out.println("Element:" + elementName + ", Frequency:"
+		// + Collections.frequency(data, elementName));
 
 	}
 
@@ -74,19 +74,25 @@ public class ElementFrequency extends Metric {
 
 				Collection attValues = data.getCollection(attName);
 
-			//	System.out.println("----------------------------------");
+				// System.out.println("----------------------------------");
 				writer.write("----------------------------------");
 				writer.newLine();
 
-			//	System.out.println("Attribute:" + attName + ", Frequency:"
-			//			+ attValues.size());
+				// System.out.println("Attribute:" + attName + ", Frequency:"
+				// + attValues.size());
 				writer.write("Attribute:" + attName + ", Frequency:"
 						+ attValues.size());
 				writer.newLine();
 				writer.write("----------------------------------");
 				writer.newLine();
-			//	System.out.println("----------------------------------");
+				// System.out.println("----------------------------------");
+				
+				
 				Collection distinctAttsValues = atts.getCollection(attName);
+				
+				System.out.println(attValues);
+				System.out.println(distinctAttsValues);
+				
 				computeDominantAttValue(attValues, distinctAttsValues, writer);
 			}
 			writer.close();
@@ -109,8 +115,8 @@ public class ElementFrequency extends Metric {
 			writer.write("\tAttribute value:" + key + ", Frequency:"
 					+ frequency);
 			writer.newLine();
-			//System.out.println("\tAttribute value:" + key + ", Frequency:"
-			//		+ frequency);
+			System.out.println("\tAttribute value:" + key + ", Frequency:"
+					+ frequency);
 
 		}
 

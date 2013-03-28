@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Stack;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -36,6 +37,8 @@ public class XMLHandler extends DefaultHandler {
 	Properties props;
 	AnalyticsConstants constants;
 	String branche;
+	String elPath;
+	Stack<String> xPaths;
 
 	public XMLHandler(Repository repositoryHandler) {
 		// TODO Auto-generated constructor stub
@@ -44,6 +47,8 @@ public class XMLHandler extends DefaultHandler {
 		constants = new AnalyticsConstants();
 		props = new Properties();
 		branche = "";
+		elPath = "";
+		xPaths = new Stack<>();
 		try {
 			props.load(new FileInputStream("configure.properties"));
 		} catch (FileNotFoundException e) {
@@ -59,6 +64,8 @@ public class XMLHandler extends DefaultHandler {
 			Attributes attributes) throws SAXException {
 
 		branche += qName;
+		xPaths.push(branche);
+
 		for (int i = 0; i < attributes.getLength(); i++) {
 
 			String name = attributes.getLocalName(i);
@@ -66,12 +73,11 @@ public class XMLHandler extends DefaultHandler {
 			if (!name.contains("xsi") && !name.contains("xmlns")) {
 				// System.out.println("Name:" + attributes.getLocalName(i)
 				// + " Value:" + attributes.getValue(i));
-				repositoryHandler.addAttributes(attributes.getQName(i),
-						attributes.getValue(i));
+				repositoryHandler.addAttributes(attributes.getQName(i)
+						+ " used at:" + branche, attributes.getValue(i));
 			}
 		}
 
-		System.out.println(branche);
 		branche += ".";
 
 	}
@@ -79,28 +85,34 @@ public class XMLHandler extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
 
-		if (branche.endsWith(qName + "" + "."))
+		String elmt = "";
+		if (branche.endsWith(qName + "" + ".")) {
 			branche = branche.substring(0, branche.length() - qName.length()
 					- 1);
-
-		repositoryHandler.addxmlElements(qName);
-
-		if (!dimensionalityMap.containsKey(qName)) {
-			dimensionalityMap.put(qName, 1);
-		} else {
-
-			dimensionalityMap.put(qName, dimensionalityMap.get(qName) + 1);
+			elmt = xPaths.elementAt(xPaths.size() - 1);
+			xPaths.removeElementAt(xPaths.size() - 1);
+			// System.out.println("--------End element-----");
+			// System.out.println(elmt);
 		}
 
-		if (!elements.contains(qName)) {
+		repositoryHandler.addxmlElements(elmt);
 
-			elements.addElement(qName);
-			repositoryHandler.addCompletenessElement(qName);
+		if (!dimensionalityMap.containsKey(elmt)) {
+			dimensionalityMap.put(elmt, 1);
+		} else {
+
+			dimensionalityMap.put(elmt, dimensionalityMap.get(elmt) + 1);
+		}
+
+		if (!elements.contains(elmt)) {
+
+			elements.addElement(elmt);
+			repositoryHandler.addCompletenessElement(elmt);
 		}
 
 		// entropy calculation
 		try {
-			repositoryHandler.addEvalue2File(qName, tmpValue);
+			repositoryHandler.addEvalue2File(elmt, tmpValue);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
