@@ -86,13 +86,10 @@ public class ElementFrequency extends Metric {
 				writer.write("----------------------------------");
 				writer.newLine();
 				// System.out.println("----------------------------------");
-				
+
 				
 				Collection distinctAttsValues = atts.getCollection(attName);
-				
-				System.out.println(attValues);
-				System.out.println(distinctAttsValues);
-				
+
 				computeDominantAttValue(attValues, distinctAttsValues, writer);
 			}
 			writer.close();
@@ -109,14 +106,14 @@ public class ElementFrequency extends Metric {
 
 		while (iterator.hasNext()) {
 
-			String key = (String) iterator.next();
+			HashMap<String, String> key = (HashMap<String, String>) iterator.next();
 
 			int frequency = Collections.frequency(attValues, key);
 			writer.write("\tAttribute value:" + key + ", Frequency:"
 					+ frequency);
 			writer.newLine();
-			System.out.println("\tAttribute value:" + key + ", Frequency:"
-					+ frequency);
+			//System.out.println("\tAttribute value:" + key + ", Frequency:"
+				//	+ frequency);
 
 		}
 

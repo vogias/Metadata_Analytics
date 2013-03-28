@@ -73,8 +73,10 @@ public class XMLHandler extends DefaultHandler {
 			if (!name.contains("xsi") && !name.contains("xmlns")) {
 				// System.out.println("Name:" + attributes.getLocalName(i)
 				// + " Value:" + attributes.getValue(i));
-				repositoryHandler.addAttributes(attributes.getQName(i)
-						+ " used at:" + branche, attributes.getValue(i));
+				HashMap<String, String> elmt = new HashMap<>();
+				elmt.put(branche, attributes.getValue(i));
+
+				repositoryHandler.addAttributes(attributes.getQName(i), elmt);
 			}
 		}
 
