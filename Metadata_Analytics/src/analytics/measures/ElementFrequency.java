@@ -65,7 +65,12 @@ public class ElementFrequency extends Metric {
 		Set keySet = data.keySet();
 
 		Iterator iterator = keySet.iterator();
-		File attInfo = new File(provider + "_Attribute_Analysis" + ".txt");
+
+		File dir = new File(provider);
+		if (!dir.exists())
+			dir.mkdir();
+
+		File attInfo = new File(dir,provider + "_Attribute_Analysis" + ".txt");
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(attInfo));
 
@@ -87,7 +92,6 @@ public class ElementFrequency extends Metric {
 				writer.newLine();
 				// System.out.println("----------------------------------");
 
-				
 				Collection distinctAttsValues = atts.getCollection(attName);
 
 				computeDominantAttValue(attValues, distinctAttsValues, writer);
@@ -106,14 +110,15 @@ public class ElementFrequency extends Metric {
 
 		while (iterator.hasNext()) {
 
-			HashMap<String, String> key = (HashMap<String, String>) iterator.next();
+			HashMap<String, String> key = (HashMap<String, String>) iterator
+					.next();
 
 			int frequency = Collections.frequency(attValues, key);
 			writer.write("\tAttribute value:" + key + ", Frequency:"
 					+ frequency);
 			writer.newLine();
-			//System.out.println("\tAttribute value:" + key + ", Frequency:"
-				//	+ frequency);
+			// System.out.println("\tAttribute value:" + key + ", Frequency:"
+			// + frequency);
 
 		}
 

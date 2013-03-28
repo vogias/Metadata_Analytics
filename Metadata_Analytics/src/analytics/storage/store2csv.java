@@ -20,7 +20,8 @@ import org.apache.commons.io.FileUtils;
  */
 public class store2csv extends Storage {
 
-	private void createHeaders(FileWriter fileWriter, String metricName,String element) {
+	private void createHeaders(FileWriter fileWriter, String metricName,
+			String element) {
 
 		try {
 			fileWriter.append(element);
@@ -38,19 +39,23 @@ public class store2csv extends Storage {
 
 	@Override
 	public void storeElementData(HashMap<String, Double> data,
-			String metricName, String dataProvider,String analysisType,String headerColumn) {
+			String metricName, String dataProvider, String analysisType,
+			String headerColumn) {
 		// TODO Auto-generated method stub
 
 		String sFileName = dataProvider + analysisType + ".csv";
-		File directory=new File(dataProvider);
-		
-		
-		File file = new File(directory, sFileName);
+
+		File dir = new File(dataProvider);
+
+		if (!dir.exists())
+			dir.mkdir();
+
+		File file = new File(dir, sFileName);
 
 		try {
 			if (!file.exists()) {
-				FileWriter writer = new FileWriter(sFileName);
-				createHeaders(writer, metricName,headerColumn);
+				FileWriter writer = new FileWriter(file);
+				createHeaders(writer, metricName, headerColumn);
 
 				Set<String> keySet = data.keySet();
 				Iterator<String> iterator = keySet.iterator();
@@ -69,7 +74,7 @@ public class store2csv extends Storage {
 
 				BufferedReader reader = new BufferedReader(new FileReader(file));
 
-				File temp = new File("temp.csv");
+				File temp = new File(dir, "temp.csv");
 
 				FileWriter writer = new FileWriter(temp);
 
@@ -103,6 +108,7 @@ public class store2csv extends Storage {
 
 				FileUtils.copyFile(temp, file);
 				temp.delete();
+				reader.close();
 
 			}
 
@@ -111,19 +117,26 @@ public class store2csv extends Storage {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void storeElementValueData(HashMap<String, Integer> data,
-			String metricName, String dataProvider,String analysisType,String headerColumn) {
+			String metricName, String dataProvider, String analysisType,
+			String headerColumn) {
 		// TODO Auto-generated method stub
 
 		String sFileName = dataProvider + analysisType + ".csv";
-		File file = new File(sFileName);
+
+		File dir = new File(dataProvider);
+
+		if (!dir.exists())
+			dir.mkdir();
+
+		File file = new File(dir, sFileName);
 
 		try {
 			if (!file.exists()) {
-				FileWriter writer = new FileWriter(sFileName);
-				createHeaders(writer, metricName,headerColumn);
+				FileWriter writer = new FileWriter(file);
+				createHeaders(writer, metricName, headerColumn);
 
 				Set<String> keySet = data.keySet();
 				Iterator<String> iterator = keySet.iterator();
@@ -142,7 +155,7 @@ public class store2csv extends Storage {
 
 				BufferedReader reader = new BufferedReader(new FileReader(file));
 
-				File temp = new File("temp.csv");
+				File temp = new File(dir, "temp.csv");
 
 				FileWriter writer = new FileWriter(temp);
 
@@ -176,6 +189,7 @@ public class store2csv extends Storage {
 
 				FileUtils.copyFile(temp, file);
 				temp.delete();
+				reader.close();
 
 			}
 

@@ -120,7 +120,7 @@ public class Main {
 				// .println("-------Computing Repository Level File Size Mean-------");
 				repo.getFileSizeDistribution(xmls);
 				System.out.println("Repository:" + repo.getRepoName()
-						+ " completed.");
+						+ " analysis completed.");
 				// System.out.println("-------Done-------"); // FileSizeMean
 
 			}
