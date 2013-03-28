@@ -66,11 +66,16 @@ public class ElementFrequency extends Metric {
 
 		Iterator iterator = keySet.iterator();
 
-		File dir = new File(provider);
+		File anls = new File("Analysis_Results");
+
+		if (!anls.exists())
+			anls.mkdir();
+
+		File dir = new File(anls, provider);
 		if (!dir.exists())
 			dir.mkdir();
 
-		File attInfo = new File(dir,provider + "_Attribute_Analysis" + ".txt");
+		File attInfo = new File(dir, provider + "_Attribute_Analysis" + ".txt");
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(attInfo));
 

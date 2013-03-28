@@ -45,8 +45,12 @@ public class store2csv extends Storage {
 
 		String sFileName = dataProvider + analysisType + ".csv";
 
-		File dir = new File(dataProvider);
+		File anls = new File("Analysis_Results");
 
+		if (!anls.exists())
+			anls.mkdir();
+
+		File dir = new File(anls, dataProvider);
 		if (!dir.exists())
 			dir.mkdir();
 
@@ -126,8 +130,12 @@ public class store2csv extends Storage {
 
 		String sFileName = dataProvider + analysisType + ".csv";
 
-		File dir = new File(dataProvider);
+		File anls = new File("Analysis_Results");
 
+		if (!anls.exists())
+			anls.mkdir();
+
+		File dir = new File(anls, dataProvider);
 		if (!dir.exists())
 			dir.mkdir();
 
