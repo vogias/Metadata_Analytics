@@ -192,6 +192,7 @@ public class Repository {
 			ClassNotFoundException {
 
 		String[] strings = elementName.split(",");
+		
 
 		for (int i = 0; i < strings.length; i++) {
 			HashMap<String, Double> data = new HashMap<>();
@@ -199,6 +200,9 @@ public class Repository {
 			System.out.println("Element:" + strings[i]);
 
 			Vector<String> vectorFromFile = getVectorFromFile(strings[i]);
+			
+			System.out.println(vectorFromFile);
+			
 			Map cardinalityMap = CollectionUtils
 					.getCardinalityMap(vectorFromFile);
 
@@ -409,8 +413,12 @@ public class Repository {
 
 	public void getAttributeFrequency() {
 
-		ElementFrequency atFrequency = new ElementFrequency(getDistinctAtts());
-		atFrequency.compute(attributes, getRepoName());
+		MultiHashMap atts = getDistinctAtts();
+		if (atts.size() > 0) {
+			ElementFrequency atFrequency = new ElementFrequency(
+					getDistinctAtts());
+			atFrequency.compute(attributes, getRepoName());
+		}
 	}
 
 	public void getElementCompleteness() throws InstantiationException,
