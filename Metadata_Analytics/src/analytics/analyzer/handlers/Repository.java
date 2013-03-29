@@ -206,7 +206,6 @@ public class Repository {
 
 				Map cardinalityMap = CollectionUtils
 						.getCardinalityMap(vectorFromFile);
-				
 
 				if (strings[i].contains(":"))
 					strings[i] = strings[i].replace(":", "_");
@@ -426,6 +425,7 @@ public class Repository {
 	public void getAttributeFrequency() {
 
 		MultiHashMap atts = getDistinctAtts();
+
 		if (atts.size() > 0) {
 
 			ElementFrequency atFrequency = new ElementFrequency(
@@ -448,6 +448,5 @@ public class Repository {
 
 		return map;
 	}
-	
-	
+
 }

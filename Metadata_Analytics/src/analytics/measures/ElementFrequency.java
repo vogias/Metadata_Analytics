@@ -91,7 +91,7 @@ public class ElementFrequency extends Metric {
 
 				// System.out.println("Attribute:" + attName + ", Frequency:"
 				// + attValues.size());
-				writer.write("Attribute:" + attName + ", Frequency:"
+				writer.write("Attribute_Name:" + attName + ",Sum_Frequency:"
 						+ attValues.size());
 				writer.newLine();
 				writer.write("----------------------------------");

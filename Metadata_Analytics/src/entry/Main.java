@@ -129,7 +129,8 @@ public class Main {
 
 				// System.out
 				// .println("-------Computing Repository Level File Size Mean-------");
-				repo.getFileSizeDistribution(xmls);
+
+				federation.appendFileSize(repo.getFileSizeDistribution(xmls));
 				System.out.println("Repository:" + repo.getRepoName()
 						+ " analysis completed.");
 				// System.out.println("-------Done-------"); // FileSizeMean
@@ -140,6 +141,8 @@ public class Main {
 			federation.getElementsMCompletness();
 			federation.getElementsMaxDimensionality();
 			federation.getElementsMEntropy();
+			
+			System.out.println("Average file size:"+federation.getAverageFileSize()+" Bytes");
 
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();
