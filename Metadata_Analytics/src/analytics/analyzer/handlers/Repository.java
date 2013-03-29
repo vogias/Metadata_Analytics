@@ -192,7 +192,6 @@ public class Repository {
 			ClassNotFoundException {
 
 		String[] strings = elementName.split(",");
-		
 
 		for (int i = 0; i < strings.length; i++) {
 			HashMap<String, Double> data = new HashMap<>();
@@ -200,20 +199,21 @@ public class Repository {
 			System.out.println("Element:" + strings[i]);
 
 			Vector<String> vectorFromFile = getVectorFromFile(strings[i]);
-			
-			System.out.println(vectorFromFile);
-			
-			Map cardinalityMap = CollectionUtils
-					.getCardinalityMap(vectorFromFile);
 
-			if (strings[i].contains(":"))
-				strings[i] = strings[i].replace(":", "_");
+			if (!vectorFromFile.contains("Element not found")) {
 
-			Storage storageClass = getStorageClass();
-			storageClass.storeElementValueData(
-					(HashMap<String, Integer>) cardinalityMap, "Frequency",
-					this.getRepoName(), "_" + strings[i]
-							+ "_ElementValue_Analysis", "Element Value");
+				Map cardinalityMap = CollectionUtils
+						.getCardinalityMap(vectorFromFile);
+
+				if (strings[i].contains(":"))
+					strings[i] = strings[i].replace(":", "_");
+
+				Storage storageClass = getStorageClass();
+				storageClass.storeElementValueData(
+						(HashMap<String, Integer>) cardinalityMap, "Frequency",
+						this.getRepoName(), "_" + strings[i]
+								+ "_ElementValue_Analysis", "Element Value");
+			}
 		}
 
 	}
