@@ -19,6 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.xml.sax.SAXException;
 
+import analytics.analyzer.handlers.Federation;
 import analytics.analyzer.handlers.Repository;
 import analytics.analyzer.handlers.XMLHandler;
 import analytics.constants.AnalyticsConstants;
@@ -59,9 +60,12 @@ public class Main {
 		Input in = (Input) whatInstance;
 
 		try {
+
 			Collection<File> dataProviders = (Collection<File>) in
 					.getData(props.getProperty(constants.mdstorePath));
 			List<File> dp = (List<File>) dataProviders;
+
+			Federation federation = new Federation(dp.size());
 
 			for (int i = 0; i < dp.size(); i++) {
 
@@ -72,6 +76,7 @@ public class Main {
 
 				Repository repo = new Repository(xmls);
 				repo.setRepoName(dp.get(i).getName());
+				federation.addRepoName(dp.get(i).getName());
 				repo.setRecordsNum(xmls.size());
 				// System.out.println("Data Provider:" + repo.getRepoName());
 				// System.out.println("Number Of Records:" +
@@ -88,12 +93,15 @@ public class Main {
 				// .println("-------Computing Repository Level Element Frequency-------");
 				System.out
 						.println("Analysing repository:" + repo.getRepoName());
-				repo.getElementFrequency();
+
+				federation.appendFreqElements(repo.getElementFrequency());
 				// System.out.println("-------Done-------");
 
 				// System.out
 				// .println("-------Computing Repository Level Element Completeness-------");
-				repo.getElementCompleteness();
+				federation.appendCompletnessElements(repo
+						.getElementCompleteness());
+
 				// System.out.println("-------Done-------");
 
 				// System.out
@@ -124,6 +132,9 @@ public class Main {
 				// System.out.println("-------Done-------"); // FileSizeMean
 
 			}
+
+			federation.getElementsMFrequency();
+			federation.getElementsMCompletness();
 
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();

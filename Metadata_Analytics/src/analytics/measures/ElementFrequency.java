@@ -44,6 +44,7 @@ public class ElementFrequency extends Metric {
 		while (iterator.hasNext()) {
 			String element = (String) iterator.next();
 			freq.put(element, (double) Collections.frequency(data, element));
+			
 			// System.out.println("Element:" + element + ", Frequency:"
 			// + Collections.frequency(data, element));
 		}

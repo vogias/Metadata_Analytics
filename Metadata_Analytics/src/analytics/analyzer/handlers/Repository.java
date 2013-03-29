@@ -165,7 +165,7 @@ public class Repository {
 
 	}
 
-	public void computeElementEntropy() throws IOException,
+	public HashMap<String, Double> computeElementEntropy() throws IOException,
 			InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
@@ -184,6 +184,8 @@ public class Repository {
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Entropy", this.getRepoName(),
 				"_Element_Analysis", "Element Name");
+
+		return data;
 
 	}
 
@@ -204,6 +206,7 @@ public class Repository {
 
 				Map cardinalityMap = CollectionUtils
 						.getCardinalityMap(vectorFromFile);
+				
 
 				if (strings[i].contains(":"))
 					strings[i] = strings[i].replace(":", "_");
@@ -213,6 +216,7 @@ public class Repository {
 						(HashMap<String, Integer>) cardinalityMap, "Frequency",
 						this.getRepoName(), "_" + strings[i]
 								+ "_ElementValue_Analysis", "Element Value");
+
 			}
 		}
 
@@ -259,8 +263,9 @@ public class Repository {
 		}
 	}
 
-	public void getElementDimensions() throws InstantiationException,
-			IllegalAccessException, ClassNotFoundException {
+	public HashMap<String, Double> getElementDimensions()
+			throws InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
 
 		Set<String> keySet = elementDims.keySet();
 		Iterator<String> iterator = keySet.iterator();
@@ -271,10 +276,12 @@ public class Repository {
 			// + elementDims.get(key));
 			data.put(key, (double) elementDims.get(key));
 		}
+
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Dimensions", this.getRepoName(),
 				"_Element_Analysis", "Element Name");
 
+		return data;
 	}
 
 	/**
@@ -307,9 +314,11 @@ public class Repository {
 		this.distinctAtts = distinctAtts;
 	}
 
-	public void getFileSizeDistribution(Collection<File> xmls) {
+	public float getFileSizeDistribution(Collection<File> xmls) {
 		FileSizeMean fileSizeMean = new FileSizeMean();
 		fileSizeMean.compute(xmls);
+		float fileSizeM = fileSizeMean.getFileSizeM();
+		return fileSizeM;
 	}
 
 	/**
@@ -400,35 +409,45 @@ public class Repository {
 		this.xmlElements = xmlElements;
 	}
 
-	public void getElementFrequency() throws InstantiationException,
-			IllegalAccessException, ClassNotFoundException {
+	public HashMap<String, Double> getElementFrequency()
+			throws InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
 
 		ElementFrequency elFrequency = new ElementFrequency(
 				getXmlElementsDistinct());
 		HashMap<String, Double> data = elFrequency.compute(xmlElements);
+
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Frequency", this.getRepoName(),
 				"_Element_Analysis", "Element Name");
+		return data;
 	}
 
 	public void getAttributeFrequency() {
 
 		MultiHashMap atts = getDistinctAtts();
 		if (atts.size() > 0) {
+
 			ElementFrequency atFrequency = new ElementFrequency(
 					getDistinctAtts());
 			atFrequency.compute(attributes, getRepoName());
 		}
 	}
 
-	public void getElementCompleteness() throws InstantiationException,
-			IllegalAccessException, ClassNotFoundException {
+	public HashMap<String, Double> getElementCompleteness()
+			throws InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
 		ElementCompleteness completeness = new ElementCompleteness(
 				getRecordsNum());
 		HashMap<String, Double> map = completeness
 				.compute(getElementCompletnessMatrix());
+
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(map, "Completeness(%)",
 				this.getRepoName(), "_Element_Analysis", "Element Name");
+
+		return map;
 	}
+	
+	
 }
