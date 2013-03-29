@@ -106,11 +106,14 @@ public class Main {
 
 				// System.out
 				// .println("---------------Computing Element Maximum dimensionality--------------");
-				repo.getElementDimensions();
+
+				federation.appendDimensionalityElements(repo
+						.getElementDimensions());
 				// System.out.println("---------------Done--------------");
 
 				// System.out.println("Computing Elements' relative entropy...");
-				repo.computeElementEntropy();
+
+				federation.appendEntropyElements(repo.computeElementEntropy());
 				// FileUtils.deleteDirectory(new File("buffer"));
 				// System.out.println("Done...");
 
@@ -133,8 +136,10 @@ public class Main {
 
 			}
 
-			federation.getElementsMFrequency();
+			federation.getElementsSFrequency();
 			federation.getElementsMCompletness();
+			federation.getElementsMaxDimensionality();
+			federation.getElementsMEntropy();
 
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();

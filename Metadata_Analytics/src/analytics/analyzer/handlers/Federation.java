@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
@@ -26,6 +27,8 @@ public class Federation {
 
 	MultiHashMap elementFreq;
 	MultiHashMap elementComp;
+	MultiHashMap elementDim;
+	MultiHashMap elementEntropy;
 	int numberOfRepos;
 	Vector<String> repoNames;
 	Properties props;
@@ -34,6 +37,8 @@ public class Federation {
 		// TODO Auto-generated constructor stub
 		elementFreq = new MultiHashMap();
 		elementComp = new MultiHashMap();
+		elementDim = new MultiHashMap();
+		elementEntropy = new MultiHashMap();
 		numberOfRepos = repoNum;
 		repoNames = new Vector<>();
 		props = new Properties();
@@ -61,13 +66,39 @@ public class Federation {
 			String elName = iterator.next();
 			Double value = elements.get(elName);
 
-			elementFreq.put(elName, value);
+			elementComp.put(elName, value);
+		}
+
+	}
+
+	public void appendDimensionalityElements(HashMap<String, Double> elements) {
+
+		Set<String> keySet = elements.keySet();
+		Iterator<String> iterator = keySet.iterator();
+		while (iterator.hasNext()) {
+			String elName = iterator.next();
+			Double value = elements.get(elName);
+
+			elementDim.put(elName, value);
+		}
+
+	}
+
+	public void appendEntropyElements(HashMap<String, Double> elements) {
+
+		Set<String> keySet = elements.keySet();
+		Iterator<String> iterator = keySet.iterator();
+		while (iterator.hasNext()) {
+			String elName = iterator.next();
+			Double value = elements.get(elName);
+
+			elementEntropy.put(elName, value);
 		}
 
 	}
 
 	@SuppressWarnings("deprecation")
-	public HashMap<String, Double> getElementsMFrequency()
+	public HashMap<String, Double> getElementsSFrequency()
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
@@ -88,7 +119,7 @@ public class Federation {
 
 		}
 		Storage storageClass = getStorageClass();
-		storageClass.storeElementData(data, "Frequency", "Federation",
+		storageClass.storeElementData(data, "Sum Frequency", "Federation",
 				"_Element_Analysis", "Element Name");
 
 		return data;
@@ -99,7 +130,7 @@ public class Federation {
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
-		Set keySet = elementFreq.keySet();
+		Set keySet = elementComp.keySet();
 
 		HashMap<String, Double> data = new HashMap<>();
 
@@ -109,18 +140,74 @@ public class Federation {
 			String nextElement = (String) iterator.next();
 
 			if (!data.containsKey(nextElement)) {
-				ArrayList<Double> collection = (ArrayList<Double>) elementFreq
+				ArrayList<Double> collection = (ArrayList<Double>) elementComp
 						.getCollection(nextElement);
-				data.put(nextElement, getCompletnessAvg(collection));
+				data.put(nextElement, getAvg(collection));
 			}
 
 		}
 		Storage storageClass = getStorageClass();
-		storageClass.storeElementData(data, "Completeness(%)", "Federation",
+		storageClass.storeElementData(data, "Average Completeness(%)", "Federation",
 				"_Element_Analysis", "Element Name");
 
 		return data;
 	}
+
+	@SuppressWarnings("deprecation")
+	public HashMap<String, Double> getElementsMaxDimensionality()
+			throws InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
+
+		Set keySet = elementDim.keySet();
+
+		HashMap<String, Double> data = new HashMap<>();
+
+		Iterator iterator = keySet.iterator();
+
+		while (iterator.hasNext()) {
+			String nextElement = (String) iterator.next();
+
+			if (!data.containsKey(nextElement)) {
+				ArrayList<Double> collection = (ArrayList<Double>) elementDim
+						.getCollection(nextElement);
+				data.put(nextElement, getMaxDimensionality(collection));
+			}
+
+		}
+		Storage storageClass = getStorageClass();
+		storageClass.storeElementData(data, "Max Dimensionality", "Federation",
+				"_Element_Analysis", "Element Name");
+
+		return data;
+	}
+	@SuppressWarnings("deprecation")
+	public HashMap<String, Double> getElementsMEntropy()
+			throws InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
+
+		Set keySet = elementEntropy.keySet();
+
+		HashMap<String, Double> data = new HashMap<>();
+
+		Iterator iterator = keySet.iterator();
+
+		while (iterator.hasNext()) {
+			String nextElement = (String) iterator.next();
+
+			if (!data.containsKey(nextElement)) {
+				ArrayList<Double> collection = (ArrayList<Double>) elementEntropy
+						.getCollection(nextElement);
+				data.put(nextElement, getAvg(collection));
+			}
+
+		}
+		Storage storageClass = getStorageClass();
+		storageClass.storeElementData(data, "Average Entropy", "Federation",
+				"_Element_Analysis", "Element Name");
+
+		return data;
+	}
+
 
 	private Storage getStorageClass() throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
@@ -138,7 +225,15 @@ public class Federation {
 		return storage;
 	}
 
-	private Double getCompletnessAvg(ArrayList<Double> data) {
+	
+
+	private Double getMaxDimensionality(ArrayList<Double> data) {
+
+		return Collections.max(data);
+	}
+
+	private Double getAvg(ArrayList<Double> data) {
+
 		Double avg = 0.0;
 		for (int i = 0; i < data.size(); i++) {
 
