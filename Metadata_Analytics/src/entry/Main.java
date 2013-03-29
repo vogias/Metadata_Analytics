@@ -141,8 +141,9 @@ public class Main {
 			federation.getElementsMCompletness();
 			federation.getElementsMaxDimensionality();
 			federation.getElementsMEntropy();
-			
-			System.out.println("Average file size:"+federation.getAverageFileSize()+" Bytes");
+			federation.getAttributesSumFreq();
+			System.out.println("Average file size:"
+					+ federation.getAverageFileSize() + " Bytes");
 
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();

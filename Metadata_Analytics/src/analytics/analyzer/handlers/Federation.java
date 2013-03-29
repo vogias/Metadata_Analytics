@@ -4,12 +4,13 @@
 package analytics.analyzer.handlers;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -243,20 +244,64 @@ public class Federation {
 		return data;
 	}
 
-	public void getAttributesSumFreq() {
+	public void getAttributesSumFreq() throws IOException {
 
 		Vector<String> repoNames = getRepoNames();
 
 		HashMap<String, Integer> data = new HashMap<>();
 		for (int i = 0; i < repoNames.size(); i++) {
-			File repoFolder = new File("Analysis", repoNames.elementAt(i));
+			File repoFolder = new File("Analysis_Results",
+					repoNames.elementAt(i));
 			File attAnalysisTxt = new File(repoFolder, repoNames.elementAt(i)
 					+ "_Attribute_Analysis.txt");
 
-			System.out.println(attAnalysisTxt.getAbsolutePath());
-			
-			//getAttributesFromFile(attAnalysisTxt);
+			if (attAnalysisTxt.exists()) {
+				HashMap<String, Integer> attributesFromFile = getAttributesFromFile(attAnalysisTxt);
+
+				Set<String> keySet = attributesFromFile.keySet();
+
+				Iterator<String> iterator = keySet.iterator();
+				while (iterator.hasNext()) {
+					String next = iterator.next();
+					if (!data.containsKey(next)) {
+						data.put(next, attributesFromFile.get(next));
+					} else {
+						data.put(next,
+								data.get(next) + attributesFromFile.get(next));
+					}
+				}
+			}
 		}
+		saveAttFreqSums2File(data);
+
+	}
+
+	private void saveAttFreqSums2File(HashMap<String, Integer> data)
+			throws IOException {
+		File an = new File("Analysis_Results");
+
+		if (!an.exists())
+			an.mkdir();
+
+		File fedDir = new File("Analysis_Results", "Federation");
+
+		if (!fedDir.exists())
+			fedDir.mkdir();
+
+		File attInfo = new File(fedDir, "Federation" + "_Attribute_Analysis"
+				+ ".txt");
+		BufferedWriter writer = new BufferedWriter(new FileWriter(attInfo));
+
+		Set<String> keySet = data.keySet();
+		Iterator<String> iterator = keySet.iterator();
+
+		while (iterator.hasNext()) {
+			String next = iterator.next();
+			writer.append(next + ", Frequency:" + data.get(next));
+			writer.newLine();
+
+		}
+		writer.close();
 	}
 
 	private HashMap<String, Integer> getAttributesFromFile(File attFile) {
@@ -282,7 +327,8 @@ public class Federation {
 							sCurrentLine.length());
 					int frequency = Integer.parseInt(freq);
 
-					data.put(attName + "_" + att, frequency);
+					data.put("Attribute Name:" + attName + ", Element:" + att,
+							frequency);
 				}
 				if (sCurrentLine.contains("Attribute_Name")) {
 
@@ -385,7 +431,9 @@ public class Federation {
 	}
 
 	public static void main(String args[]) throws Exception {
-		Federation federation = new Federation(3);
+		Federation federation = new Federation(2);
+		federation.addRepoName("TRAGLOR");
+		federation.addRepoName("TRANGLOR_COPY");
 
 		federation.getAttributesSumFreq();
 	}
