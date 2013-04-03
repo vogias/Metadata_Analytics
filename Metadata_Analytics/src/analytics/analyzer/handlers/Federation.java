@@ -304,7 +304,6 @@ public class Federation {
 
 		while (iterator.hasNext()) {
 			String next = iterator.next();
-			System.out.println(next);
 			String attName = next.substring(next.indexOf(":") + 1,
 					next.indexOf(","));
 			String attValue = next.substring(next.indexOf("Element:") + 8,
