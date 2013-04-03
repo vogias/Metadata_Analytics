@@ -289,15 +289,33 @@ public class Federation {
 			fedDir.mkdir();
 
 		File attInfo = new File(fedDir, "Federation" + "_Attribute_Analysis"
-				+ ".txt");
+				+ ".csv");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(attInfo));
 
 		Set<String> keySet = data.keySet();
 		Iterator<String> iterator = keySet.iterator();
 
+		writer.append("Attribute Name");
+		writer.append(",");
+		writer.append("Attribute Value");
+		writer.append(",");
+		writer.append("Frequency");
+		writer.newLine();
+
 		while (iterator.hasNext()) {
 			String next = iterator.next();
-			writer.append(next + ", Frequency:" + data.get(next));
+			System.out.println(next);
+			String attName = next.substring(next.indexOf(":") + 1,
+					next.indexOf(","));
+			String attValue = next.substring(next.indexOf("Element:") + 8,
+					next.length());
+			writer.append(attName);
+			writer.append(",");
+			writer.append(attValue);
+			writer.append(",");
+
+			Integer freqValue = data.get(next);
+			writer.append(String.valueOf(freqValue));
 			writer.newLine();
 
 		}
