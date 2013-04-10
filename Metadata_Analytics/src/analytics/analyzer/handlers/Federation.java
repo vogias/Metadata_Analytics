@@ -252,11 +252,11 @@ public class Federation {
 		for (int i = 0; i < repoNames.size(); i++) {
 			File repoFolder = new File("Analysis_Results",
 					repoNames.elementAt(i));
-			File attAnalysisTxt = new File(repoFolder, repoNames.elementAt(i)
-					+ "_Attribute_Analysis.txt");
+			File attAnalysisCsv = new File(repoFolder, repoNames.elementAt(i)
+					+ "_Attribute_Analysis.csv");
 
-			if (attAnalysisTxt.exists()) {
-				HashMap<String, Integer> attributesFromFile = getAttributesFromFile(attAnalysisTxt);
+			if (attAnalysisCsv.exists()) {
+				HashMap<String, Integer> attributesFromFile = getAttributesFromFile(attAnalysisCsv);
 
 				Set<String> keySet = attributesFromFile.keySet();
 
@@ -272,6 +272,7 @@ public class Federation {
 				}
 			}
 		}
+		//System.out.println(data);
 		saveAttFreqSums2File(data);
 
 	}
@@ -297,6 +298,8 @@ public class Federation {
 
 		writer.append("Attribute Name");
 		writer.append(",");
+		writer.append("Element Used");
+		writer.append(",");
 		writer.append("Attribute Value");
 		writer.append(",");
 		writer.append("Frequency");
@@ -304,15 +307,18 @@ public class Federation {
 
 		while (iterator.hasNext()) {
 			String next = iterator.next();
-			String attName = next.substring(next.indexOf(":") + 1,
-					next.indexOf(","));
-			String attValue = next.substring(next.indexOf("Element:") + 8,
-					next.length());
+			String[] attributes=next.split(",");
+			String attName = attributes[0];
+			String element=attributes[1];
+			String attValue = attributes[2];
+			
 			writer.append(attName);
+			writer.append(",");
+			writer.append(element);
 			writer.append(",");
 			writer.append(attValue);
 			writer.append(",");
-
+			
 			Integer freqValue = data.get(next);
 			writer.append(String.valueOf(freqValue));
 			writer.newLine();
@@ -328,35 +334,36 @@ public class Federation {
 		try {
 
 			String sCurrentLine;
-			String attName = "";
+			
 
 			HashMap<String, Integer> data = new HashMap<>();
 			br = new BufferedReader(new FileReader(attFile));
 
 			while ((sCurrentLine = br.readLine()) != null) {
-				if (sCurrentLine.contains("Attribute value:{")) {
-					String att = sCurrentLine.substring(
-							sCurrentLine.indexOf("{") + 1,
-							sCurrentLine.lastIndexOf("}"));
-					att = att.replace("=", ":");
-					String freq = sCurrentLine.substring(
-							sCurrentLine.lastIndexOf(":") + 1,
-							sCurrentLine.length());
+				if (!sCurrentLine.contains("Attribute Name,Element Used,Attribute Value,Frequency")) {
+					
+					String[] attributes = sCurrentLine.split(",");
+					
+					String attName=attributes[0];
+					String element = attributes[1];
+					String value = attributes[2];
+					String freq = attributes[3];
 					int frequency = Integer.parseInt(freq);
 
-					data.put("Attribute Name:" + attName + ", Element:" + att,
+					data.put(attName+","+element+","+value,
 							frequency);
 				}
-				if (sCurrentLine.contains("Attribute_Name")) {
+				/*if (sCurrentLine.contains("Attribute_Name")) {
 
 					attName = sCurrentLine.substring(
 							sCurrentLine.indexOf(":") + 1,
 							sCurrentLine.indexOf(","));
 
-				}
+				}*/
 
 			}
 
+		
 			return data;
 
 		} catch (IOException e) {

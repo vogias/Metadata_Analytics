@@ -138,7 +138,7 @@ public class ElementFrequency extends Metric {
 					elementName.lastIndexOf("}"));
 			writer.write(value + ",");
 
-			writer.write(frequency);
+			writer.write(String.valueOf(frequency));
 			writer.newLine();
 			// System.out.println("\tAttribute value:" + key + ", Frequency:"
 			// + frequency);
