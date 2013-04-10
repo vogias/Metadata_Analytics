@@ -44,7 +44,7 @@ public class ElementFrequency extends Metric {
 		while (iterator.hasNext()) {
 			String element = (String) iterator.next();
 			freq.put(element, (double) Collections.frequency(data, element));
-			
+
 			// System.out.println("Element:" + element + ", Frequency:"
 			// + Collections.frequency(data, element));
 		}
@@ -76,31 +76,36 @@ public class ElementFrequency extends Metric {
 		if (!dir.exists())
 			dir.mkdir();
 
-		File attInfo = new File(dir, provider + "_Attribute_Analysis" + ".txt");
+		File attInfo = new File(dir, provider + "_Attribute_Analysis" + ".csv");
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(attInfo));
+
+			writer.write("Attribute Name,Element Used,Attribute Value,Frequency");
+			writer.newLine();
 
 			while (iterator.hasNext()) {
 				String attName = (String) iterator.next();
 
 				Collection attValues = data.getCollection(attName);
 
-				// System.out.println("----------------------------------");
-				writer.write("----------------------------------");
-				writer.newLine();
-
-				// System.out.println("Attribute:" + attName + ", Frequency:"
-				// + attValues.size());
-				writer.write("Attribute_Name:" + attName + ",Sum_Frequency:"
-						+ attValues.size());
-				writer.newLine();
-				writer.write("----------------------------------");
-				writer.newLine();
-				// System.out.println("----------------------------------");
+				/*
+				 * // System.out.println("----------------------------------");
+				 * writer.write("----------------------------------");
+				 * writer.newLine();
+				 * 
+				 * // System.out.println("Attribute:" + attName + ", Frequency:"
+				 * // + attValues.size()); writer.write("Attribute_Name:" +
+				 * attName + ",Sum_Frequency:" + attValues.size());
+				 * writer.newLine();
+				 * writer.write("----------------------------------");
+				 * writer.newLine(); //
+				 * System.out.println("----------------------------------");
+				 */
 
 				Collection distinctAttsValues = atts.getCollection(attName);
 
-				computeDominantAttValue(attValues, distinctAttsValues, writer);
+				computeDominantAttValue(attValues, distinctAttsValues, writer,
+						attName);
 			}
 			writer.close();
 		} catch (IOException e) {
@@ -110,18 +115,30 @@ public class ElementFrequency extends Metric {
 	}
 
 	private void computeDominantAttValue(Collection attValues,
-			Collection distinctAV, BufferedWriter writer) throws IOException {
+			Collection distinctAV, BufferedWriter writer, String attName)
+			throws IOException {
 
 		Iterator iterator = distinctAV.iterator();
 
 		while (iterator.hasNext()) {
 
+			writer.write(attName + ",");
+
 			HashMap<String, String> key = (HashMap<String, String>) iterator
 					.next();
 
 			int frequency = Collections.frequency(attValues, key);
-			writer.write("\tAttribute value:" + key + ", Frequency:"
-					+ frequency);
+
+			String elementName = key.toString();
+			String element = elementName.substring(
+					elementName.indexOf("{") + 1, elementName.indexOf("="));
+
+			writer.write(element + ",");
+			String value = elementName.substring(elementName.indexOf("=") + 1,
+					elementName.lastIndexOf("}"));
+			writer.write(value + ",");
+
+			writer.write(frequency);
 			writer.newLine();
 			// System.out.println("\tAttribute value:" + key + ", Frequency:"
 			// + frequency);
