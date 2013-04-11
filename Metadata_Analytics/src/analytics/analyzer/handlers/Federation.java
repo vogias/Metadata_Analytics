@@ -504,7 +504,7 @@ public class Federation {
 
 			}
 
-			System.out.println(data);
+			//System.out.println(data);
 			return data;
 
 		} catch (IOException e) {
