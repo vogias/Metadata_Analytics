@@ -142,6 +142,8 @@ public class Main {
 			federation.getElementsMaxDimensionality();
 			federation.getElementsMEntropy();
 			federation.getAttributesSumFreq();
+			federation.getElementValueSumFreq(props
+					.getProperty(constants.elementValues));
 			System.out.println("Average file size:"
 					+ federation.getAverageFileSize() + " Bytes");
 

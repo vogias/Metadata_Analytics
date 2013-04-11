@@ -35,6 +35,7 @@ public class Federation {
 	MultiHashMap elementDim;
 	MultiHashMap elementEntropy;
 	Vector<Float> fileSize;
+	HashMap<String, HashMap<String, Integer>> vocs;
 	int numberOfRepos;
 	Vector<String> repoNames;
 	Properties props;
@@ -272,7 +273,7 @@ public class Federation {
 				}
 			}
 		}
-		//System.out.println(data);
+		// System.out.println(data);
 		saveAttFreqSums2File(data);
 
 	}
@@ -307,18 +308,18 @@ public class Federation {
 
 		while (iterator.hasNext()) {
 			String next = iterator.next();
-			String[] attributes=next.split(",");
+			String[] attributes = next.split(",");
 			String attName = attributes[0];
-			String element=attributes[1];
+			String element = attributes[1];
 			String attValue = attributes[2];
-			
+
 			writer.append(attName);
 			writer.append(",");
 			writer.append(element);
 			writer.append(",");
 			writer.append(attValue);
 			writer.append(",");
-			
+
 			Integer freqValue = data.get(next);
 			writer.append(String.valueOf(freqValue));
 			writer.newLine();
@@ -334,36 +335,176 @@ public class Federation {
 		try {
 
 			String sCurrentLine;
-			
 
 			HashMap<String, Integer> data = new HashMap<>();
 			br = new BufferedReader(new FileReader(attFile));
 
 			while ((sCurrentLine = br.readLine()) != null) {
-				if (!sCurrentLine.contains("Attribute Name,Element Used,Attribute Value,Frequency")) {
-					
+				if (!sCurrentLine
+						.contains("Attribute Name,Element Used,Attribute Value,Frequency")) {
+
 					String[] attributes = sCurrentLine.split(",");
-					
-					String attName=attributes[0];
+
+					String attName = attributes[0];
 					String element = attributes[1];
 					String value = attributes[2];
 					String freq = attributes[3];
 					int frequency = Integer.parseInt(freq);
 
-					data.put(attName+","+element+","+value,
-							frequency);
+					data.put(attName + "," + element + "," + value, frequency);
 				}
-				/*if (sCurrentLine.contains("Attribute_Name")) {
-
-					attName = sCurrentLine.substring(
-							sCurrentLine.indexOf(":") + 1,
-							sCurrentLine.indexOf(","));
-
-				}*/
+				/*
+				 * if (sCurrentLine.contains("Attribute_Name")) {
+				 * 
+				 * attName = sCurrentLine.substring( sCurrentLine.indexOf(":") +
+				 * 1, sCurrentLine.indexOf(","));
+				 * 
+				 * }
+				 */
 
 			}
 
-		
+			return data;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	public void getElementValueSumFreq(String elementsAnalyzed)
+			throws IOException {
+
+		String[] elements = elementsAnalyzed.split(",");
+		Vector<String> repos = getRepoNames();
+
+		File ar = new File("Analysis_Results");
+
+		vocs = new HashMap<>();
+		for (int i = 0; i < repos.size(); i++) {
+			String repo = repos.elementAt(i);
+			String elementName = "";
+			for (int j = 0; j < elements.length; j++) {
+				elementName = elements[j];
+				elementName = repo + "_" + elementName
+						+ "_ElementValue_Analysis.csv";
+				File repoFolder = new File(ar, repo);
+				File csvFile = new File(repoFolder, elementName);
+
+				if (csvFile.exists()) {
+
+					appendVocabularies(elements[j],
+							getVocabularyFromFile(csvFile));
+				}
+
+			}
+		}
+		System.out.println(vocs);
+		saveVocsToCSV();
+
+	}
+
+	private void saveVocsToCSV() throws IOException {
+
+		File an = new File("Analysis_Results");
+		File federationFolder = new File(an, "Federation");
+
+		Set<String> keySet = vocs.keySet();
+		Iterator<String> iterator = keySet.iterator();
+
+		while (iterator.hasNext()) {
+			String key = iterator.next();
+			HashMap<String, Integer> map = vocs.get(key);
+			File f = new File(federationFolder, "Federation_" + key
+					+ "_ElementValue_Analysis.csv");
+
+			BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+			writer.append("Element Value,Frequency");
+			writer.newLine();
+
+			Set<String> keySet2 = map.keySet();
+			Iterator<String> iterator2 = keySet2.iterator();
+
+			while (iterator2.hasNext()) {
+				String key2 = iterator2.next();
+				Integer freq = map.get(key2);
+				writer.append(key2 + "," + String.valueOf(freq));
+				writer.newLine();
+			}
+
+			writer.close();
+
+		}
+
+	}
+
+	private HashMap<String, Integer> mapMerge(HashMap<String, Integer> map1,
+			HashMap<String, Integer> map2) {
+
+		Set<String> keySet = map2.keySet();
+		Iterator<String> iterator = keySet.iterator();
+
+		while (iterator.hasNext()) {
+			String key = iterator.next();
+			Integer freq = map2.get(key);
+
+			if (map1.containsKey(key)) {
+				map1.put(key, map1.get(key) + freq);
+			} else {
+				map1.put(key, freq);
+			}
+		}
+
+		return map1;
+	}
+
+	private void appendVocabularies(String element,
+			HashMap<String, Integer> data) {
+
+		if (vocs.containsKey(element)) {
+
+			HashMap<String, Integer> map2 = vocs.get(element);
+
+			vocs.put(element, mapMerge(data, map2));
+
+		} else {
+			vocs.put(element, data);
+		}
+
+	}
+
+	private HashMap<String, Integer> getVocabularyFromFile(File f) {
+		BufferedReader br = null;
+
+		try {
+
+			String sCurrentLine;
+
+			HashMap<String, Integer> data = new HashMap<>();
+			br = new BufferedReader(new FileReader(f));
+
+			while ((sCurrentLine = br.readLine()) != null) {
+				if (!sCurrentLine.contains("Element Value,Frequency")) {
+
+					String[] attributes = sCurrentLine.split(",");
+
+					String voc = attributes[0];
+					String freq = attributes[1];
+					int frequency = Integer.parseInt(freq);
+
+					data.put(voc, frequency);
+				}
+
+			}
+
+			System.out.println(data);
 			return data;
 
 		} catch (IOException e) {

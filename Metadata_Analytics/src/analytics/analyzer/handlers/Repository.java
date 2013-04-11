@@ -198,7 +198,7 @@ public class Repository {
 		for (int i = 0; i < strings.length; i++) {
 			HashMap<String, Double> data = new HashMap<>();
 
-			System.out.println("Element:" + strings[i]);
+			System.out.println("Element:" + strings[i]+" statistical analysis");
 
 			Vector<String> vectorFromFile = getVectorFromFile(strings[i]);
 
