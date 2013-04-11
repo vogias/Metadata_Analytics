@@ -406,7 +406,7 @@ public class Federation {
 
 			}
 		}
-		System.out.println(vocs);
+		//System.out.println(vocs);
 		saveVocsToCSV();
 
 	}
