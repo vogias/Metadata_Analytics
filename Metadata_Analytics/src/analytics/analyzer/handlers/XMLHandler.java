@@ -70,7 +70,7 @@ public class XMLHandler extends DefaultHandler {
 
 			String name = attributes.getLocalName(i);
 			String value = attributes.getValue(i);
-			if (!name.contains("xsi") && !name.contains("xmlns")) {
+			if (!name.contains("xsi:schemaLocation") && !name.contains("xmlns")) {
 				// System.out.println("Name:" + attributes.getLocalName(i)
 				// + " Value:" + attributes.getValue(i));
 				HashMap<String, String> elmt = new HashMap<>();

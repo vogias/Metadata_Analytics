@@ -31,23 +31,26 @@ public class ElementCompleteness extends Metric {
 
 	public HashMap<String, Double> compute(HashMap<String, Integer> data) {
 
-		HashMap<String, Integer> dat = (HashMap<String, Integer>) data;
-
-		Set<String> keySet = dat.keySet();
+		Set<String> keySet = data.keySet();
 		Iterator<String> iterator = keySet.iterator();
 		HashMap<String, Double> output = new HashMap<>();
 		while (iterator.hasNext()) {
 			String key = iterator.next();
-			Integer value = dat.get(key);
+			Integer value = data.get(key);
 
 			float percentage = ((float) value / records) * 100;
 
-			//System.out.println("Element:" + key + ", Completeness:"
-					//+ percentage + "%");
+			/*
+			 * if (key.equals("chor_dc:dc.dcterms:accessRights")) {
+			 * System.out.println("Value:" + value + " number of records:" +
+			 * records + " percentage:" + percentage); }
+			 */
+
+			// System.out.println("Element:" + key + ", Completeness:"
+			// + percentage + "%");
 			output.put(key, (double) percentage);
 		}
 
-		
 		return output;
 
 	}

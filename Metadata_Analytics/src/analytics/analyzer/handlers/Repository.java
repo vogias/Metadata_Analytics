@@ -196,9 +196,10 @@ public class Repository {
 		String[] strings = elementName.split(",");
 
 		for (int i = 0; i < strings.length; i++) {
-			//HashMap<String, Double> data = new HashMap<>();
+			// HashMap<String, Double> data = new HashMap<>();
 
-			System.out.println("Element:" + strings[i]+" statistical analysis");
+			System.out.println("Element:" + strings[i]
+					+ " statistical analysis");
 
 			Vector<String> vectorFromFile = getVectorFromFile(strings[i]);
 
@@ -245,6 +246,13 @@ public class Repository {
 			Integer inValue = elementCompletness.get(key);
 			elementCompletness.put(key, inValue + 1);
 		}
+
+		/*
+		 * if (key.equals("chor_dc:dc.dcterms:accessRights")) {
+		 * System.out.println("Key:" + key + " value:" +
+		 * elementCompletness.get(key)); }
+		 */
+
 	}
 
 	public HashMap<String, Integer> getElementCompletnessMatrix() {
@@ -414,6 +422,7 @@ public class Repository {
 
 		ElementFrequency elFrequency = new ElementFrequency(
 				getXmlElementsDistinct());
+		// System.out.println(getXmlElementsDistinct());
 		HashMap<String, Double> data = elFrequency.compute(xmlElements);
 
 		Storage storageClass = getStorageClass();
@@ -439,6 +448,7 @@ public class Repository {
 			ClassNotFoundException {
 		ElementCompleteness completeness = new ElementCompleteness(
 				getRecordsNum());
+
 		HashMap<String, Double> map = completeness
 				.compute(getElementCompletnessMatrix());
 

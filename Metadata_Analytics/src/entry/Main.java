@@ -78,6 +78,7 @@ public class Main {
 				repo.setRepoName(dp.get(i).getName());
 				federation.addRepoName(dp.get(i).getName());
 				repo.setRecordsNum(xmls.size());
+
 				// System.out.println("Data Provider:" + repo.getRepoName());
 				// System.out.println("Number Of Records:" +
 				// repo.getRecordsNum());
@@ -93,6 +94,7 @@ public class Main {
 				// .println("-------Computing Repository Level Element Frequency-------");
 				System.out
 						.println("Analysing repository:" + repo.getRepoName());
+				System.out.println("Number of records:" + xmls.size());
 
 				federation.appendFreqElements(repo.getElementFrequency());
 				// System.out.println("-------Done-------");
@@ -134,6 +136,7 @@ public class Main {
 				System.out.println("Repository:" + repo.getRepoName()
 						+ " analysis completed.");
 				// System.out.println("-------Done-------"); // FileSizeMean
+
 
 			}
 
