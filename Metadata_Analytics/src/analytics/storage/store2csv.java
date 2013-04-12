@@ -151,9 +151,13 @@ public class store2csv extends Storage {
 
 				while (iterator.hasNext()) {
 					String key = iterator.next();
+					Integer value = data.get(key);
+
+					if (key.contains(","))
+						key = key.replace(",", "/");
+
 					writer.append(key);
 					writer.append(',');
-					Integer value = data.get(key);
 					writer.append(String.valueOf(value));
 					writer.append('\n');
 				}
@@ -184,6 +188,10 @@ public class store2csv extends Storage {
 					} else {
 						String key = iterator.next();
 						Integer value = data.get(key);
+
+						if (key.contains(","))
+							key = key.replace(",", "/");
+						
 						line = line + "," + value;
 						writer.append(line);
 						writer.append('\n');

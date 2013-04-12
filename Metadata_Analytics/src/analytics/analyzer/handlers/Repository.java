@@ -196,7 +196,7 @@ public class Repository {
 		String[] strings = elementName.split(",");
 
 		for (int i = 0; i < strings.length; i++) {
-			HashMap<String, Double> data = new HashMap<>();
+			//HashMap<String, Double> data = new HashMap<>();
 
 			System.out.println("Element:" + strings[i]+" statistical analysis");
 
