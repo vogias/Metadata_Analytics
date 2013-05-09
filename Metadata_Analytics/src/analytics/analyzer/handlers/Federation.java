@@ -94,6 +94,7 @@ public class Federation {
 			Double value = elements.get(elName);
 
 			elementComp.put(elName, value);
+			
 		}
 
 	}

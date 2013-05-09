@@ -13,9 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MultiHashMap;
-import org.apache.lucene.util.CollectionUtil;
 
 /**
  * @author vogias

@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.lucene.analysis.ReusableAnalyzerBase;
-
 /**
  * @author vogias
  * 
