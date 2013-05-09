@@ -94,7 +94,7 @@ public class Federation {
 			Double value = elements.get(elName);
 
 			elementComp.put(elName, value);
-			
+
 		}
 
 	}
@@ -407,7 +407,7 @@ public class Federation {
 
 			}
 		}
-		//System.out.println(vocs);
+		// System.out.println(vocs);
 		saveVocsToCSV();
 
 	}
@@ -505,7 +505,7 @@ public class Federation {
 
 			}
 
-			//System.out.println(data);
+			// System.out.println(data);
 			return data;
 
 		} catch (IOException e) {
@@ -549,7 +549,7 @@ public class Federation {
 
 			avg += data.get(i);
 		}
-		avg = avg / data.size();
+		avg = avg / this.numberOfRepos;
 		return avg;
 	}
 
