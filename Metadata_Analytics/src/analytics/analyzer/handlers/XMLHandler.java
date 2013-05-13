@@ -63,7 +63,7 @@ public class XMLHandler extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 
-		branche += qName;
+		branche += qName.toLowerCase();
 		xPaths.push(branche);
 
 		for (int i = 0; i < attributes.getLength(); i++) {
@@ -91,6 +91,7 @@ public class XMLHandler extends DefaultHandler {
 		if (branche.endsWith(qName + "" + ".")) {
 			branche = branche.substring(0, branche.length() - qName.length()
 					- 1);
+			branche = branche.toLowerCase();
 			elmt = xPaths.elementAt(xPaths.size() - 1);
 			xPaths.removeElementAt(xPaths.size() - 1);
 			// System.out.println("--------End element-----");
