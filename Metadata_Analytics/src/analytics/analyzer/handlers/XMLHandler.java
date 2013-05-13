@@ -88,10 +88,12 @@ public class XMLHandler extends DefaultHandler {
 			throws SAXException {
 
 		String elmt = "";
+		qName = qName.toLowerCase();
+		
 		if (branche.endsWith(qName + "" + ".")) {
 			branche = branche.substring(0, branche.length() - qName.length()
 					- 1);
-			branche = branche.toLowerCase();
+			// branche = branche.toLowerCase();
 			elmt = xPaths.elementAt(xPaths.size() - 1);
 			xPaths.removeElementAt(xPaths.size() - 1);
 			// System.out.println("--------End element-----");
