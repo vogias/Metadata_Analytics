@@ -24,7 +24,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MultiHashMap;
-import org.apache.commons.io.FileUtils;
 import org.xml.sax.SAXException;
 
 import analytics.constants.AnalyticsConstants;
