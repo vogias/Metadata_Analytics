@@ -49,8 +49,35 @@ public class FSInput extends Input {
 
 		Collection<File> files = utils.listFiles(dataProviderDir, extensions,
 				true);
-		
+
 		return files;
+
+	}
+
+	@Override
+	public List<String> getRepoNames(String path) {
+		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
+
+		File mdstore = new File(path);
+		List<String> files = new ArrayList<>();
+
+		if (!mdstore.isDirectory()) {
+			System.err.println("This is not a directory");
+			System.err.println("Exiting...");
+			return null;
+		} else {
+
+			File[] providersDirs = mdstore.listFiles();
+
+			for (int i = 0; i < providersDirs.length; i++) {
+				File prDir = providersDirs[i];
+				if (prDir.isDirectory())
+					files.add(prDir.getName());
+			}
+
+			return files;
+		}
 
 	}
 }
