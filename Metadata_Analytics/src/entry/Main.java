@@ -63,6 +63,7 @@ public class Main {
 
 			Collection<File> dataProviders = (Collection<File>) in
 					.getData(props.getProperty(constants.mdstorePath));
+			
 			List<File> dp = (List<File>) dataProviders;
 
 			Federation federation = new Federation(dp.size());
