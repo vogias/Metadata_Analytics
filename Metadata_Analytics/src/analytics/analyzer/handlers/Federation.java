@@ -308,22 +308,27 @@ public class Federation {
 		writer.newLine();
 
 		while (iterator.hasNext()) {
-			String next = iterator.next();
-			String[] attributes = next.split(",");
-			String attName = attributes[0];
-			String element = attributes[1];
-			String attValue = attributes[2];
 
-			writer.append(attName);
-			writer.append(",");
-			writer.append(element);
-			writer.append(",");
-			writer.append(attValue);
-			writer.append(",");
+			try {
+				String next = iterator.next();
+				String[] attributes = next.split(",");
+				String attName = attributes[0];
+				String element = attributes[1];
+				String attValue = attributes[2];
 
-			Integer freqValue = data.get(next);
-			writer.append(String.valueOf(freqValue));
-			writer.newLine();
+				writer.append(attName);
+				writer.append(",");
+				writer.append(element);
+				writer.append(",");
+				writer.append(attValue);
+				writer.append(",");
+
+				Integer freqValue = data.get(next);
+				writer.append(String.valueOf(freqValue));
+				writer.newLine();
+			} catch (ArrayIndexOutOfBoundsException ex) {
+				continue;
+			}
 
 		}
 		writer.close();
@@ -341,18 +346,23 @@ public class Federation {
 			br = new BufferedReader(new FileReader(attFile));
 
 			while ((sCurrentLine = br.readLine()) != null) {
-				if (!sCurrentLine
-						.contains("Attribute Name,Element Used,Attribute Value,Frequency")) {
+				try {
+					if (!sCurrentLine
+							.contains("Attribute Name,Element Used,Attribute Value,Frequency")) {
 
-					String[] attributes = sCurrentLine.split(",");
+						String[] attributes = sCurrentLine.split(",");
 
-					String attName = attributes[0];
-					String element = attributes[1];
-					String value = attributes[2];
-					String freq = attributes[3];
-					int frequency = Integer.parseInt(freq);
+						String attName = attributes[0];
+						String element = attributes[1];
+						String value = attributes[2];
+						String freq = attributes[3];
+						int frequency = Integer.parseInt(freq);
 
-					data.put(attName + "," + element + "," + value, frequency);
+						data.put(attName + "," + element + "," + value,
+								frequency);
+					}
+				} catch (ArrayIndexOutOfBoundsException ex) {
+					continue;
 				}
 				/*
 				 * if (sCurrentLine.contains("Attribute_Name")) {
