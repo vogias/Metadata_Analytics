@@ -56,12 +56,18 @@ public class Main {
 
 		boolean fedFlag = false;
 
-		if (!federated.equals("") || federated != null)
-			fedFlag = Boolean.parseBoolean(federated);
-
-		if (repo2Analyze.equals("") || repo2Analyze == null)
+		try {
+			if (!federated.equals(""))
+				fedFlag = Boolean.parseBoolean(federated);
+		} catch (NullPointerException ex) {
+			fedFlag = false;
+		}
+		try {
+			if (repo2Analyze.equals(""))
+				repo2Analyze = "*";
+		} catch (NullPointerException ex) {
 			repo2Analyze = "*";
-
+		}
 		String dataInputClass = props.getProperty(constants.inputClass);
 
 		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
@@ -87,8 +93,9 @@ public class Main {
 			List<File> dp = (List<File>) dataProviders;
 
 			Federation federation = null;
-			if (fedFlag){
-				System.out.println("Federated statistical analysis is activated...");
+			if (fedFlag) {
+				System.out
+						.println("Federated statistical analysis is activated...");
 				federation = new Federation(dp.size());
 			}
 
