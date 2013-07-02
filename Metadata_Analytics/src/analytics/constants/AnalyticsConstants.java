@@ -16,7 +16,8 @@ public class AnalyticsConstants {
 	public static String elementValues = "analytics.element.values";
 	public static String analyzeRepositories = "repositories.analyze";
 	public static String fedAnalysis = "repositories.federated.analysis";
-	
-	//public static String temporalMode = "temporal.analysis.mode";
-	
+	public static String temporalAnalysis = "temporal.analysis.mode";
+
+	// public static String temporalMode = "temporal.analysis.mode";
+
 }

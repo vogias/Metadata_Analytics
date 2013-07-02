@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream.GetField;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -53,15 +54,26 @@ public class Main {
 
 		String repo2Analyze = props.getProperty(constants.analyzeRepositories);
 		String federated = props.getProperty(constants.fedAnalysis);
+		String temporal = props.getProperty(constants.temporalAnalysis);
 
 		boolean fedFlag = false;
+		boolean temporalFlag = false;
 
 		try {
 			if (!federated.equals(""))
 				fedFlag = Boolean.parseBoolean(federated);
+
 		} catch (NullPointerException ex) {
 			fedFlag = false;
 		}
+		try {
+			if (!temporal.equals(""))
+				temporalFlag = Boolean.parseBoolean(temporal);
+
+		} catch (NullPointerException ex) {
+			temporalFlag = false;
+		}
+
 		try {
 			if (repo2Analyze.equals(""))
 				repo2Analyze = "*";
@@ -96,7 +108,7 @@ public class Main {
 			if (fedFlag) {
 				System.out
 						.println("Federated statistical analysis is activated...");
-				federation = new Federation(dp.size());
+				federation = new Federation(dp.size(), temporalFlag);
 			}
 
 			for (int i = 0; i < dp.size(); i++) {
@@ -106,7 +118,8 @@ public class Main {
 				Collection<File> xmls = utils.listFiles(dp.get(i), extensions,
 						true);
 
-				Repository repo = new Repository(xmls);
+				Repository repo = new Repository(xmls, temporalFlag);
+
 				repo.setRepoName(dp.get(i).getName());
 				repo.setRecordsNum(xmls.size());
 
@@ -148,6 +161,7 @@ public class Main {
 					repo.computeElementEntropy();
 					repo.computeElementValueFreq(props
 							.getProperty(constants.elementValues));
+
 					FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency();

@@ -39,8 +39,10 @@ public class Federation {
 	int numberOfRepos;
 	Vector<String> repoNames;
 	Properties props;
+	boolean temporalAnalysis;
 
-	public Federation(int repoNum) throws FileNotFoundException, IOException {
+	public Federation(int repoNum, boolean temporal)
+			throws FileNotFoundException, IOException {
 		// TODO Auto-generated constructor stub
 		elementFreq = new MultiHashMap();
 		elementComp = new MultiHashMap();
@@ -51,6 +53,7 @@ public class Federation {
 		repoNames = new Vector<>();
 		props = new Properties();
 		props.load(new FileInputStream("configure.properties"));
+		temporalAnalysis = temporal;
 	}
 
 	public void appendFreqElements(HashMap<String, Double> elements) {
@@ -148,7 +151,7 @@ public class Federation {
 		}
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Sum Frequency", "Federation",
-				"_Element_Analysis", "Element Name");
+				"_Element_Analysis", "Element Name", temporalAnalysis);
 
 		return data;
 	}
@@ -185,7 +188,8 @@ public class Federation {
 		}
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Average Completeness(%)",
-				"Federation", "_Element_Analysis", "Element Name");
+				"Federation", "_Element_Analysis", "Element Name",
+				temporalAnalysis);
 
 		return data;
 	}
@@ -213,7 +217,7 @@ public class Federation {
 		}
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Max Dimensionality", "Federation",
-				"_Element_Analysis", "Element Name");
+				"_Element_Analysis", "Element Name", temporalAnalysis);
 
 		return data;
 	}
@@ -241,7 +245,7 @@ public class Federation {
 		}
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Average Entropy", "Federation",
-				"_Element_Analysis", "Element Name");
+				"_Element_Analysis", "Element Name", temporalAnalysis);
 
 		return data;
 	}
@@ -607,7 +611,7 @@ public class Federation {
 	}
 
 	public static void main(String args[]) throws Exception {
-		Federation federation = new Federation(2);
+		Federation federation = new Federation(2, true);
 		federation.addRepoName("TRAGLOR");
 		federation.addRepoName("TRANGLOR_COPY");
 

@@ -13,10 +13,10 @@ public abstract class Storage {
 
 
 	public abstract void storeElementData(HashMap<String, Double> data,
-			String metricName,String dataProvider,String analysisType,String headerColumn);
+			String metricName,String dataProvider,String analysisType,String headerColumn,boolean temporal);
 	
 	public abstract void storeElementValueData(HashMap<String, Integer> data,
-			String metricName,String dataProvider,String analysisType,String headerColumn);
+			String metricName,String dataProvider,String analysisType,String headerColumn,boolean temporal);
 	
 	
 }

@@ -48,9 +48,13 @@ public class Repository {
 	int recordsNum;
 	String repoName;
 	Properties props;
+	boolean temporalAnalysis;
+	
+	Storage storage;
 
-	public Repository(Collection<File> xmls) throws FileNotFoundException,
-			IOException, SAXException, ParserConfigurationException {
+	public Repository(Collection<File> xmls, boolean temporal)
+			throws FileNotFoundException, IOException, SAXException,
+			ParserConfigurationException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 
 		// TODO Auto-generated constructor stub
 		xmlElements = new Vector<>();
@@ -74,9 +78,13 @@ public class Repository {
 			j++;
 		}
 
+		temporalAnalysis = temporal;
+
+		this.storage=this.createStorageClass();
+		
 	}
 
-	private Storage getStorageClass() throws InstantiationException,
+	private Storage createStorageClass() throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
 
 		AnalyticsConstants constants = new AnalyticsConstants();
@@ -90,6 +98,11 @@ public class Repository {
 		Storage storage = (Storage) whatInstance;
 
 		return storage;
+	}
+	
+	private Storage getStorageClass(){
+		
+		return this.storage;
 	}
 
 	/**
@@ -181,8 +194,9 @@ public class Repository {
 		}
 
 		Storage storageClass = getStorageClass();
+		
 		storageClass.storeElementData(data, "Entropy", this.getRepoName(),
-				"_Element_Analysis", "Element Name");
+				"_Element_Analysis", "Element Name", temporalAnalysis);
 
 		return data;
 
@@ -214,7 +228,8 @@ public class Repository {
 				storageClass.storeElementValueData(
 						(HashMap<String, Integer>) cardinalityMap, "Frequency",
 						this.getRepoName(), "_" + strings[i]
-								+ "_ElementValue_Analysis", "Element Value");
+								+ "_ElementValue_Analysis", "Element Value",
+						temporalAnalysis);
 
 			}
 		}
@@ -284,8 +299,9 @@ public class Repository {
 		}
 
 		Storage storageClass = getStorageClass();
+		
 		storageClass.storeElementData(data, "Dimensions", this.getRepoName(),
-				"_Element_Analysis", "Element Name");
+				"_Element_Analysis", "Element Name", temporalAnalysis);
 
 		return data;
 	}
@@ -425,8 +441,9 @@ public class Repository {
 		HashMap<String, Double> data = elFrequency.compute(xmlElements);
 
 		Storage storageClass = getStorageClass();
+		
 		storageClass.storeElementData(data, "Frequency", this.getRepoName(),
-				"_Element_Analysis", "Element Name");
+				"_Element_Analysis", "Element Name", temporalAnalysis);
 		return data;
 	}
 
@@ -452,8 +469,10 @@ public class Repository {
 				.compute(getElementCompletnessMatrix());
 
 		Storage storageClass = getStorageClass();
+		
 		storageClass.storeElementData(map, "Completeness(%)",
-				this.getRepoName(), "_Element_Analysis", "Element Name");
+				this.getRepoName(), "_Element_Analysis", "Element Name",
+				temporalAnalysis);
 
 		return map;
 	}

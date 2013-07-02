@@ -42,7 +42,7 @@ public class store2csv extends Storage {
 	@Override
 	public void storeElementData(HashMap<String, Double> data,
 			String metricName, String dataProvider, String analysisType,
-			String headerColumn) {
+			String headerColumn, boolean temporal) {
 		// TODO Auto-generated method stub
 
 		String sFileName = dataProvider + analysisType + ".csv";
@@ -134,7 +134,7 @@ public class store2csv extends Storage {
 	@Override
 	public void storeElementValueData(HashMap<String, Integer> data,
 			String metricName, String dataProvider, String analysisType,
-			String headerColumn) {
+			String headerColumn, boolean temporal) {
 		// TODO Auto-generated method stub
 
 		String sFileName = dataProvider + analysisType + ".csv";
@@ -143,6 +143,13 @@ public class store2csv extends Storage {
 
 		if (!anls.exists())
 			anls.mkdir();
+
+		else {
+			// if (temporal == false) {
+			// FileUtils.deleteQuietly(anls);
+			// anls.mkdir();
+			// }
+		}
 
 		File dir = new File(anls, dataProvider);
 		if (!dir.exists())
