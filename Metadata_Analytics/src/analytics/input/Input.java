@@ -12,7 +12,7 @@ import java.util.List;
  */
 public abstract class Input {
 
-	public abstract Collection<?> getData(String path);
+	public abstract Collection<?> getData(String path,String repoSelection);
 
 	public abstract List<String> getRepoNames(String path);
 

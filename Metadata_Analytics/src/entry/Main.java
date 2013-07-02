@@ -50,6 +50,18 @@ public class Main {
 		Properties props = new Properties();
 		props.load(new FileInputStream("configure.properties"));
 		AnalyticsConstants constants = new AnalyticsConstants();
+
+		String repo2Analyze = props.getProperty(constants.analyzeRepositories);
+		String federated = props.getProperty(constants.fedAnalysis);
+
+		boolean fedFlag = false;
+
+		if (!federated.equals("") || federated != null)
+			fedFlag = Boolean.parseBoolean(federated);
+
+		if (repo2Analyze.equals("") || repo2Analyze == null)
+			repo2Analyze = "*";
+
 		String dataInputClass = props.getProperty(constants.inputClass);
 
 		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
@@ -61,12 +73,24 @@ public class Main {
 
 		try {
 
-			Collection<File> dataProviders = (Collection<File>) in
-					.getData(props.getProperty(constants.mdstorePath));
-			
+			Collection<File> dataProviders = (Collection<File>) in.getData(
+					props.getProperty(constants.mdstorePath), repo2Analyze);
+
+			if (dataProviders.isEmpty()) {
+
+				System.out.println("Wrong data providers file names.");
+				System.out.println("Exiting...");
+
+				System.exit(-1);
+			}
+
 			List<File> dp = (List<File>) dataProviders;
 
-			Federation federation = new Federation(dp.size());
+			Federation federation = null;
+			if (fedFlag){
+				System.out.println("Federated statistical analysis is activated...");
+				federation = new Federation(dp.size());
+			}
 
 			for (int i = 0; i < dp.size(); i++) {
 
@@ -77,78 +101,67 @@ public class Main {
 
 				Repository repo = new Repository(xmls);
 				repo.setRepoName(dp.get(i).getName());
-				federation.addRepoName(dp.get(i).getName());
 				repo.setRecordsNum(xmls.size());
 
-				// System.out.println("Data Provider:" + repo.getRepoName());
-				// System.out.println("Number Of Records:" +
-				// repo.getRecordsNum());
+				if (fedFlag) {
+					federation.addRepoName(dp.get(i).getName());
 
-				/*
-				 * Iterator<File> iterator = xmls.iterator(); int j = 0; while
-				 * (iterator.hasNext()) { File xml = iterator.next(); XMLHandler
-				 * xmlHandler = new XMLHandler(repo); InputStream inS = new
-				 * FileInputStream(xml); xmlHandler.parseDocument(inS); j++; }
-				 */
+					System.out.println("Analysing repository:"
+							+ repo.getRepoName());
+					System.out.println("Number of records:" + xmls.size());
 
-				// System.out
-				// .println("-------Computing Repository Level Element Frequency-------");
-				System.out
-						.println("Analysing repository:" + repo.getRepoName());
-				System.out.println("Number of records:" + xmls.size());
+					federation.appendFreqElements(repo.getElementFrequency());
 
-				federation.appendFreqElements(repo.getElementFrequency());
-				// System.out.println("-------Done-------");
+					federation.appendCompletnessElements(repo
+							.getElementCompleteness());
 
-				// System.out
-				// .println("-------Computing Repository Level Element Completeness-------");
-				federation.appendCompletnessElements(repo
-						.getElementCompleteness());
+					federation.appendDimensionalityElements(repo
+							.getElementDimensions());
 
-				// System.out.println("-------Done-------");
+					federation.appendEntropyElements(repo
+							.computeElementEntropy());
 
-				// System.out
-				// .println("---------------Computing Element Maximum dimensionality--------------");
+					repo.computeElementValueFreq(props
+							.getProperty(constants.elementValues));
+					FileUtils.deleteDirectory(new File("buffer"));
 
-				federation.appendDimensionalityElements(repo
-						.getElementDimensions());
-				// System.out.println("---------------Done--------------");
+					repo.getAttributeFrequency();
 
-				// System.out.println("Computing Elements' relative entropy...");
+					federation.appendFileSize(repo
+							.getFileSizeDistribution(xmls));
+					System.out.println("Repository:" + repo.getRepoName()
+							+ " analysis completed.");
+				} else {
+					System.out.println("Analysing repository:"
+							+ repo.getRepoName());
+					System.out.println("Number of records:" + xmls.size());
+					repo.getElementFrequency();
+					repo.getElementCompleteness();
+					repo.getElementDimensions();
+					repo.computeElementEntropy();
+					repo.computeElementValueFreq(props
+							.getProperty(constants.elementValues));
+					FileUtils.deleteDirectory(new File("buffer"));
 
-				federation.appendEntropyElements(repo.computeElementEntropy());
-				// FileUtils.deleteDirectory(new File("buffer"));
-				// System.out.println("Done...");
+					repo.getAttributeFrequency();
+					System.out.println("Repository:" + repo.getRepoName()
+							+ " analysis completed.");
 
-				repo.computeElementValueFreq(props
-						.getProperty(constants.elementValues));
-				FileUtils.deleteDirectory(new File("buffer"));
-
-				// System.out
-				// .println("-------Computing Repository Level Attribute Frequency-------");
-				repo.getAttributeFrequency();
-				// // repo.showAttributes();
-				// System.out.println("-------Done-------");
-
-				// System.out
-				// .println("-------Computing Repository Level File Size Mean-------");
-
-				federation.appendFileSize(repo.getFileSizeDistribution(xmls));
-				System.out.println("Repository:" + repo.getRepoName()
-						+ " analysis completed.");
-				// System.out.println("-------Done-------"); // FileSizeMean
+				}
 
 			}
 
-			federation.getElementsSFrequency();
-			federation.getElementsMCompletness();
-			federation.getElementsMaxDimensionality();
-			federation.getElementsMEntropy();
-			federation.getAttributesSumFreq();
-			federation.getElementValueSumFreq(props
-					.getProperty(constants.elementValues));
-			System.out.println("Average file size:"
-					+ federation.getAverageFileSize() + " Bytes");
+			if (fedFlag) {
+				federation.getElementsSFrequency();
+				federation.getElementsMCompletness();
+				federation.getElementsMaxDimensionality();
+				federation.getElementsMEntropy();
+				federation.getAttributesSumFreq();
+				federation.getElementValueSumFreq(props
+						.getProperty(constants.elementValues));
+				System.out.println("Average file size:"
+						+ federation.getAverageFileSize() + " Bytes");
+			}
 
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();

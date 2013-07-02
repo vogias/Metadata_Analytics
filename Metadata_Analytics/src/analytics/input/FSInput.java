@@ -18,7 +18,7 @@ import org.apache.commons.io.FileUtils;
 public class FSInput extends Input {
 
 	@Override
-	public Collection<File> getData(String path) {
+	public Collection<File> getData(String path, String repoSelection) {
 		// TODO Auto-generated method stub
 		File mdstore = new File(path);
 		List<File> files = new ArrayList<>();
@@ -29,12 +29,24 @@ public class FSInput extends Input {
 			return null;
 		} else {
 
-			File[] providersDirs = mdstore.listFiles();
+			if (repoSelection.equals("*")) {
+				File[] providersDirs = mdstore.listFiles();
 
-			for (int i = 0; i < providersDirs.length; i++) {
-				File prDir = providersDirs[i];
-				if (prDir.isDirectory())
-					files.add(prDir);
+				for (int i = 0; i < providersDirs.length; i++) {
+					File prDir = providersDirs[i];
+					if (prDir.isDirectory())
+						files.add(prDir);
+				}
+			} else {
+				String[] repos = repoSelection.split(",");
+				for (int i = 0; i < repos.length; i++) {
+					File repo = new File(mdstore, repos[i]);
+
+					if (repo != null && repo.isDirectory()) {
+						files.add(repo);
+					} else
+						continue;
+				}
 			}
 
 			return files;
