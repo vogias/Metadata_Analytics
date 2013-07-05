@@ -54,6 +54,7 @@ public class Repository {
 	Storage storage;
 	Collection<File> xmls;
 	float fileSizeM;
+	float requirements;
 
 	public Repository(Collection<File> xmls, boolean temporal)
 			throws FileNotFoundException, IOException, SAXException,
@@ -63,6 +64,8 @@ public class Repository {
 		// TODO Auto-generated constructor stub
 		xmlElements = new Vector<>();
 
+		fileSizeM = 0;
+		requirements = 0;
 		this.xmls = xmls;
 		attributes = new MultiHashMap();
 		distinctAtts = new MultiHashMap();
@@ -88,6 +91,21 @@ public class Repository {
 
 		this.storage = this.createStorageClass();
 
+	}
+
+	/**
+	 * @return the requirements
+	 */
+	public float getRequirements() {
+		return requirements;
+	}
+
+	/**
+	 * @param requirements
+	 *            the requirements to set
+	 */
+	public void setRequirements(float requirements) {
+		this.requirements = requirements;
 	}
 
 	/**
@@ -390,7 +408,8 @@ public class Repository {
 	}
 
 	/**
-	 * @param fileSizeM the fileSizeM to set
+	 * @param fileSizeM
+	 *            the fileSizeM to set
 	 */
 	public void setFileSizeM(float fileSizeM) {
 		this.fileSizeM = fileSizeM;
@@ -532,11 +551,12 @@ public class Repository {
 
 	public float getApproStorageRequirements() {
 
-		float req = xmls.size() * getFileSizeM();
+		requirements = xmls.size() * getFileSizeM();
 
 		System.out.println(this.getRepoName()
-				+ " Approximate Storage Requirements:" + req + " bytes.");
-		return req;
+				+ " Approximate Storage Requirements:" + requirements
+				+ " bytes.");
+		return requirements;
 	}
 
 	public void storeRepoGeneralInfo() {

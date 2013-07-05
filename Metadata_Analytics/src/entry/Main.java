@@ -145,11 +145,16 @@ public class Main {
 
 					repo.computeElementValueFreq(props
 							.getProperty(constants.elementValues));
+
+					repo.storeRepoGeneralInfo();
+
 					FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency();
 
 					federation.appendFileSize(repo.getFileSizeDistribution());
+					federation.appendNoRecords(repo.getXmls().size());
+
 					System.out.println("Repository:" + repo.getRepoName()
 							+ " analysis completed.");
 					System.out
@@ -168,9 +173,6 @@ public class Main {
 					repo.computeElementValueFreq(props
 							.getProperty(constants.elementValues));
 
-//					repo.getFileSizeDistribution();
-//					repo.getApproStorageRequirements();
-//					repo.getSchema();
 					repo.storeRepoGeneralInfo();
 
 					FileUtils.deleteDirectory(new File("buffer"));
@@ -197,6 +199,10 @@ public class Main {
 						.getProperty(constants.elementValues));
 				System.out.println("Average file size:"
 						+ federation.getAverageFileSize() + " Bytes");
+				System.out.println("Sum number of records:"
+						+ federation.getRecordsSum() + " records");
+				System.out.println("Sum storage requirements:"
+						+ federation.getRequirements() + " bytes");
 			}
 
 		} catch (NullPointerException ex) {

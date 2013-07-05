@@ -35,11 +35,13 @@ public class Federation {
 	MultiHashMap elementDim;
 	MultiHashMap elementEntropy;
 	Vector<Float> fileSize;
+
 	HashMap<String, HashMap<String, Integer>> vocs;
 	int numberOfRepos;
 	Vector<String> repoNames;
 	Properties props;
 	boolean temporalAnalysis;
+	Vector<Integer> noRecords;
 
 	public Federation(int repoNum, boolean temporal)
 			throws FileNotFoundException, IOException {
@@ -49,6 +51,8 @@ public class Federation {
 		elementDim = new MultiHashMap();
 		elementEntropy = new MultiHashMap();
 		fileSize = new Vector<>();
+
+		noRecords = new Vector<>();
 		numberOfRepos = repoNum;
 		repoNames = new Vector<>();
 		props = new Properties();
@@ -73,11 +77,37 @@ public class Federation {
 		this.fileSize.addElement(fileSize);
 	}
 
+	public void appendNoRecords(int recordNum) {
+		this.noRecords.addElement(recordNum);
+	}
+
+	public Vector<Integer> getNoRecords() {
+		return noRecords;
+
+	}
+
+	public int getRecordsSum() {
+
+		Vector<Integer> records = getNoRecords();
+
+		int sum = 0;
+
+		for (int i = 0; i < records.size(); i++) {
+			sum += records.elementAt(i);
+		}
+		return sum;
+	}
+
 	/**
 	 * @return the fileSize
 	 */
 	public Vector<Float> getFileSize() {
 		return fileSize;
+	}
+
+	public float getRequirements() {
+
+		return getRecordsSum() * getAverageFileSize();
 	}
 
 	/**
@@ -164,6 +194,8 @@ public class Federation {
 		avg = avg / fileSize.size();
 		return avg;
 	}
+
+	
 
 	@SuppressWarnings("deprecation")
 	public HashMap<String, Double> getElementsMCompletness()
