@@ -563,7 +563,15 @@ public class Repository {
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeRepositoryData(repoName, xmls.size(),
-				getFileSizeDistribution(), getApproStorageRequirements(),
+				getFileSizeM(), getApproStorageRequirements(),
 				getSchema());
+	}
+
+	public String getGeneralDataFilePath() {
+		return storage.getGeneralIngoFilePath();
+	}
+
+	public String getElementDataFiledPath() {
+		return storage.getElementDataFilePath();
 	}
 }

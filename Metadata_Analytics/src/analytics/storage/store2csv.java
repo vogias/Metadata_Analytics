@@ -6,6 +6,7 @@ package analytics.storage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.nio.Buffer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Vector;
 
 import org.apache.commons.io.FileUtils;
 
@@ -21,6 +23,67 @@ import org.apache.commons.io.FileUtils;
  * 
  */
 public class store2csv extends Storage {
+
+	String elementDataFilePath;
+	String specificElementDataFilePath;
+	String generalDataFilePath;
+	String attributeDataFilePath;
+	boolean appendData = false;
+
+	/**
+	 * @return the appendData
+	 */
+	public boolean isAppendData() {
+		return appendData;
+	}
+
+	/**
+	 * @param appendData
+	 *            the appendData to set
+	 */
+	public void setAppendData(boolean appendData) {
+		this.appendData = appendData;
+	}
+
+	/**
+	 * @return the generalDataFilePath
+	 */
+	public String getGeneralDataFilePath() {
+		return generalDataFilePath;
+	}
+
+	/**
+	 * @param generalDataFilePath
+	 *            the generalDataFilePath to set
+	 */
+	public void setGeneralDataFilePath(String generalDataFilePath) {
+		this.generalDataFilePath = generalDataFilePath;
+	}
+
+	/**
+	 * @param elementDataFilePath
+	 *            the elementDataFilePath to set
+	 */
+	public void setElementDataFilePath(String elementDataFilePath) {
+		this.elementDataFilePath = elementDataFilePath;
+	}
+
+	/**
+	 * @param specificElementDataFilePath
+	 *            the specificElementDataFilePath to set
+	 */
+	public void setSpecificElementDataFilePath(
+			String specificElementDataFilePath) {
+		this.specificElementDataFilePath = specificElementDataFilePath;
+	}
+
+	/**
+	 * @param attributeDataFilePath
+	 *            the attributeDataFilePath to set
+	 */
+	public void setAttributeDataFilePath(String attributeDataFilePath) {
+		this.attributeDataFilePath = attributeDataFilePath;
+	}
 
 	private void createHeaders(BufferedWriter writer, String metricName,
 			String element) {
@@ -58,6 +121,7 @@ public class store2csv extends Storage {
 
 		File file = new File(dir, sFileName);
 
+		this.setElementDataFilePath(file.getAbsolutePath());
 		try {
 			if (!file.exists()) {
 				FileWriter writer = new FileWriter(file);
@@ -250,6 +314,7 @@ public class store2csv extends Storage {
 
 		File file = new File(dir, sFileName);
 
+		this.setGeneralDataFilePath(file.getAbsolutePath());
 		FileWriter writer;
 		try {
 			writer = new FileWriter(file);
@@ -277,6 +342,98 @@ public class store2csv extends Storage {
 			bw.append(",");
 			bw.append(schema);
 			bw.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public String getElementDataFilePath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getSpecificElementDataFilePath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getGeneralIngoFilePath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAttributeDataFilePath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void appendRepositoryData(String repoName, int noRecords,
+			float avgFSize, float storageReq, String schema) {
+
+		// TODO Auto-generated method stub
+		String sFileName = "Federation" + "_GeneralInfo" + ".csv";
+
+		File anls = new File("Analysis_Results");
+
+		if (!anls.exists())
+			anls.mkdir();
+
+		File dir = new File(anls, repoName);
+		if (!dir.exists())
+			dir.mkdir();
+
+		File file = new File(dir, sFileName);
+
+		FileWriter writer;
+		try {
+			writer = new FileWriter(file);
+			BufferedWriter bw = new BufferedWriter(writer);
+
+			if (!isAppendData()) {
+
+				setAppendData(true);
+				// create header
+				bw.append("Repository Name");
+				bw.append(",");
+				bw.append("Number of records");
+				bw.append(",");
+				bw.append("Average file size(bytes)");
+				bw.append(",");
+				bw.append("Approximate Storage requirements(bytes)");
+				bw.append(",");
+				bw.append("Metadata schema namespace");
+				bw.newLine();
+				bw.append(repoName);
+				bw.append(",");
+				bw.append(String.valueOf(noRecords));
+				bw.append(",");
+				bw.append(String.valueOf(avgFSize));
+				bw.append(",");
+				bw.append(String.valueOf(storageReq));
+				bw.append(",");
+				bw.append(schema);
+				bw.close();
+			} else {
+				// insert data
+				bw.append(repoName);
+				bw.append(",");
+				bw.append(String.valueOf(noRecords));
+				bw.append(",");
+				bw.append(String.valueOf(avgFSize));
+				bw.append(",");
+				bw.append(String.valueOf(storageReq));
+				bw.append(",");
+				bw.append(schema);
+				bw.close();
+			}
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

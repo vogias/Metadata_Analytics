@@ -39,9 +39,11 @@ public class Federation {
 	HashMap<String, HashMap<String, Integer>> vocs;
 	int numberOfRepos;
 	Vector<String> repoNames;
+	Vector<Float> requirements;
 	Properties props;
 	boolean temporalAnalysis;
 	Vector<Integer> noRecords;
+	Vector<String> schemas;
 
 	public Federation(int repoNum, boolean temporal)
 			throws FileNotFoundException, IOException {
@@ -52,6 +54,8 @@ public class Federation {
 		elementEntropy = new MultiHashMap();
 		fileSize = new Vector<>();
 
+		schemas=new Vector<>();
+		requirements = new Vector<>();
 		noRecords = new Vector<>();
 		numberOfRepos = repoNum;
 		repoNames = new Vector<>();
@@ -76,12 +80,27 @@ public class Federation {
 	public void appendFileSize(float fileSize) {
 		this.fileSize.addElement(fileSize);
 	}
+	public void appendSchemas(String sch) {
+		schemas.addElement(sch);
+	}
+
+	public Vector<String> getSchemas() {
+		return schemas;
+	}
+	public void appendRequirements(float req) {
+		requirements.addElement(req);
+	}
+
+	public Vector<Float> getRequirementsVector() {
+		return requirements;
+	}
 
 	public void appendNoRecords(int recordNum) {
 		this.noRecords.addElement(recordNum);
 	}
 
 	public Vector<Integer> getNoRecords() {
+		
 		return noRecords;
 
 	}
@@ -194,8 +213,6 @@ public class Federation {
 		avg = avg / fileSize.size();
 		return avg;
 	}
-
-	
 
 	@SuppressWarnings("deprecation")
 	public HashMap<String, Double> getElementsMCompletness()
@@ -648,5 +665,11 @@ public class Federation {
 		federation.addRepoName("TRANGLOR_COPY");
 
 		federation.getAttributesSumFreq();
+	}
+
+	public void storeGeneralInfo2CSV() {
+		
+		// TODO Auto-generated method stub
+
 	}
 }

@@ -146,14 +146,15 @@ public class Main {
 					repo.computeElementValueFreq(props
 							.getProperty(constants.elementValues));
 
-					repo.storeRepoGeneralInfo();
-
 					FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency();
 
 					federation.appendFileSize(repo.getFileSizeDistribution());
 					federation.appendNoRecords(repo.getXmls().size());
+					repo.storeRepoGeneralInfo();
+					federation.appendSchemas(repo.getSchema());
+					federation.appendRequirements(repo.getRequirements());
 
 					System.out.println("Repository:" + repo.getRepoName()
 							+ " analysis completed.");
@@ -203,6 +204,8 @@ public class Main {
 						+ federation.getRecordsSum() + " records");
 				System.out.println("Sum storage requirements:"
 						+ federation.getRequirements() + " bytes");
+				federation.storeGeneralInfo2CSV();
+
 			}
 
 		} catch (NullPointerException ex) {
