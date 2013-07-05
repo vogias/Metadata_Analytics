@@ -34,7 +34,7 @@ public class FileSizeMean extends Metric {
 		}
 
 		setFileSizeM(c2 / i);
-		System.out.println("File size mean:" + getFileSizeM() + " bytes");
+		
 		return null;
 	}
 

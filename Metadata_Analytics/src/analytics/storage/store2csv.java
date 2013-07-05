@@ -232,4 +232,57 @@ public class store2csv extends Storage {
 		}
 	}
 
+	@Override
+	public void storeRepositoryData(String repoName, int noRecords,
+			float avgFSize, float storageReq, String schema) {
+		// TODO Auto-generated method stub
+
+		String sFileName = repoName + "_GeneralInfo" + ".csv";
+
+		File anls = new File("Analysis_Results");
+
+		if (!anls.exists())
+			anls.mkdir();
+
+		File dir = new File(anls, repoName);
+		if (!dir.exists())
+			dir.mkdir();
+
+		File file = new File(dir, sFileName);
+
+		FileWriter writer;
+		try {
+			writer = new FileWriter(file);
+			BufferedWriter bw = new BufferedWriter(writer);
+			// create header
+			bw.append("Repository Name");
+			bw.append(",");
+			bw.append("Number of records");
+			bw.append(",");
+			bw.append("Average file size(bytes)");
+			bw.append(",");
+			bw.append("Approximate Storage requirements(bytes)");
+			bw.append(",");
+			bw.append("Metadata schema namespace");
+			bw.newLine();
+
+			// insert data
+			bw.append(repoName);
+			bw.append(",");
+			bw.append(String.valueOf(noRecords));
+			bw.append(",");
+			bw.append(String.valueOf(avgFSize));
+			bw.append(",");
+			bw.append(String.valueOf(storageReq));
+			bw.append(",");
+			bw.append(schema);
+			bw.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 }

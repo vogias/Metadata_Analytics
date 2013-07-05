@@ -77,6 +77,8 @@ public class XMLHandler extends DefaultHandler {
 				elmt.put(branche, attributes.getValue(i));
 
 				repositoryHandler.addAttributes(attributes.getQName(i), elmt);
+			} else if (name.contains("xmlns")) {
+				repositoryHandler.setSchema(attributes.getValue(i));
 			}
 		}
 
@@ -89,7 +91,7 @@ public class XMLHandler extends DefaultHandler {
 
 		String elmt = "";
 		qName = qName.toLowerCase();
-		
+
 		if (branche.endsWith(qName + "" + ".")) {
 			branche = branche.substring(0, branche.length() - qName.length()
 					- 1);

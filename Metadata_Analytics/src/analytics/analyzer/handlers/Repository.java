@@ -49,15 +49,21 @@ public class Repository {
 	String repoName;
 	Properties props;
 	boolean temporalAnalysis;
-	
+	String schema;
+
 	Storage storage;
+	Collection<File> xmls;
+	float fileSizeM;
 
 	public Repository(Collection<File> xmls, boolean temporal)
 			throws FileNotFoundException, IOException, SAXException,
-			ParserConfigurationException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+			ParserConfigurationException, InstantiationException,
+			IllegalAccessException, ClassNotFoundException {
 
 		// TODO Auto-generated constructor stub
 		xmlElements = new Vector<>();
+
+		this.xmls = xmls;
 		attributes = new MultiHashMap();
 		distinctAtts = new MultiHashMap();
 		elementCompletness = new HashMap<>();
@@ -80,8 +86,39 @@ public class Repository {
 
 		temporalAnalysis = temporal;
 
-		this.storage=this.createStorageClass();
-		
+		this.storage = this.createStorageClass();
+
+	}
+
+	/**
+	 * @return the schema
+	 */
+	public String getSchema() {
+		System.out.println(getRepoName() + " schema namespace:" + schema);
+		return schema;
+	}
+
+	/**
+	 * @param schema
+	 *            the schema to set
+	 */
+	public void setSchema(String schema) {
+		this.schema = schema;
+	}
+
+	/**
+	 * @return the xmls
+	 */
+	public Collection<File> getXmls() {
+		return xmls;
+	}
+
+	/**
+	 * @param xmls
+	 *            the xmls to set
+	 */
+	public void setXmls(Collection<File> xmls) {
+		this.xmls = xmls;
 	}
 
 	private Storage createStorageClass() throws InstantiationException,
@@ -99,9 +136,9 @@ public class Repository {
 
 		return storage;
 	}
-	
-	private Storage getStorageClass(){
-		
+
+	private Storage getStorageClass() {
+
 		return this.storage;
 	}
 
@@ -194,7 +231,7 @@ public class Repository {
 		}
 
 		Storage storageClass = getStorageClass();
-		
+
 		storageClass.storeElementData(data, "Entropy", this.getRepoName(),
 				"_Element_Analysis", "Element Name", temporalAnalysis);
 
@@ -299,7 +336,7 @@ public class Repository {
 		}
 
 		Storage storageClass = getStorageClass();
-		
+
 		storageClass.storeElementData(data, "Dimensions", this.getRepoName(),
 				"_Element_Analysis", "Element Name", temporalAnalysis);
 
@@ -336,11 +373,27 @@ public class Repository {
 		this.distinctAtts = distinctAtts;
 	}
 
-	public float getFileSizeDistribution(Collection<File> xmls) {
+	public float getFileSizeDistribution() {
 		FileSizeMean fileSizeMean = new FileSizeMean();
 		fileSizeMean.compute(xmls);
-		float fileSizeM = fileSizeMean.getFileSizeM();
+		fileSizeM = fileSizeMean.getFileSizeM();
+
+		System.out.println("File size mean:" + fileSizeM + " bytes");
 		return fileSizeM;
+	}
+
+	/**
+	 * @return the fileSizeM
+	 */
+	public float getFileSizeM() {
+		return fileSizeM;
+	}
+
+	/**
+	 * @param fileSizeM the fileSizeM to set
+	 */
+	public void setFileSizeM(float fileSizeM) {
+		this.fileSizeM = fileSizeM;
 	}
 
 	/**
@@ -441,7 +494,7 @@ public class Repository {
 		HashMap<String, Double> data = elFrequency.compute(xmlElements);
 
 		Storage storageClass = getStorageClass();
-		
+
 		storageClass.storeElementData(data, "Frequency", this.getRepoName(),
 				"_Element_Analysis", "Element Name", temporalAnalysis);
 		return data;
@@ -469,7 +522,7 @@ public class Repository {
 				.compute(getElementCompletnessMatrix());
 
 		Storage storageClass = getStorageClass();
-		
+
 		storageClass.storeElementData(map, "Completeness(%)",
 				this.getRepoName(), "_Element_Analysis", "Element Name",
 				temporalAnalysis);
@@ -477,4 +530,20 @@ public class Repository {
 		return map;
 	}
 
+	public float getApproStorageRequirements() {
+
+		float req = xmls.size() * getFileSizeM();
+
+		System.out.println(this.getRepoName()
+				+ " Approximate Storage Requirements:" + req + " bytes.");
+		return req;
+	}
+
+	public void storeRepoGeneralInfo() {
+		Storage storageClass = getStorageClass();
+
+		storageClass.storeRepositoryData(repoName, xmls.size(),
+				getFileSizeDistribution(), getApproStorageRequirements(),
+				getSchema());
+	}
 }

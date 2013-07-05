@@ -126,6 +126,8 @@ public class Main {
 				if (fedFlag) {
 					federation.addRepoName(dp.get(i).getName());
 
+					System.out
+							.println("######################################");
 					System.out.println("Analysing repository:"
 							+ repo.getRepoName());
 					System.out.println("Number of records:" + xmls.size());
@@ -147,14 +149,18 @@ public class Main {
 
 					repo.getAttributeFrequency();
 
-					federation.appendFileSize(repo
-							.getFileSizeDistribution(xmls));
+					federation.appendFileSize(repo.getFileSizeDistribution());
 					System.out.println("Repository:" + repo.getRepoName()
 							+ " analysis completed.");
+					System.out
+							.println("======================================");
 				} else {
+					System.out
+							.println("######################################");
 					System.out.println("Analysing repository:"
 							+ repo.getRepoName());
-					System.out.println("Number of records:" + xmls.size());
+					System.out.println("Number of records:"
+							+ repo.getXmls().size());
 					repo.getElementFrequency();
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
@@ -162,11 +168,20 @@ public class Main {
 					repo.computeElementValueFreq(props
 							.getProperty(constants.elementValues));
 
+//					repo.getFileSizeDistribution();
+//					repo.getApproStorageRequirements();
+//					repo.getSchema();
+					repo.storeRepoGeneralInfo();
+
 					FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency();
+					System.out
+							.println("======================================");
 					System.out.println("Repository:" + repo.getRepoName()
 							+ " analysis completed.");
+					System.out
+							.println("======================================");
 
 				}
 
