@@ -34,6 +34,8 @@ import analytics.input.OAITargetInput;
  */
 public class OAIInitializer extends InitializeProcess {
 
+	Properties props;
+
 	@Override
 	public boolean pathCheck(Input in, Properties props) {
 		// TODO Auto-generated method stub
@@ -53,6 +55,7 @@ public class OAIInitializer extends InitializeProcess {
 	@Override
 	public List<?> getProvidersData(Input in, Properties props) {
 		// TODO Auto-generated method stub
+		this.props = props;
 		String repositoriesList = props
 				.getProperty(AnalyticsConstants.oaiRepositoriesList);
 
@@ -77,16 +80,49 @@ public class OAIInitializer extends InitializeProcess {
 
 	}
 
+	public List<String> getMetadataFormats() {
+
+		String metadataFormats = props
+				.getProperty(AnalyticsConstants.metadataFormats);
+
+		String[] formats;
+		if (metadataFormats.contains(","))
+			formats = metadataFormats.split(",");
+		else
+			formats = new String[] { metadataFormats };
+
+		List<String> mFormats = new ArrayList<>();
+
+		for (int i = 0; i < formats.length; i++) {
+			mFormats.add(formats[i]);
+			System.out.println(formats[i]);
+		}
+
+		return (List<String>) mFormats;
+	}
+
 	@Override
 	public void doAnalysis(Federation federation, List<?> dataProviders,
 			boolean fedFlag, String elementNames)
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, SAXException, ParserConfigurationException {
+		List<String> metadataFormats = getMetadataFormats();
+		boolean flag = false;
+
+		if (dataProviders.size() == metadataFormats.size())
+			flag = true;
+
 		for (int i = 0; i < dataProviders.size(); i++) {
 
 			OAITargetInput input = new OAITargetInput();
-			Collection<String> xmls = (Collection<String>) input.getData(
-					(String) dataProviders.get(i), "oai_ods");
+
+			Collection<String> xmls;
+			if (flag) {
+				xmls = (Collection<String>) input.getData(
+						(String) dataProviders.get(i), metadataFormats.get(i));
+			}else
+				xmls = (Collection<String>) input.getData(
+						(String) dataProviders.get(i), metadataFormats.get(0));
 
 			try {
 				Repository repo = new Repository(xmls);
@@ -121,11 +157,11 @@ public class OAIInitializer extends InitializeProcess {
 
 					repo.getAttributeFrequency();
 
-					//federation.appendFileSize(repo.getFileSizeDistribution());
-					//federation.appendNoRecords(repo.getXmls().size());
-				//	repo.storeRepoGeneralInfo();
-				//	federation.appendSchemas(repo.getSchema());
-				//	federation.appendRequirements(repo.getRequirements());
+					// federation.appendFileSize(repo.getFileSizeDistribution());
+					federation.appendNoRecords(repo.getXmls().size());
+					// repo.storeRepoGeneralInfo();
+					federation.appendSchemas(repo.getSchema());
+					// federation.appendRequirements(repo.getRequirements());
 
 					System.out.println("Repository:" + repo.getRepoName()
 							+ " analysis completed.");
@@ -144,7 +180,7 @@ public class OAIInitializer extends InitializeProcess {
 					repo.computeElementEntropy();
 					repo.computeElementValueFreq(elementNames);
 
-				//	repo.storeRepoGeneralInfo();
+					// repo.storeRepoGeneralInfo();
 
 					FileUtils.deleteDirectory(new File("buffer"));
 
@@ -178,7 +214,7 @@ public class OAIInitializer extends InitializeProcess {
 						+ federation.getRecordsSum() + " records");
 				System.out.println("Sum storage requirements:"
 						+ federation.getRequirements() + " bytes");
-			//	federation.storeGeneralInfo2CSV();
+				// federation.storeGeneralInfo2CSV();
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}

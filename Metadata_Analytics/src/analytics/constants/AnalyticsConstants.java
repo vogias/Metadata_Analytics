@@ -20,6 +20,7 @@ public class AnalyticsConstants {
 	public static String initializer = "analytics.initializer.class";
 	public static String xmlHandlerInput = "analytics.xmlHandler.input.class";
 	public static String oaiRepositoriesList = "analytics.repositories.list";
+	public static String metadataFormats = "analytics.repositories.metadataFormat";
 	
 	// public static String temporalMode = "temporal.analysis.mode";
 
