@@ -69,7 +69,7 @@ public class OAIInitializer extends InitializeProcess {
 
 		for (int i = 0; i < repos.length; i++) {
 			dataProviders.add(repos[i]);
-			System.out.println(repos[i]);
+
 		}
 
 		// Collection<String> dataProviders = (Collection<String>) in.getData(
@@ -95,7 +95,7 @@ public class OAIInitializer extends InitializeProcess {
 
 		for (int i = 0; i < formats.length; i++) {
 			mFormats.add(formats[i]);
-			System.out.println(formats[i]);
+
 		}
 
 		return (List<String>) mFormats;
@@ -120,7 +120,7 @@ public class OAIInitializer extends InitializeProcess {
 			if (flag) {
 				xmls = (Collection<String>) input.getData(
 						(String) dataProviders.get(i), metadataFormats.get(i));
-			}else
+			} else
 				xmls = (Collection<String>) input.getData(
 						(String) dataProviders.get(i), metadataFormats.get(0));
 
