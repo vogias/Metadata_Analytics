@@ -3,10 +3,7 @@
  */
 package analytics.input;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream.GetField;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -52,14 +49,12 @@ public class OAITargetInput extends Input {
 
 			IdentifiersList list = oaiPmhServer.listIdentifiers(repoSelection);
 
-			int recordsNum = 0;
 			while (more) {
 				for (Header header : list.asList()) {
 					// System.out.println(header.getIdentifier());
 					Record record = oaiPmhServer.getRecord(
 							header.getIdentifier(), repoSelection);
 					data.addElement(record.getMetadataAsString());
-					recordsNum++;
 
 				}
 				if (list.getResumptionToken() != null)
@@ -69,7 +64,6 @@ public class OAITargetInput extends Input {
 					more = false;
 			}
 
-			System.out.println("Records:" + recordsNum);
 			return data;
 
 		} catch (OAIException | IOException e1) {

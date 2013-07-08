@@ -81,17 +81,17 @@ public class Repository {
 
 		props.load(new FileInputStream("configure.properties"));
 
-		Iterator<File> iterator = (Iterator<File>) xmls.iterator();
-		int j = 0;
-		while (iterator.hasNext()) {
-			File xml = iterator.next();
-			XMLHandler xmlHandler = new XMLHandler(this);
-
-			InputStream inS = new FileInputStream(xml);
-
-			xmlHandler.parseDocument(inS);
-			j++;
-		}
+//		Iterator<File> iterator = (Iterator<File>) xmls.iterator();
+//		int j = 0;
+//		while (iterator.hasNext()) {
+//			File xml = iterator.next();
+//			XMLHandler xmlHandler = new XMLHandler(this);
+//
+//			InputStream inS = new FileInputStream(xml);
+//
+//			xmlHandler.parseDocument(inS);
+//			j++;
+//		}
 		XmlHandlerInput handlerInput = (XmlHandlerInput) this
 				.createXMLHandlerInputClass();
 

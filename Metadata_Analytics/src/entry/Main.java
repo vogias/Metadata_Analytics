@@ -62,10 +62,10 @@ public class Main {
 		Object whatInstance = myClass.newInstance();
 		Input in = (Input) whatInstance;
 
-		String initilizerClass = props
-				.getProperty(AnalyticsConstants.initilizer);
+		String initializerClass = props
+				.getProperty(AnalyticsConstants.initializer);
 		myClassLoader = ClassLoader.getSystemClassLoader();
-		myClass = myClassLoader.loadClass(initilizerClass);
+		myClass = myClassLoader.loadClass(initializerClass);
 		whatInstance = myClass.newInstance();
 
 		InitializeProcess initProcess = (InitializeProcess) whatInstance;
@@ -74,7 +74,9 @@ public class Main {
 
 			if (!initProcess.pathCheck(in, props)) {
 
-				System.out.println("Wrong data providers file names.");
+				System.out.println("Wrong data providers values.");
+				System.out
+						.println("Please insert correct data providers values.");
 				System.out.println("Exiting...");
 
 				System.exit(-1);
@@ -90,7 +92,7 @@ public class Main {
 			}
 
 			initProcess.doAnalysis(federation, dp, fedFlag,
-					AnalyticsConstants.elementValues);
+					props.getProperty(AnalyticsConstants.elementValues));
 
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();
