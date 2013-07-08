@@ -5,6 +5,7 @@ package analytics.analyzer.handlers;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -48,18 +49,18 @@ public class Repository {
 	int recordsNum;
 	String repoName;
 	Properties props;
-	boolean temporalAnalysis;
+
 	String schema;
 
 	Storage storage;
-	Collection<File> xmls;
+	Collection<?> xmls;
 	float fileSizeM;
 	float requirements;
 
-	public Repository(Collection<File> xmls, boolean temporal)
-			throws FileNotFoundException, IOException, SAXException,
-			ParserConfigurationException, InstantiationException,
-			IllegalAccessException, ClassNotFoundException {
+	public Repository(Collection<File> xmls) throws FileNotFoundException,
+			IOException, SAXException, ParserConfigurationException,
+			InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
 
 		// TODO Auto-generated constructor stub
 		xmlElements = new Vector<>();
@@ -83,11 +84,46 @@ public class Repository {
 			File xml = iterator.next();
 			XMLHandler xmlHandler = new XMLHandler(this);
 			InputStream inS = new FileInputStream(xml);
+
 			xmlHandler.parseDocument(inS);
 			j++;
 		}
 
-		temporalAnalysis = temporal;
+		this.storage = this.createStorageClass();
+
+	}
+
+	public Repository(Vector<String> xmls) throws SAXException,
+			ParserConfigurationException, InstantiationException,
+			IllegalAccessException, ClassNotFoundException,
+			FileNotFoundException, IOException {
+
+		// TODO Auto-generated constructor stub
+		xmlElements = new Vector<>();
+
+		fileSizeM = 0;
+		requirements = 0;
+		this.xmls = xmls;
+		attributes = new MultiHashMap();
+		distinctAtts = new MultiHashMap();
+		elementCompletness = new HashMap<>();
+		xmlElementsDistinct = new Vector<>();
+		elementDims = new HashMap<>();
+		recordsNum = 0;
+		elementEntropy = new Vector<>();
+		props = new Properties();
+
+		props.load(new FileInputStream("configure.properties"));
+		Iterator<String> iterator = xmls.iterator();
+		int j = 0;
+		while (iterator.hasNext()) {
+			String xml = iterator.next();
+			XMLHandler xmlHandler = new XMLHandler(this);
+			InputStream inS = new ByteArrayInputStream(xml.getBytes());
+
+			xmlHandler.parseDocument(inS);
+			j++;
+		}
 
 		this.storage = this.createStorageClass();
 
@@ -127,7 +163,7 @@ public class Repository {
 	/**
 	 * @return the xmls
 	 */
-	public Collection<File> getXmls() {
+	public Collection<?> getXmls() {
 		return xmls;
 	}
 
@@ -251,7 +287,7 @@ public class Repository {
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(data, "Entropy", this.getRepoName(),
-				"_Element_Analysis", "Element Name", temporalAnalysis);
+				"_Element_Analysis", "Element Name");
 
 		return data;
 
@@ -283,8 +319,7 @@ public class Repository {
 				storageClass.storeElementValueData(
 						(HashMap<String, Integer>) cardinalityMap, "Frequency",
 						this.getRepoName(), "_" + strings[i]
-								+ "_ElementValue_Analysis", "Element Value",
-						temporalAnalysis);
+								+ "_ElementValue_Analysis", "Element Value");
 
 			}
 		}
@@ -356,7 +391,7 @@ public class Repository {
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(data, "Dimensions", this.getRepoName(),
-				"_Element_Analysis", "Element Name", temporalAnalysis);
+				"_Element_Analysis", "Element Name");
 
 		return data;
 	}
@@ -515,7 +550,7 @@ public class Repository {
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(data, "Frequency", this.getRepoName(),
-				"_Element_Analysis", "Element Name", temporalAnalysis);
+				"_Element_Analysis", "Element Name");
 		return data;
 	}
 
@@ -543,8 +578,7 @@ public class Repository {
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(map, "Completeness(%)",
-				this.getRepoName(), "_Element_Analysis", "Element Name",
-				temporalAnalysis);
+				this.getRepoName(), "_Element_Analysis", "Element Name");
 
 		return map;
 	}
@@ -562,9 +596,8 @@ public class Repository {
 	public void storeRepoGeneralInfo() {
 		Storage storageClass = getStorageClass();
 
-		storageClass.storeRepositoryData(repoName, xmls.size(),
-				getFileSizeM(), getApproStorageRequirements(),
-				getSchema());
+		storageClass.storeRepositoryData(repoName, xmls.size(), getFileSizeM(),
+				getApproStorageRequirements(), getSchema());
 	}
 
 	public String getGeneralDataFilePath() {

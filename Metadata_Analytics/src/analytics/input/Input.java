@@ -15,5 +15,7 @@ public abstract class Input {
 	public abstract Collection<?> getData(String path,String repoSelection);
 
 	public abstract List<String> getRepoNames(String path);
+	
+	public abstract String getRepoName();//for oai-pmh implementation
 
 }

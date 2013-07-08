@@ -45,7 +45,7 @@ public class Federation {
 	Vector<Integer> noRecords;
 	Vector<String> schemas;
 
-	public Federation(int repoNum, boolean temporal)
+	public Federation(int repoNum)// , boolean temporal
 			throws FileNotFoundException, IOException {
 		// TODO Auto-generated constructor stub
 		elementFreq = new MultiHashMap();
@@ -61,7 +61,7 @@ public class Federation {
 		repoNames = new Vector<>();
 		props = new Properties();
 		props.load(new FileInputStream("configure.properties"));
-		temporalAnalysis = temporal;
+		// temporalAnalysis = temporal;
 	}
 
 	public void appendFreqElements(HashMap<String, Double> elements) {
@@ -203,7 +203,7 @@ public class Federation {
 		}
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Sum Frequency", "Federation",
-				"_Element_Analysis", "Element Name", temporalAnalysis);
+				"_Element_Analysis", "Element Name");
 
 		return data;
 	}
@@ -240,8 +240,7 @@ public class Federation {
 		}
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Average Completeness(%)",
-				"Federation", "_Element_Analysis", "Element Name",
-				temporalAnalysis);
+				"Federation", "_Element_Analysis", "Element Name");
 
 		return data;
 	}
@@ -269,7 +268,7 @@ public class Federation {
 		}
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Max Dimensionality", "Federation",
-				"_Element_Analysis", "Element Name", temporalAnalysis);
+				"_Element_Analysis", "Element Name");
 
 		return data;
 	}
@@ -297,7 +296,7 @@ public class Federation {
 		}
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Average Entropy", "Federation",
-				"_Element_Analysis", "Element Name", temporalAnalysis);
+				"_Element_Analysis", "Element Name");
 
 		return data;
 	}
@@ -675,25 +674,26 @@ public class Federation {
 		Vector<Float> requirementsVector = getRequirementsVector();
 		Vector<String> schemas = getSchemas();
 		Vector<Float> fileSize = getFileSize();
-		
+
 		for (int i = 0; i < repos; i++) {
 
-			storageClass.appendRepositoryData(names.elementAt(i), records.elementAt(i), fileSize.elementAt(i),
+			storageClass.appendRepositoryData(names.elementAt(i),
+					records.elementAt(i), fileSize.elementAt(i),
 					requirementsVector.elementAt(i), schemas.elementAt(i));
 		}
 
-		storageClass.appendRepositoryData("FEDERATION", getRecordsSum(), getAverageFileSize(),
-				getRequirements(), "----");
+		storageClass.appendRepositoryData("FEDERATION", getRecordsSum(),
+				getAverageFileSize(), getRequirements(), "----");
 		// TODO Auto-generated method stub
 
 	}
 
 	public static void main(String args[]) throws Exception {
-		Federation federation = new Federation(2, true);
-		federation.addRepoName("TRAGLOR");
-		federation.addRepoName("TRANGLOR_COPY");
-
-		federation.getAttributesSumFreq();
+		// Federation federation = new Federation(2, true);
+		// federation.addRepoName("TRAGLOR");
+		// federation.addRepoName("TRANGLOR_COPY");
+		//
+		// federation.getAttributesSumFreq();
 	}
 
 }
