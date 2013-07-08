@@ -27,6 +27,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MultiHashMap;
 import org.xml.sax.SAXException;
 
+import xmlHandling.XmlHandlerInput;
+
 import analytics.constants.AnalyticsConstants;
 import analytics.measures.ElementCompleteness;
 import analytics.measures.ElementFrequency;
@@ -57,7 +59,7 @@ public class Repository {
 	float fileSizeM;
 	float requirements;
 
-	public Repository(Collection<File> xmls) throws FileNotFoundException,
+	public Repository(Collection<?> xmls) throws FileNotFoundException,
 			IOException, SAXException, ParserConfigurationException,
 			InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
@@ -78,53 +80,22 @@ public class Repository {
 		props = new Properties();
 
 		props.load(new FileInputStream("configure.properties"));
-		Iterator<File> iterator = xmls.iterator();
+
+		Iterator<File> iterator = (Iterator<File>) xmls.iterator();
 		int j = 0;
 		while (iterator.hasNext()) {
 			File xml = iterator.next();
 			XMLHandler xmlHandler = new XMLHandler(this);
+
 			InputStream inS = new FileInputStream(xml);
 
 			xmlHandler.parseDocument(inS);
 			j++;
 		}
+		XmlHandlerInput handlerInput = (XmlHandlerInput) this
+				.createXMLHandlerInputClass();
 
-		this.storage = this.createStorageClass();
-
-	}
-
-	public Repository(Vector<String> xmls) throws SAXException,
-			ParserConfigurationException, InstantiationException,
-			IllegalAccessException, ClassNotFoundException,
-			FileNotFoundException, IOException {
-
-		// TODO Auto-generated constructor stub
-		xmlElements = new Vector<>();
-
-		fileSizeM = 0;
-		requirements = 0;
-		this.xmls = xmls;
-		attributes = new MultiHashMap();
-		distinctAtts = new MultiHashMap();
-		elementCompletness = new HashMap<>();
-		xmlElementsDistinct = new Vector<>();
-		elementDims = new HashMap<>();
-		recordsNum = 0;
-		elementEntropy = new Vector<>();
-		props = new Properties();
-
-		props.load(new FileInputStream("configure.properties"));
-		Iterator<String> iterator = xmls.iterator();
-		int j = 0;
-		while (iterator.hasNext()) {
-			String xml = iterator.next();
-			XMLHandler xmlHandler = new XMLHandler(this);
-			InputStream inS = new ByteArrayInputStream(xml.getBytes());
-
-			xmlHandler.parseDocument(inS);
-			j++;
-		}
-
+		handlerInput.getInputData(this);
 		this.storage = this.createStorageClass();
 
 	}
@@ -178,8 +149,8 @@ public class Repository {
 	private Storage createStorageClass() throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
 
-		AnalyticsConstants constants = new AnalyticsConstants();
-		String storageClass = props.getProperty(constants.storageClass);
+		String storageClass = props
+				.getProperty(AnalyticsConstants.storageClass);
 
 		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
 
@@ -189,6 +160,21 @@ public class Repository {
 		Storage storage = (Storage) whatInstance;
 
 		return storage;
+	}
+
+	private Object createXMLHandlerInputClass() throws InstantiationException,
+			IllegalAccessException, ClassNotFoundException {
+
+		String xmlInputClass = props
+				.getProperty(AnalyticsConstants.xmlHandlerInput);
+
+		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
+
+		Class myClass = myClassLoader.loadClass(xmlInputClass);
+
+		Object whatInstance = myClass.newInstance();
+
+		return whatInstance;
 	}
 
 	private Storage getStorageClass() {
