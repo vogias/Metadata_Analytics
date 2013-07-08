@@ -54,7 +54,7 @@ public class Federation {
 		elementEntropy = new MultiHashMap();
 		fileSize = new Vector<>();
 
-		schemas=new Vector<>();
+		schemas = new Vector<>();
 		requirements = new Vector<>();
 		noRecords = new Vector<>();
 		numberOfRepos = repoNum;
@@ -80,6 +80,7 @@ public class Federation {
 	public void appendFileSize(float fileSize) {
 		this.fileSize.addElement(fileSize);
 	}
+
 	public void appendSchemas(String sch) {
 		schemas.addElement(sch);
 	}
@@ -87,6 +88,7 @@ public class Federation {
 	public Vector<String> getSchemas() {
 		return schemas;
 	}
+
 	public void appendRequirements(float req) {
 		requirements.addElement(req);
 	}
@@ -100,7 +102,7 @@ public class Federation {
 	}
 
 	public Vector<Integer> getNoRecords() {
-		
+
 		return noRecords;
 
 	}
@@ -121,6 +123,7 @@ public class Federation {
 	 * @return the fileSize
 	 */
 	public Vector<Float> getFileSize() {
+
 		return fileSize;
 	}
 
@@ -659,6 +662,32 @@ public class Federation {
 		this.repoNames = repoNames;
 	}
 
+	public void storeGeneralInfo2CSV() throws InstantiationException,
+			IllegalAccessException, ClassNotFoundException, IOException {
+
+		Storage storageClass = getStorageClass();
+
+		int repos = getNumberOfRepos();
+
+		System.out.println("Number of repos:" + repos);
+		Vector<String> names = getRepoNames();
+		Vector<Integer> records = getNoRecords();
+		Vector<Float> requirementsVector = getRequirementsVector();
+		Vector<String> schemas = getSchemas();
+		Vector<Float> fileSize = getFileSize();
+		
+		for (int i = 0; i < repos; i++) {
+
+			storageClass.appendRepositoryData(names.elementAt(i), records.elementAt(i), fileSize.elementAt(i),
+					requirementsVector.elementAt(i), schemas.elementAt(i));
+		}
+
+		storageClass.appendRepositoryData("FEDERATION", getRecordsSum(), getAverageFileSize(),
+				getRequirements(), "----");
+		// TODO Auto-generated method stub
+
+	}
+
 	public static void main(String args[]) throws Exception {
 		Federation federation = new Federation(2, true);
 		federation.addRepoName("TRAGLOR");
@@ -667,9 +696,4 @@ public class Federation {
 		federation.getAttributesSumFreq();
 	}
 
-	public void storeGeneralInfo2CSV() {
-		
-		// TODO Auto-generated method stub
-
-	}
 }

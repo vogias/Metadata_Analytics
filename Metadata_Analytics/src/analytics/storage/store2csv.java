@@ -375,8 +375,8 @@ public class store2csv extends Storage {
 	}
 
 	@Override
-	public void appendRepositoryData(String repoName, int noRecords,
-			float avgFSize, float storageReq, String schema) {
+	public void appendRepositoryData(String repoName,int noRecords, float avgFSize,
+			float storageReq, String schema) throws IOException {
 
 		// TODO Auto-generated method stub
 		String sFileName = "Federation" + "_GeneralInfo" + ".csv";
@@ -386,15 +386,18 @@ public class store2csv extends Storage {
 		if (!anls.exists())
 			anls.mkdir();
 
-		File dir = new File(anls, repoName);
+		File dir = new File(anls, "Federation");
 		if (!dir.exists())
 			dir.mkdir();
 
 		File file = new File(dir, sFileName);
 
+		if (!file.exists())
+			file.createNewFile();
+
 		FileWriter writer;
 		try {
-			writer = new FileWriter(file);
+			writer = new FileWriter(file,true);
 			BufferedWriter bw = new BufferedWriter(writer);
 
 			if (!isAppendData()) {
@@ -420,6 +423,7 @@ public class store2csv extends Storage {
 				bw.append(String.valueOf(storageReq));
 				bw.append(",");
 				bw.append(schema);
+				bw.newLine();
 				bw.close();
 			} else {
 				// insert data
@@ -432,6 +436,7 @@ public class store2csv extends Storage {
 				bw.append(String.valueOf(storageReq));
 				bw.append(",");
 				bw.append(schema);
+				bw.newLine();
 				bw.close();
 			}
 
