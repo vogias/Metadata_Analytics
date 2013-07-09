@@ -66,6 +66,7 @@ public class FSInitializer extends InitializeProcess {
 					(File) dataProviders.get(i), extensions, true);
 
 			try {
+				
 				Repository repo = new Repository(xmls);
 
 				repo.setRepoName(((File) dataProviders.get(i)).getName());

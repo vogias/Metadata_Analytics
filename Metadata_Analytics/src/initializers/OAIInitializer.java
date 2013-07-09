@@ -55,50 +55,57 @@ public class OAIInitializer extends InitializeProcess {
 	@Override
 	public List<?> getProvidersData(Input in, Properties props) {
 		// TODO Auto-generated method stub
-		this.props = props;
-		String repositoriesList = props
-				.getProperty(AnalyticsConstants.oaiRepositoriesList);
+		try {
+			this.props = props;
+			String repositoriesList = props
+					.getProperty(AnalyticsConstants.oaiRepositoriesList);
 
-		String[] repos;
-		if (repositoriesList.contains(","))
-			repos = repositoriesList.split(",");
-		else
-			repos = new String[] { repositoriesList };
+			String[] repos;
+			if (repositoriesList.contains(","))
+				repos = repositoriesList.split(",");
+			else
+				repos = new String[] { repositoriesList };
 
-		List<String> dataProviders = new ArrayList<>();
+			List<String> dataProviders = new ArrayList<>();
 
-		for (int i = 0; i < repos.length; i++) {
-			dataProviders.add(repos[i]);
+			for (int i = 0; i < repos.length; i++) {
+				dataProviders.add(repos[i]);
 
+			}
+
+			return (List<?>) dataProviders;
+		} catch (NullPointerException ex) {
+			System.out
+					.println("The 'analytics.repositories.list' is not present in the properties file.");
+			return null;
 		}
-
-		// Collection<String> dataProviders = (Collection<String>) in.getData(
-		// props.getProperty(AnalyticsConstants.mdstorePath),
-		// props.getProperty(AnalyticsConstants.analyzeRepositories));
-
-		return (List<?>) dataProviders;
 
 	}
 
 	public List<String> getMetadataFormats() {
 
-		String metadataFormats = props
-				.getProperty(AnalyticsConstants.metadataFormats);
+		try {
+			String metadataFormats = props
+					.getProperty(AnalyticsConstants.metadataFormats);
 
-		String[] formats;
-		if (metadataFormats.contains(","))
-			formats = metadataFormats.split(",");
-		else
-			formats = new String[] { metadataFormats };
+			String[] formats;
+			if (metadataFormats.contains(","))
+				formats = metadataFormats.split(",");
+			else
+				formats = new String[] { metadataFormats };
 
-		List<String> mFormats = new ArrayList<>();
+			List<String> mFormats = new ArrayList<>();
 
-		for (int i = 0; i < formats.length; i++) {
-			mFormats.add(formats[i]);
+			for (int i = 0; i < formats.length; i++) {
+				mFormats.add(formats[i]);
 
+			}
+
+			return (List<String>) mFormats;
+		} catch (NullPointerException ex) {
+			System.err.println("The metadata format field is not present...");
+			return null;
 		}
-
-		return (List<String>) mFormats;
 	}
 
 	@Override
@@ -107,6 +114,10 @@ public class OAIInitializer extends InitializeProcess {
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, SAXException, ParserConfigurationException {
 		List<String> metadataFormats = getMetadataFormats();
+
+		if (metadataFormats == null)
+			System.exit(-1);
+
 		boolean flag = false;
 
 		if (dataProviders.size() == metadataFormats.size())
@@ -120,10 +131,15 @@ public class OAIInitializer extends InitializeProcess {
 			if (flag) {
 				xmls = (Collection<String>) input.getData(
 						(String) dataProviders.get(i), metadataFormats.get(i));
-			} else
+			} else {
 				xmls = (Collection<String>) input.getData(
 						(String) dataProviders.get(i), metadataFormats.get(0));
 
+			}
+			if (xmls == null || xmls.size() == 0) {
+				System.out.println("Exiting...");
+				System.exit(-1);
+			}
 			try {
 				Repository repo = new Repository(xmls);
 
