@@ -109,7 +109,7 @@ public class OAIInitializer extends InitializeProcess {
 	}
 
 	@Override
-	public void doAnalysis(Federation federation, List<?> dataProviders,
+	public void doAnalysis(Federation federation, final List<?> dataProviders,
 			boolean fedFlag, String elementNames)
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, SAXException, ParserConfigurationException {
@@ -237,5 +237,4 @@ public class OAIInitializer extends InitializeProcess {
 
 		}
 	}
-
 }

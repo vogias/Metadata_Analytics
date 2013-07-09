@@ -89,6 +89,11 @@ public class Main {
 				System.out
 						.println("Federated statistical analysis is activated...");
 				federation = new Federation(dp.size());// temporalFlag
+			}else{
+				System.out
+				.println("Federated statistical analysis is deactivated.");
+				System.out
+				.println("Analyzing...");
 			}
 
 			initProcess.doAnalysis(federation, dp, fedFlag,
