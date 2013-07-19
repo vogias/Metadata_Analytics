@@ -9,7 +9,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.dom4j.DocumentException;
+
 import se.kb.oai.OAIException;
+import se.kb.oai.pmh.ErrorResponseException;
 import se.kb.oai.pmh.Header;
 import se.kb.oai.pmh.IdentifiersList;
 import se.kb.oai.pmh.OaiPmhServer;
@@ -52,9 +55,14 @@ public class OAITargetInput extends Input {
 			while (more) {
 				for (Header header : list.asList()) {
 					// System.out.println(header.getIdentifier());
-					Record record = oaiPmhServer.getRecord(
-							header.getIdentifier(), repoSelection);
-					data.addElement(record.getMetadataAsString());
+
+					try {
+						Record record = oaiPmhServer.getRecord(
+								header.getIdentifier(), repoSelection);
+						data.addElement(record.getMetadataAsString());
+					} catch (ErrorResponseException ex) {
+						continue;
+					}
 
 				}
 				if (list.getResumptionToken() != null)
@@ -70,7 +78,7 @@ public class OAITargetInput extends Input {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return data;
-			
+
 		}
 
 	}
