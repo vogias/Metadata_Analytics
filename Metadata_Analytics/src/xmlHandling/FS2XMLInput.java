@@ -24,14 +24,15 @@ import analytics.analyzer.handlers.XMLHandler;
 public class FS2XMLInput extends XmlHandlerInput {
 
 	@Override
-	public void getInputData(Repository repo) throws SAXException,
-			ParserConfigurationException {
+	public void getInputData(Repository repo) throws SAXException, ParserConfigurationException {
 		// TODO Auto-generated method stub
 		Iterator<File> iterator = (Iterator<File>) repo.getXmls().iterator();
 		int j = 0;
+		File xml = null;
 		try {
+
 			while (iterator.hasNext()) {
-				File xml = iterator.next();
+				xml = iterator.next();
 				XMLHandler xmlHandler = new XMLHandler(repo);
 
 				InputStream inS = new FileInputStream(xml);

@@ -59,8 +59,11 @@ public class OAITargetInput extends Input {
 					try {
 						Record record = oaiPmhServer.getRecord(
 								header.getIdentifier(), repoSelection);
+
 						data.addElement(record.getMetadataAsString());
 					} catch (ErrorResponseException ex) {
+						continue;
+					} catch (NullPointerException e) {
 						continue;
 					}
 
