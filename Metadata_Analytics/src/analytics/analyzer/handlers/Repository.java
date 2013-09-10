@@ -5,14 +5,12 @@ package analytics.analyzer.handlers;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,7 +26,6 @@ import org.apache.commons.collections.MultiHashMap;
 import org.xml.sax.SAXException;
 
 import xmlHandling.XmlHandlerInput;
-
 import analytics.constants.AnalyticsConstants;
 import analytics.measures.ElementCompleteness;
 import analytics.measures.ElementFrequency;
@@ -224,7 +221,7 @@ public class Repository {
 
 		File f = new File("buffer/" + filename + ".txt");
 
-		BufferedReader br;
+		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new FileReader(f));
 			String line = br.readLine();
@@ -250,6 +247,13 @@ public class Repository {
 			Vector<String> data = new Vector<>();
 			data.addElement("Element not found");
 			return data;
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 
 	}

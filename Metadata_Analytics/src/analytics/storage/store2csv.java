@@ -98,7 +98,15 @@ public class store2csv extends Storage {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
+		// finally {
+		// try {
+		// if (writer != null)
+		// writer.close();
+		// } catch (IOException ex) {
+		// ex.printStackTrace();
+		// }
+		// }
 
 	}
 
@@ -122,10 +130,14 @@ public class store2csv extends Storage {
 		File file = new File(dir, sFileName);
 
 		this.setElementDataFilePath(file.getAbsolutePath());
+		FileWriter writer;
+		BufferedWriter bw = null;
+
+		BufferedReader reader = null;
 		try {
 			if (!file.exists()) {
-				FileWriter writer = new FileWriter(file);
-				BufferedWriter bw = new BufferedWriter(writer);
+				writer = new FileWriter(file);
+				bw = new BufferedWriter(writer);
 				createHeaders(bw, metricName, headerColumn);
 
 				Set<String> keySet = data.keySet();
@@ -143,12 +155,12 @@ public class store2csv extends Storage {
 				bw.close();
 			} else {
 
-				BufferedReader reader = new BufferedReader(new FileReader(file));
+				reader = new BufferedReader(new FileReader(file));
 
 				File temp = new File(dir, "temp.csv");
 
-				FileWriter writer = new FileWriter(temp);
-				BufferedWriter bw = new BufferedWriter(writer);
+				writer = new FileWriter(temp);
+				bw = new BufferedWriter(writer);
 
 				String line;
 				int counter = 0;
@@ -192,6 +204,15 @@ public class store2csv extends Storage {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				if (bw != null)
+					bw.close();
+				if (reader != null)
+					reader.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 
@@ -220,11 +241,13 @@ public class store2csv extends Storage {
 			dir.mkdir();
 
 		File file = new File(dir, sFileName);
-
+		FileWriter writer;
+		BufferedWriter bw = null;
+		BufferedReader reader = null;
 		try {
 			if (!file.exists()) {
-				FileWriter writer = new FileWriter(file);
-				BufferedWriter bw = new BufferedWriter(writer);
+				writer = new FileWriter(file);
+				bw = new BufferedWriter(writer);
 				createHeaders(bw, metricName, headerColumn);
 
 				Set<String> keySet = data.keySet();
@@ -245,12 +268,12 @@ public class store2csv extends Storage {
 				bw.close();
 			} else {
 
-				BufferedReader reader = new BufferedReader(new FileReader(file));
+				reader = new BufferedReader(new FileReader(file));
 
 				File temp = new File(dir, "temp.csv");
 
-				FileWriter writer = new FileWriter(temp);
-				BufferedWriter bw = new BufferedWriter(writer);
+				writer = new FileWriter(temp);
+				bw = new BufferedWriter(writer);
 
 				String line;
 				int counter = 0;
@@ -293,6 +316,15 @@ public class store2csv extends Storage {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				if (bw != null)
+					bw.close();
+				if (reader != null)
+					reader.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 
@@ -316,9 +348,10 @@ public class store2csv extends Storage {
 
 		this.setGeneralDataFilePath(file.getAbsolutePath());
 		FileWriter writer;
+		BufferedWriter bw = null;
 		try {
 			writer = new FileWriter(file);
-			BufferedWriter bw = new BufferedWriter(writer);
+			bw = new BufferedWriter(writer);
 			// create header
 			bw.append("Repository Name");
 			bw.append(",");
@@ -346,6 +379,13 @@ public class store2csv extends Storage {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				if (bw != null)
+					bw.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 
 	}
@@ -375,8 +415,8 @@ public class store2csv extends Storage {
 	}
 
 	@Override
-	public void appendRepositoryData(String repoName,int noRecords, float avgFSize,
-			float storageReq, String schema) throws IOException {
+	public void appendRepositoryData(String repoName, int noRecords,
+			float avgFSize, float storageReq, String schema) throws IOException {
 
 		// TODO Auto-generated method stub
 		String sFileName = "Federation" + "_GeneralInfo" + ".csv";
@@ -396,9 +436,10 @@ public class store2csv extends Storage {
 			file.createNewFile();
 
 		FileWriter writer;
+		BufferedWriter bw = null;
 		try {
-			writer = new FileWriter(file,true);
-			BufferedWriter bw = new BufferedWriter(writer);
+			writer = new FileWriter(file, true);
+			bw = new BufferedWriter(writer);
 
 			if (!isAppendData()) {
 
@@ -443,6 +484,13 @@ public class store2csv extends Storage {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				if (bw != null)
+					bw.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 
 	}
