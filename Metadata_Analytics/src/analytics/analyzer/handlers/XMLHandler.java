@@ -122,10 +122,21 @@ public class XMLHandler extends DefaultHandler {
 
 		// entropy calculation
 		try {
+
+			System.err.println(branche + ":" + tmpValue);
+
 			repositoryHandler.addEvalue2File(elmt, tmpValue);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (NullPointerException e) {
+			// TODO: handle exception
+			try {
+				repositoryHandler.addEvalue2File(elmt, "");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 	}
@@ -161,16 +172,14 @@ public class XMLHandler extends DefaultHandler {
 		// TODO Auto-generated method stub
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 
-		Reader reader = new InputStreamReader(is,"UTF-8");
-		 
+		Reader reader = new InputStreamReader(is, "UTF-8");
+
 		InputSource inputStream = new InputSource(reader);
 		inputStream.setEncoding("UTF-8");
-		
-		
+
 		SAXParser parser = spf.newSAXParser();
 
 		parser.parse(inputStream, this);
-		
 
 	}
 }
