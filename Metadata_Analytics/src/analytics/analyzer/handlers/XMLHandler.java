@@ -123,8 +123,6 @@ public class XMLHandler extends DefaultHandler {
 		// entropy calculation
 		try {
 
-			System.err.println(branche + ":" + tmpValue);
-
 			repositoryHandler.addEvalue2File(elmt, tmpValue);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
