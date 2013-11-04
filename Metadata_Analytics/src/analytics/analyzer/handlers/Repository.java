@@ -551,7 +551,7 @@ public class Repository {
 		if (atts.size() > 0) {
 
 			ElementFrequency atFrequency = new ElementFrequency(
-					getDistinctAtts());
+					atts);
 			atFrequency.compute(attributes, getRepoName());
 		}
 	}

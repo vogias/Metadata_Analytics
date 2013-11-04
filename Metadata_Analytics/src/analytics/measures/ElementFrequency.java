@@ -86,6 +86,7 @@ public class ElementFrequency extends Metric {
 
 				Collection attValues = data.getCollection(attName);
 
+				
 				/*
 				 * // System.out.println("----------------------------------");
 				 * writer.write("----------------------------------");
