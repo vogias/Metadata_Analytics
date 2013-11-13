@@ -24,8 +24,8 @@ import analytics.analyzer.handlers.XMLHandler;
 public class OAI2XMLInput extends XmlHandlerInput {
 
 	@Override
-	public void getInputData(Repository repo) throws SAXException,
-			ParserConfigurationException {
+	public void getInputData(Repository repo)
+			throws ParserConfigurationException {
 		Iterator<String> iterator = (Iterator<String>) repo.getXmls()
 				.iterator();
 		int j = 0;
@@ -36,8 +36,15 @@ public class OAI2XMLInput extends XmlHandlerInput {
 
 				InputStream inS = new ByteArrayInputStream(xml.getBytes());
 
-				xmlHandler.parseDocument(inS);
-				j++;
+				try {
+					xmlHandler.parseDocument(inS);
+					j++;
+				} catch (SAXException e) {
+					// TODO Auto-generated catch block
+
+					System.err.println("Bad formed xml file:" + xml);
+					continue;
+				}
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();

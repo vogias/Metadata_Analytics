@@ -24,7 +24,8 @@ import analytics.analyzer.handlers.XMLHandler;
 public class FS2XMLInput extends XmlHandlerInput {
 
 	@Override
-	public void getInputData(Repository repo) throws SAXException, ParserConfigurationException {
+	public void getInputData(Repository repo)
+			throws ParserConfigurationException {
 		// TODO Auto-generated method stub
 		Iterator<File> iterator = (Iterator<File>) repo.getXmls().iterator();
 		int j = 0;
@@ -36,9 +37,17 @@ public class FS2XMLInput extends XmlHandlerInput {
 				XMLHandler xmlHandler = new XMLHandler(repo);
 
 				InputStream inS = new FileInputStream(xml);
+				
+				try {
+					xmlHandler.parseDocument(inS);
+					j++;
+				} catch (SAXException e) {
+					// TODO Auto-generated catch block
+					
+					System.err.println("Bad formed xml file:" + xml.getName());
+					continue;
+				}
 
-				xmlHandler.parseDocument(inS);
-				j++;
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
