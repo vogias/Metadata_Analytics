@@ -37,14 +37,14 @@ public class FS2XMLInput extends XmlHandlerInput {
 				XMLHandler xmlHandler = new XMLHandler(repo);
 
 				InputStream inS = new FileInputStream(xml);
-				
+
 				try {
 					xmlHandler.parseDocument(inS);
 					j++;
 				} catch (SAXException e) {
 					// TODO Auto-generated catch block
-					
-					System.err.println("Bad formed xml file:" + xml.getName());
+
+					System.err.println("Bad formed xml file:" + xml.getPath());
 					continue;
 				}
 
