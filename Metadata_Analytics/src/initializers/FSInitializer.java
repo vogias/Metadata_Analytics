@@ -102,8 +102,8 @@ public class FSInitializer extends InitializeProcess {
 
 					federation.appendFileSize(repo.getFileSizeDistribution());
 					federation.appendNoRecords(repo.getXmls().size());
-					repo.storeRepoGeneralInfo();
-					federation.appendSchemas(repo.getSchema());
+					repo.storeRepoGeneralInfo(true);
+					federation.appendSchemas(repo.getSchema(false));
 					federation.appendRequirements(repo.getRequirements());
 
 					System.out.println("Repository:" + repo.getRepoName()
@@ -123,7 +123,7 @@ public class FSInitializer extends InitializeProcess {
 					repo.computeElementEntropy();
 					repo.computeElementValueFreq(elements);
 
-					repo.storeRepoGeneralInfo();
+					repo.storeRepoGeneralInfo(false);
 
 					FileUtils.deleteDirectory(new File("buffer"));
 

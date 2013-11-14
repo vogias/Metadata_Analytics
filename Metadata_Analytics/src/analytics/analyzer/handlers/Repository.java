@@ -115,8 +115,10 @@ public class Repository {
 	/**
 	 * @return the schema
 	 */
-	public String getSchema() {
-		System.out.println(getRepoName() + " schema namespace:" + schema);
+	public String getSchema(boolean showInfo) {
+		if (showInfo == true)
+			System.out.println(getRepoName() + " schema namespace:" + schema);
+		
 		return schema;
 	}
 
@@ -550,8 +552,7 @@ public class Repository {
 
 		if (atts.size() > 0) {
 
-			ElementFrequency atFrequency = new ElementFrequency(
-					atts);
+			ElementFrequency atFrequency = new ElementFrequency(atts);
 			atFrequency.compute(attributes, getRepoName());
 		}
 	}
@@ -583,11 +584,16 @@ public class Repository {
 		return requirements;
 	}
 
-	public void storeRepoGeneralInfo() {
+	public void storeRepoGeneralInfo(boolean fed) {
 		Storage storageClass = getStorageClass();
 
-		storageClass.storeRepositoryData(repoName, xmls.size(), getFileSizeM(),
-				getApproStorageRequirements(), getSchema());
+		if (fed == false)
+			storageClass.storeRepositoryData(repoName, xmls.size(),
+					getFileSizeDistribution(), getApproStorageRequirements(),
+					getSchema(true));
+		else
+			storageClass.storeRepositoryData(repoName, xmls.size(),
+					getFileSizeM(), getApproStorageRequirements(), getSchema(true));
 	}
 
 	public String getGeneralDataFilePath() {

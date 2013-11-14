@@ -176,7 +176,7 @@ public class OAIInitializer extends InitializeProcess {
 					// federation.appendFileSize(repo.getFileSizeDistribution());
 					federation.appendNoRecords(repo.getXmls().size());
 					// repo.storeRepoGeneralInfo();
-					federation.appendSchemas(repo.getSchema());
+					federation.appendSchemas(repo.getSchema(false));
 					// federation.appendRequirements(repo.getRequirements());
 
 					System.out.println("Repository:" + repo.getRepoName()
