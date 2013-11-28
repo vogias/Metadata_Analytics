@@ -56,10 +56,10 @@ public class Repository {
 	float fileSizeM;
 	float requirements;
 
-	public Repository(Collection<?> xmls) throws FileNotFoundException,
-			IOException, SAXException, ParserConfigurationException,
-			InstantiationException, IllegalAccessException,
-			ClassNotFoundException {
+	public Repository(Collection<?> xmls, String[] elements2Analyze)
+			throws FileNotFoundException, IOException, SAXException,
+			ParserConfigurationException, InstantiationException,
+			IllegalAccessException, ClassNotFoundException {
 
 		// TODO Auto-generated constructor stub
 		xmlElements = new Vector<>();
@@ -89,10 +89,12 @@ public class Repository {
 		// xmlHandler.parseDocument(inS);
 		// j++;
 		// }
+
 		XmlHandlerInput handlerInput = (XmlHandlerInput) this
 				.createXMLHandlerInputClass();
 
-		handlerInput.getInputData(this);
+		
+		handlerInput.getInputData(this, elements2Analyze);
 		this.storage = this.createStorageClass();
 
 	}
@@ -118,7 +120,7 @@ public class Repository {
 	public String getSchema(boolean showInfo) {
 		if (showInfo == true)
 			System.out.println(getRepoName() + " schema namespace:" + schema);
-		
+
 		return schema;
 	}
 
@@ -593,7 +595,8 @@ public class Repository {
 					getSchema(true));
 		else
 			storageClass.storeRepositoryData(repoName, xmls.size(),
-					getFileSizeM(), getApproStorageRequirements(), getSchema(true));
+					getFileSizeM(), getApproStorageRequirements(),
+					getSchema(true));
 	}
 
 	public String getGeneralDataFilePath() {

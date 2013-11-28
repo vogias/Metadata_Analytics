@@ -89,15 +89,26 @@ public class Main {
 				System.out
 						.println("Federated statistical analysis is activated...");
 				federation = new Federation(dp.size());// temporalFlag
-			}else{
+			} else {
 				System.out
-				.println("Federated statistical analysis is deactivated.");
-				System.out
-				.println("Analyzing...");
+						.println("Federated statistical analysis is deactivated.");
+				System.out.println("Analyzing...");
 			}
 
-			initProcess.doAnalysis(federation, dp, fedFlag,
-					props.getProperty(AnalyticsConstants.elementValues));
+			String elements2AnalyzeSTR = props
+					.getProperty(AnalyticsConstants.elementValues);
+			
+			String[] elements2Analyze = elements2AnalyzeSTR.split(",");
+
+			System.out.println("=========Elements to analyze=========");
+			for (int i = 0; i < elements2Analyze.length; i++) {
+				
+				System.out.println(elements2Analyze[i]);
+			}
+			System.out.println("======================================");
+			// initProcess.doAnalysis(federation, dp, fedFlag,
+			// elements2AnalyzeSTR);
+			initProcess.doAnalysis(federation, dp, fedFlag, elements2Analyze);
 
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();

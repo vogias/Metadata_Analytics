@@ -42,10 +42,19 @@ public class XMLHandler extends DefaultHandler {
 	String branche;
 	String elPath;
 	Stack<String> xPaths;
+	String[] elements2Analyze;
+	boolean all = false;
 
-	public XMLHandler(Repository repositoryHandler) {
+	public XMLHandler(Repository repositoryHandler, String[] elements2Analyze) {
 		// TODO Auto-generated constructor stub
 		this.repositoryHandler = repositoryHandler;
+		this.elements2Analyze = elements2Analyze;
+		
+		if (contains(elements2Analyze, "*"))
+			all = true;
+		else
+			all = false;
+
 		elements = new Vector<>();
 		constants = new AnalyticsConstants();
 		props = new Properties();
@@ -63,6 +72,21 @@ public class XMLHandler extends DefaultHandler {
 		}
 	}
 
+	private boolean contains(String[] els, String input) {
+
+		boolean flag = false;
+		for (int i = 0; i < els.length; i++) {
+
+			if (input.equals(els[i])) {
+				flag = true;
+				break;
+			}
+
+		}
+
+		return flag;
+	}
+
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 
@@ -76,12 +100,26 @@ public class XMLHandler extends DefaultHandler {
 			if (!name.contains("xsi:schemaLocation") && !name.contains("xmlns")) {
 				// System.out.println("Name:" + attributes.getLocalName(i)
 				// + " Value:" + attributes.getValue(i));
-				HashMap<String, String> elmt = new HashMap<>();
-				elmt.put(branche, attributes.getValue(i));
 
-				repositoryHandler.addAttributes(attributes.getQName(i), elmt);
+				if (all == false) {
+					if (contains(elements2Analyze, branche)) {
+
+						HashMap<String, String> elmt = new HashMap<>();
+						elmt.put(branche, value);
+
+						repositoryHandler.addAttributes(attributes.getQName(i),
+								elmt);
+					}
+				} else {
+
+					HashMap<String, String> elmt = new HashMap<>();
+					elmt.put(branche, value);
+
+					repositoryHandler.addAttributes(attributes.getQName(i),
+							elmt);
+				}
 			} else if (name.contains("xmlns")) {
-				repositoryHandler.setSchema(attributes.getValue(i));
+				repositoryHandler.setSchema(value);
 			}
 		}
 
@@ -105,35 +143,73 @@ public class XMLHandler extends DefaultHandler {
 			// System.out.println(elmt);
 		}
 
-		repositoryHandler.addxmlElements(elmt);
+		if (all ==false) {
+			if (contains(elements2Analyze, elmt)) {
 
-		if (!dimensionalityMap.containsKey(elmt)) {
-			dimensionalityMap.put(elmt, 1);
+				repositoryHandler.addxmlElements(elmt);
+
+				if (!dimensionalityMap.containsKey(elmt)) {
+					dimensionalityMap.put(elmt, 1);
+				} else {
+
+					dimensionalityMap
+							.put(elmt, dimensionalityMap.get(elmt) + 1);
+				}
+
+				if (!elements.contains(elmt)) {
+
+					elements.addElement(elmt);
+					repositoryHandler.addCompletenessElement(elmt);
+				}
+
+				// entropy calculation
+				try {
+
+					repositoryHandler.addEvalue2File(elmt, tmpValue);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NullPointerException e) {
+					// TODO: handle exception
+					try {
+						repositoryHandler.addEvalue2File(elmt, "");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
 		} else {
+			repositoryHandler.addxmlElements(elmt);
 
-			dimensionalityMap.put(elmt, dimensionalityMap.get(elmt) + 1);
-		}
+			if (!dimensionalityMap.containsKey(elmt)) {
+				dimensionalityMap.put(elmt, 1);
+			} else {
 
-		if (!elements.contains(elmt)) {
+				dimensionalityMap.put(elmt, dimensionalityMap.get(elmt) + 1);
+			}
 
-			elements.addElement(elmt);
-			repositoryHandler.addCompletenessElement(elmt);
-		}
+			if (!elements.contains(elmt)) {
 
-		// entropy calculation
-		try {
+				elements.addElement(elmt);
+				repositoryHandler.addCompletenessElement(elmt);
+			}
 
-			repositoryHandler.addEvalue2File(elmt, tmpValue);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NullPointerException e) {
-			// TODO: handle exception
+			// entropy calculation
 			try {
-				repositoryHandler.addEvalue2File(elmt, "");
-			} catch (IOException e1) {
+
+				repositoryHandler.addEvalue2File(elmt, tmpValue);
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				e.printStackTrace();
+			} catch (NullPointerException e) {
+				// TODO: handle exception
+				try {
+					repositoryHandler.addEvalue2File(elmt, "");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
 

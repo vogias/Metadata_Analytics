@@ -110,7 +110,7 @@ public class OAIInitializer extends InitializeProcess {
 
 	@Override
 	public void doAnalysis(Federation federation, final List<?> dataProviders,
-			boolean fedFlag, String elementNames)
+			boolean fedFlag, String[] elements2Analyze)
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, SAXException, ParserConfigurationException {
 		List<String> metadataFormats = getMetadataFormats();
@@ -141,7 +141,7 @@ public class OAIInitializer extends InitializeProcess {
 				System.exit(-1);
 			}
 			try {
-				Repository repo = new Repository(xmls);
+				Repository repo = new Repository(xmls,elements2Analyze);
 
 				repo.setRepoName(input.getRepoName());
 				repo.setRecordsNum(xmls.size());
@@ -167,7 +167,7 @@ public class OAIInitializer extends InitializeProcess {
 					federation.appendEntropyElements(repo
 							.computeElementEntropy());
 
-					repo.computeElementValueFreq(elementNames);
+				//	repo.computeElementValueFreq(elementNames);
 
 					FileUtils.deleteDirectory(new File("buffer"));
 
@@ -194,7 +194,7 @@ public class OAIInitializer extends InitializeProcess {
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
 					repo.computeElementEntropy();
-					repo.computeElementValueFreq(elementNames);
+					//repo.computeElementValueFreq(elementNames);
 
 					// repo.storeRepoGeneralInfo();
 
@@ -223,7 +223,7 @@ public class OAIInitializer extends InitializeProcess {
 				federation.getElementsMaxDimensionality();
 				federation.getElementsMEntropy();
 				federation.getAttributesSumFreq();
-				federation.getElementValueSumFreq(elementNames);
+				//federation.getElementValueSumFreq(elementNames);
 				System.out.println("Average file size:"
 						+ federation.getAverageFileSize() + " Bytes");
 				System.out.println("Sum number of records:"

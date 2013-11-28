@@ -53,7 +53,7 @@ public class FSInitializer extends InitializeProcess {
 
 	@Override
 	public void doAnalysis(Federation federation, List<?> dataProviders,
-			boolean fedFlag, String elements) throws InstantiationException,
+			boolean fedFlag,String[] elements2Analyze) throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException, SAXException,
 			ParserConfigurationException {
 		// TODO Auto-generated method stub
@@ -67,7 +67,7 @@ public class FSInitializer extends InitializeProcess {
 
 			try {
 				
-				Repository repo = new Repository(xmls);
+				Repository repo = new Repository(xmls,elements2Analyze);
 
 				repo.setRepoName(((File) dataProviders.get(i)).getName());
 				repo.setRecordsNum(xmls.size());
@@ -94,7 +94,7 @@ public class FSInitializer extends InitializeProcess {
 					federation.appendEntropyElements(repo
 							.computeElementEntropy());
 
-					repo.computeElementValueFreq(elements);
+				//	repo.computeElementValueFreq(elements);
 
 					FileUtils.deleteDirectory(new File("buffer"));
 
@@ -121,7 +121,7 @@ public class FSInitializer extends InitializeProcess {
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
 					repo.computeElementEntropy();
-					repo.computeElementValueFreq(elements);
+				//	repo.computeElementValueFreq(elements);
 
 					repo.storeRepoGeneralInfo(false);
 
@@ -150,7 +150,7 @@ public class FSInitializer extends InitializeProcess {
 				federation.getElementsMaxDimensionality();
 				federation.getElementsMEntropy();
 				federation.getAttributesSumFreq();
-				federation.getElementValueSumFreq(elements);
+				//federation.getElementValueSumFreq(elements);
 				System.out.println("Average file size:"
 						+ federation.getAverageFileSize() + " Bytes");
 				System.out.println("Sum number of records:"
