@@ -255,7 +255,7 @@ public class XMLHandler extends DefaultHandler {
 
 		parser.parse(inputStream, this);
 
-		is.close();
+	
 
 	}
 }

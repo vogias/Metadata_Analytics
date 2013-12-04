@@ -28,7 +28,7 @@ public class OAI2XMLInput extends XmlHandlerInput {
 			throws ParserConfigurationException {
 		Iterator<String> iterator = (Iterator<String>) repo.getXmls()
 				.iterator();
-		int j = 0;
+		// int j = 0;
 		try {
 			while (iterator.hasNext()) {
 				String xml = iterator.next();
@@ -38,7 +38,8 @@ public class OAI2XMLInput extends XmlHandlerInput {
 
 				try {
 					xmlHandler.parseDocument(inS);
-					j++;
+					// j++;
+					inS.close();
 				} catch (SAXException e) {
 					// TODO Auto-generated catch block
 
