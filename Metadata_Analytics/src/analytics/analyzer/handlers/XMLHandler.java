@@ -49,7 +49,7 @@ public class XMLHandler extends DefaultHandler {
 		// TODO Auto-generated constructor stub
 		this.repositoryHandler = repositoryHandler;
 		this.elements2Analyze = elements2Analyze;
-		
+
 		if (contains(elements2Analyze, "*"))
 			all = true;
 		else
@@ -143,7 +143,7 @@ public class XMLHandler extends DefaultHandler {
 			// System.out.println(elmt);
 		}
 
-		if (all ==false) {
+		if (all == false) {
 			if (contains(elements2Analyze, elmt)) {
 
 				repositoryHandler.addxmlElements(elmt);
@@ -254,6 +254,8 @@ public class XMLHandler extends DefaultHandler {
 		SAXParser parser = spf.newSAXParser();
 
 		parser.parse(inputStream, this);
+
+		is.close();
 
 	}
 }

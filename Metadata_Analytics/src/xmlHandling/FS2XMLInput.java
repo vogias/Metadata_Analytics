@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.Iterator;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -30,9 +29,6 @@ public class FS2XMLInput extends XmlHandlerInput {
 		Iterator<File> iterator = (Iterator<File>) repo.getXmls().iterator();
     	int j = 0;
 		File xml = null;
-		
-		
-		
 		try {
 
 			while (iterator.hasNext()) {
@@ -55,6 +51,7 @@ public class FS2XMLInput extends XmlHandlerInput {
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
+			
 		}
 	}
 }
