@@ -22,6 +22,8 @@ public class AnalyticsConstants {
 	public static String oaiRepositoriesList = "analytics.repositories.list";
 	public static String metadataFormats = "analytics.repositories.metadataFormat";
 	
+	public static String elementVocaulary = "vocabulary.element.values";
+	
 	// public static String temporalMode = "temporal.analysis.mode";
 
 }

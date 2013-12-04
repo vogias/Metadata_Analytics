@@ -97,24 +97,26 @@ public class Main {
 
 			String elements2AnalyzeSTR = props
 					.getProperty(AnalyticsConstants.elementValues);
-			if(elements2AnalyzeSTR.equals(""))
-			{
+			if (elements2AnalyzeSTR.equals("")) {
 				System.err.println("No elements defined.");
 				System.err.println("Exiting..");
 				System.exit(-1);
 			}
-			
+
 			String[] elements2Analyze = elements2AnalyzeSTR.split(",");
 
 			System.out.println("=========Elements to analyze=========");
 			for (int i = 0; i < elements2Analyze.length; i++) {
-				
+
 				System.out.println(elements2Analyze[i]);
 			}
 			System.out.println("======================================");
-			// initProcess.doAnalysis(federation, dp, fedFlag,
-			// elements2AnalyzeSTR);
-			initProcess.doAnalysis(federation, dp, fedFlag, elements2Analyze);
+
+			String elementsVocs = props
+					.getProperty(AnalyticsConstants.elementVocaulary);
+
+			initProcess.doAnalysis(federation, dp, fedFlag, elements2Analyze,
+					elementsVocs);
 
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();

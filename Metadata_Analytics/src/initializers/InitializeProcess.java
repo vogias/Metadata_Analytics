@@ -23,7 +23,7 @@ public abstract class InitializeProcess {
 	public abstract List<?> getProvidersData(Input in,Properties props);
 
 	public abstract void doAnalysis(Federation federation,
-			List<?> dataProviders, boolean fedFlag,String[] elements2Analyze)
+			List<?> dataProviders, boolean fedFlag,String[] elements2Analyze,String elmtVoc)
 			throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException, SAXException, ParserConfigurationException;
 }

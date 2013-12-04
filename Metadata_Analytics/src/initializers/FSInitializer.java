@@ -53,7 +53,7 @@ public class FSInitializer extends InitializeProcess {
 
 	@Override
 	public void doAnalysis(Federation federation, List<?> dataProviders,
-			boolean fedFlag,String[] elements2Analyze) throws InstantiationException,
+			boolean fedFlag,String[] elements2Analyze,String elmtVoc) throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException, SAXException,
 			ParserConfigurationException {
 		// TODO Auto-generated method stub
@@ -94,7 +94,7 @@ public class FSInitializer extends InitializeProcess {
 					federation.appendEntropyElements(repo
 							.computeElementEntropy());
 
-				//	repo.computeElementValueFreq(elements);
+					repo.computeElementValueFreq(elmtVoc);
 
 					FileUtils.deleteDirectory(new File("buffer"));
 
@@ -121,7 +121,7 @@ public class FSInitializer extends InitializeProcess {
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
 					repo.computeElementEntropy();
-				//	repo.computeElementValueFreq(elements);
+					repo.computeElementValueFreq(elmtVoc);
 
 					repo.storeRepoGeneralInfo(false);
 

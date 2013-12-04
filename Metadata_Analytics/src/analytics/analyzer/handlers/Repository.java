@@ -343,7 +343,7 @@ public class Repository {
 			// HashMap<String, Double> data = new HashMap<>();
 
 			System.out.println("Element:" + strings[i]
-					+ " statistical analysis");
+					+ " vocabulary statistical analysis");
 
 			Vector<String> vectorFromFile = getVectorFromFile(strings[i]);
 

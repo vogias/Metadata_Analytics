@@ -110,7 +110,7 @@ public class OAIInitializer extends InitializeProcess {
 
 	@Override
 	public void doAnalysis(Federation federation, final List<?> dataProviders,
-			boolean fedFlag, String[] elements2Analyze)
+			boolean fedFlag, String[] elements2Analyze,String elmtVoc)
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, SAXException, ParserConfigurationException {
 		List<String> metadataFormats = getMetadataFormats();
@@ -167,7 +167,7 @@ public class OAIInitializer extends InitializeProcess {
 					federation.appendEntropyElements(repo
 							.computeElementEntropy());
 
-				//	repo.computeElementValueFreq(elementNames);
+					repo.computeElementValueFreq(elmtVoc);
 
 					FileUtils.deleteDirectory(new File("buffer"));
 
@@ -194,7 +194,7 @@ public class OAIInitializer extends InitializeProcess {
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
 					repo.computeElementEntropy();
-					//repo.computeElementValueFreq(elementNames);
+					repo.computeElementValueFreq(elmtVoc);
 
 					// repo.storeRepoGeneralInfo();
 
