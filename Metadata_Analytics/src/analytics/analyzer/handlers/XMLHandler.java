@@ -37,7 +37,7 @@ public class XMLHandler extends DefaultHandler {
 	Repository repositoryHandler;
 	HashMap<String, Integer> dimensionalityMap;
 	Vector<String> elements;
-	//Properties props;
+	// Properties props;
 	AnalyticsConstants constants;
 	String branche;
 	String elPath;
@@ -57,20 +57,20 @@ public class XMLHandler extends DefaultHandler {
 
 		elements = new Vector<>();
 		constants = new AnalyticsConstants();
-		//props = new Properties();
+		// props = new Properties();
 		branche = "";
 		elPath = "";
 		xPaths = new Stack<>();
-//		try {
-//			props.load(new FileInputStream("configure.properties"));
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		// try {
+		// props.load(new FileInputStream("configure.properties"));
+		// } catch (FileNotFoundException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		//
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 	}
 
 	private boolean contains(String[] els, String input) {
@@ -167,17 +167,11 @@ public class XMLHandler extends DefaultHandler {
 				try {
 
 					repositoryHandler.addEvalue2File(elmt, tmpValue);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (NullPointerException e) {
 					// TODO: handle exception
-					try {
-						repositoryHandler.addEvalue2File(elmt, "");
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+
+					repositoryHandler.addEvalue2File(elmt, "");
+
 				}
 			}
 		} else {
@@ -200,17 +194,12 @@ public class XMLHandler extends DefaultHandler {
 			try {
 
 				repositoryHandler.addEvalue2File(elmt, tmpValue);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
 			} catch (NullPointerException e) {
 				// TODO: handle exception
-				try {
-					repositoryHandler.addEvalue2File(elmt, "");
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+
+				repositoryHandler.addEvalue2File(elmt, "");
+
 			}
 		}
 
@@ -255,8 +244,6 @@ public class XMLHandler extends DefaultHandler {
 		SAXParser parser = spf.newSAXParser();
 
 		parser.parse(inputStream, this);
-
-	
 
 	}
 }

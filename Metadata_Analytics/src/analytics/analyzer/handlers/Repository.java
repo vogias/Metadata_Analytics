@@ -93,7 +93,6 @@ public class Repository {
 		XmlHandlerInput handlerInput = (XmlHandlerInput) this
 				.createXMLHandlerInputClass();
 
-		
 		handlerInput.getInputData(this, elements2Analyze);
 		this.storage = this.createStorageClass();
 
@@ -191,7 +190,7 @@ public class Repository {
 		return elementEntropy;
 	}
 
-	public void addEvalue2File(String name, String value) throws IOException {
+	public void addEvalue2File(String name, String value) {
 
 		if (name.contains(":"))
 			name = name.replace(":", "_");
@@ -203,18 +202,64 @@ public class Repository {
 		File f = new File("buffer/" + name + ".txt");
 
 		if (f.exists()) {
-			FileWriter fw = new FileWriter(f, true);
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(value);
-			bw.newLine();
-			bw.close();
+			FileWriter fw = null;
+			try {
+				fw = new FileWriter(f, true);
+				writeValue2File(fw, value);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				if (fw != null) {
+					try {
+						fw.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+
 		} else {
-			f.createNewFile();
-			FileWriter fw = new FileWriter(f);
-			BufferedWriter bw = new BufferedWriter(fw);
+			FileWriter fw = null;
+			try {
+				f.createNewFile();
+				fw = new FileWriter(f);
+				writeValue2File(fw, value);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				if (fw != null) {
+					try {
+						fw.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+
+		}
+	}
+
+	private void writeValue2File(FileWriter fw, String value) {
+		BufferedWriter bw = new BufferedWriter(fw);
+		try {
 			bw.write(value);
 			bw.newLine();
-			bw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (bw != null) {
+				try {
+					bw.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
