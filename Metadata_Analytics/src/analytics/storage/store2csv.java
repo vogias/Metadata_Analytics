@@ -95,7 +95,7 @@ public class store2csv extends Storage {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 		// finally {
 		// try {
 		// if (writer != null)
@@ -127,7 +127,7 @@ public class store2csv extends Storage {
 		File file = new File(dir, sFileName);
 
 		this.setElementDataFilePath(file.getAbsolutePath());
-		FileWriter writer;
+		FileWriter writer = null;
 		BufferedWriter bw = null;
 
 		BufferedReader reader = null;
@@ -149,7 +149,9 @@ public class store2csv extends Storage {
 					bw.append(String.valueOf(value));
 					bw.newLine();
 				}
+
 				bw.close();
+				writer.close();
 			} else {
 
 				reader = new BufferedReader(new FileReader(file));
@@ -191,6 +193,7 @@ public class store2csv extends Storage {
 
 				}
 				bw.close();
+				writer.close();
 
 				FileUtils.copyFile(temp, file);
 				temp.delete();
@@ -207,6 +210,8 @@ public class store2csv extends Storage {
 					bw.close();
 				if (reader != null)
 					reader.close();
+				if (writer != null)
+					writer.close();
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
