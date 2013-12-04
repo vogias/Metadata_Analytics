@@ -5,6 +5,7 @@ package xmlHandling;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
@@ -29,30 +30,45 @@ public class FS2XMLInput extends XmlHandlerInput {
 		Iterator<File> iterator = (Iterator<File>) repo.getXmls().iterator();
 		// int j = 0;
 		File xml = null;
-		try {
+		// try {
 
-			while (iterator.hasNext()) {
-				xml = iterator.next();
+		while (iterator.hasNext()) {
+			xml = iterator.next();
 
-				XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze);
+			XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze);
 
-				InputStream inS = new FileInputStream(xml);
+			InputStream inS = null;
+			try {
+				inS = new FileInputStream(xml);
+				xmlHandler.parseDocument(inS);
 
-				try {
-					xmlHandler.parseDocument(inS);
-					inS.close();
-					// j++;
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
 
-					System.err.println("Bad formed xml file:" + xml.getPath());
-					continue;
+				System.err.println("Bad formed xml file:" + xml.getPath());
+
+				continue;
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				if (inS != null) {
+					try {
+						inS.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-
 			}
-		} catch (IOException ex) {
-			ex.printStackTrace();
 
 		}
+		// } catch (IOException ex) {
+		// ex.printStackTrace();
+		//
+		// }
 	}
 }
