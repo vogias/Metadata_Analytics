@@ -244,8 +244,9 @@ public class Repository {
 	}
 
 	private void writeValue2File(FileWriter fw, String value) {
-		BufferedWriter bw = new BufferedWriter(fw);
+		BufferedWriter bw = null;
 		try {
+			bw=new BufferedWriter(fw);
 			bw.write(value);
 			bw.newLine();
 		} catch (IOException e) {
