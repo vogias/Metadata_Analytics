@@ -9,8 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.dom4j.DocumentException;
-
 import se.kb.oai.OAIException;
 import se.kb.oai.pmh.ErrorResponseException;
 import se.kb.oai.pmh.Header;

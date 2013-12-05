@@ -9,18 +9,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
 import org.xml.sax.SAXException;
-
-import se.kb.oai.OAIException;
-import se.kb.oai.pmh.Header;
-import se.kb.oai.pmh.IdentifiersList;
-import se.kb.oai.pmh.OaiPmhServer;
-import se.kb.oai.pmh.Record;
 
 import analytics.analyzer.handlers.Federation;
 import analytics.analyzer.handlers.Repository;
