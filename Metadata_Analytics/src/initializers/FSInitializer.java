@@ -73,6 +73,7 @@ public class FSInitializer extends InitializeProcess {
 		Properties props = new Properties();
 		try {
 			props.load(new FileInputStream("configure.properties"));
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
