@@ -4,14 +4,19 @@
 package initializers;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.io.FileUtils;
 import org.xml.sax.SAXException;
 
@@ -103,7 +108,7 @@ public class OAIInitializer extends InitializeProcess {
 
 	@Override
 	public void doAnalysis(Federation federation, final List<?> dataProviders,
-			boolean fedFlag, String[] elements2Analyze,String elmtVoc)
+			boolean fedFlag, String[] elements2Analyze, String elmtVoc)
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, SAXException, ParserConfigurationException {
 		List<String> metadataFormats = getMetadataFormats();
@@ -115,6 +120,14 @@ public class OAIInitializer extends InitializeProcess {
 
 		if (dataProviders.size() == metadataFormats.size())
 			flag = true;
+
+		Vector<String> xmlElements = new Vector<>();
+		Vector<String> xmlElementsDistinct = new Vector<>();
+		MultiHashMap attributes = new MultiHashMap();
+		MultiHashMap distinctAtts = new MultiHashMap();
+		HashMap<String, Integer> elementDims = new HashMap<>();
+		HashMap<String, Integer> elementCompletness = new HashMap<>();
+		Vector<String> elementEntropy = new Vector<>();
 
 		for (int i = 0; i < dataProviders.size(); i++) {
 
@@ -134,8 +147,12 @@ public class OAIInitializer extends InitializeProcess {
 				System.exit(-1);
 			}
 			try {
-				Repository repo = new Repository(xmls,elements2Analyze);
+				// Repository repo = new Repository(xmls,elements2Analyze);
 
+				Repository repo = new Repository(xmls, elements2Analyze,
+						attributes, distinctAtts, xmlElements,
+						xmlElementsDistinct, elementDims, elementCompletness,
+						elementEntropy, props);
 				repo.setRepoName(input.getRepoName());
 				repo.setRecordsNum(xmls.size());
 
@@ -206,6 +223,13 @@ public class OAIInitializer extends InitializeProcess {
 
 				ex.printStackTrace();
 			}
+			xmlElements.clear();
+			xmlElementsDistinct.clear();
+			attributes.clear();
+			distinctAtts.clear();
+			elementDims.clear();
+			elementCompletness.clear();
+			elementEntropy.clear();
 
 		}
 
@@ -216,7 +240,7 @@ public class OAIInitializer extends InitializeProcess {
 				federation.getElementsMaxDimensionality();
 				federation.getElementsMEntropy();
 				federation.getAttributesSumFreq();
-				//federation.getElementValueSumFreq(elementNames);
+				// federation.getElementValueSumFreq(elementNames);
 				System.out.println("Average file size:"
 						+ federation.getAverageFileSize() + " Bytes");
 				System.out.println("Sum number of records:"

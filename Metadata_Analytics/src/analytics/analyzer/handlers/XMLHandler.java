@@ -34,7 +34,6 @@ public class XMLHandler extends DefaultHandler {
 	Repository repositoryHandler;
 	HashMap<String, Integer> dimensionalityMap;
 	Vector<String> elements;
-	// Properties props;
 	AnalyticsConstants constants;
 	String branche;
 	String elPath;
@@ -54,20 +53,9 @@ public class XMLHandler extends DefaultHandler {
 
 		elements = new Vector<>();
 		constants = new AnalyticsConstants();
-		// props = new Properties();
 		branche = "";
 		elPath = "";
 		xPaths = new Stack<>();
-		// try {
-		// props.load(new FileInputStream("configure.properties"));
-		// } catch (FileNotFoundException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		//
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
 	}
 
 	private boolean contains(String[] els, String input) {
@@ -90,6 +78,7 @@ public class XMLHandler extends DefaultHandler {
 
 		branche += qName.toLowerCase();
 		xPaths.push(branche);
+		HashMap<String, String> elmt = new HashMap<>();
 
 		for (int i = 0; i < attributes.getLength(); i++) {
 
@@ -102,7 +91,9 @@ public class XMLHandler extends DefaultHandler {
 				if (all == false) {
 					if (contains(elements2Analyze, branche)) {
 
-						HashMap<String, String> elmt = new HashMap<>();
+						// HashMap<String, String> elmt = new HashMap<>();
+						elmt.clear();
+
 						elmt.put(branche, value);
 
 						repositoryHandler.addAttributes(attributes.getQName(i),
@@ -110,7 +101,8 @@ public class XMLHandler extends DefaultHandler {
 					}
 				} else {
 
-					HashMap<String, String> elmt = new HashMap<>();
+					// HashMap<String, String> elmt = new HashMap<>();
+					elmt.clear();
 					elmt.put(branche, value);
 
 					repositoryHandler.addAttributes(attributes.getQName(i),
@@ -143,63 +135,44 @@ public class XMLHandler extends DefaultHandler {
 
 		if (all == false) {
 			if (contains(elements2Analyze, elmt)) {
+				doCalculations(elmt);
 
-				repositoryHandler.addxmlElements(elmt);
-
-				if (!dimensionalityMap.containsKey(elmt)) {
-					dimensionalityMap.put(elmt, 1);
-				} else {
-
-					dimensionalityMap
-							.put(elmt, dimensionalityMap.get(elmt) + 1);
-				}
-
-				if (!elements.contains(elmt)) {
-
-					elements.addElement(elmt);
-					repositoryHandler.addCompletenessElement(elmt);
-				}
-
-				// entropy calculation
-				try {
-
-					repositoryHandler.addEvalue2File(elmt, tmpValue);
-				} catch (NullPointerException e) {
-					// TODO: handle exception
-
-					repositoryHandler.addEvalue2File(elmt, "");
-
-				}
 			}
 		} else {
-			repositoryHandler.addxmlElements(elmt);
 
-			if (!dimensionalityMap.containsKey(elmt)) {
-				dimensionalityMap.put(elmt, 1);
-			} else {
+			doCalculations(elmt);
 
-				dimensionalityMap.put(elmt, dimensionalityMap.get(elmt) + 1);
-			}
-
-			if (!elements.contains(elmt)) {
-
-				elements.addElement(elmt);
-				repositoryHandler.addCompletenessElement(elmt);
-			}
-
-			// entropy calculation
-			try {
-
-				repositoryHandler.addEvalue2File(elmt, tmpValue);
-
-			} catch (NullPointerException e) {
-				// TODO: handle exception
-
-				repositoryHandler.addEvalue2File(elmt, "");
-
-			}
 		}
 
+	}
+
+	private void doCalculations(String elmt) {
+		repositoryHandler.addxmlElements(elmt);
+
+		if (!dimensionalityMap.containsKey(elmt)) {
+			dimensionalityMap.put(elmt, 1);
+		} else {
+
+			dimensionalityMap.put(elmt, dimensionalityMap.get(elmt) + 1);
+		}
+
+		if (!elements.contains(elmt)) {
+
+			elements.addElement(elmt);
+			repositoryHandler.addCompletenessElement(elmt);
+		}
+
+		// entropy calculation
+		try {
+
+			repositoryHandler.addEvalue2File(elmt, tmpValue);
+
+		} catch (NullPointerException e) {
+			// TODO: handle exception
+
+			repositoryHandler.addEvalue2File(elmt, "");
+
+		}
 	}
 
 	public void startDocument() {

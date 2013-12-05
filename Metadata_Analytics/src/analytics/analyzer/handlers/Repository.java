@@ -6,7 +6,6 @@ package analytics.analyzer.handlers;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -48,47 +47,57 @@ public class Repository {
 	int recordsNum;
 	String repoName;
 	Properties props;
-
 	String schema;
-
 	Storage storage;
 	Collection<?> xmls;
 	float fileSizeM;
 	float requirements;
 
-	public Repository(Collection<?> xmls, String[] elements2Analyze)
+	// public Repository(Collection<?> xmls, String[] elements2Analyze,
+	// MultiHashMap attributes, MultiHashMap distinctAtts,
+	// Vector<String> xmlElements, Vector<String> xmlElementsDistinct,
+	// HashMap<String, Integer> elementDims,
+	// HashMap<String, Integer> elementCompletness,
+	// Vector<String> elementEntropy, Properties props)
+
+	public Repository(Collection<?> xmls, String[] elements2Analyze,
+			MultiHashMap attributes, MultiHashMap distinctAtts,
+			Vector<String> xmlElements, Vector<String> xmlElementsDistinct,
+			HashMap<String, Integer> elementDims,
+			HashMap<String, Integer> elementCompletness,
+			Vector<String> elementEntropy, Properties props)
 			throws FileNotFoundException, IOException, SAXException,
 			ParserConfigurationException, InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
 
 		// TODO Auto-generated constructor stub
-		xmlElements = new Vector<>();
+		// xmlElements = new Vector<>();
+		this.xmlElements = xmlElements;
 
 		fileSizeM = 0;
 		requirements = 0;
 		this.xmls = xmls;
-		attributes = new MultiHashMap();
-		distinctAtts = new MultiHashMap();
-		elementCompletness = new HashMap<>();
-		xmlElementsDistinct = new Vector<>();
-		elementDims = new HashMap<>();
+		// attributes = new MultiHashMap();
+		this.attributes = attributes;
+		// distinctAtts = new MultiHashMap();
+		this.distinctAtts = distinctAtts;
+
+		// elementCompletness = new HashMap<>();
+		this.elementCompletness = elementCompletness;
+
+		// xmlElementsDistinct = new Vector<>();
+		this.xmlElementsDistinct = xmlElementsDistinct;
+
+		// elementDims = new HashMap<>();
+		this.elementDims = elementDims;
+
 		recordsNum = 0;
-		elementEntropy = new Vector<>();
-		props = new Properties();
+		// elementEntropy = new Vector<>();
+		this.elementEntropy = elementEntropy;
 
-		props.load(new FileInputStream("configure.properties"));
-
-		// Iterator<File> iterator = (Iterator<File>) xmls.iterator();
-		// int j = 0;
-		// while (iterator.hasNext()) {
-		// File xml = iterator.next();
-		// XMLHandler xmlHandler = new XMLHandler(this);
-		//
-		// InputStream inS = new FileInputStream(xml);
-		//
-		// xmlHandler.parseDocument(inS);
-		// j++;
-		// }
+		// props = new Properties();
+		this.props = props;
+		// props.load(new FileInputStream("configure.properties"));
 
 		XmlHandlerInput handlerInput = (XmlHandlerInput) this
 				.createXMLHandlerInputClass();
@@ -246,7 +255,7 @@ public class Repository {
 	private void writeValue2File(FileWriter fw, String value) {
 		BufferedWriter bw = null;
 		try {
-			bw=new BufferedWriter(fw);
+			bw = new BufferedWriter(fw);
 			bw.write(value);
 			bw.newLine();
 		} catch (IOException e) {
