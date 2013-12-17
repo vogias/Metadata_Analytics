@@ -197,6 +197,7 @@ public class Federation {
 			if (!data.containsKey(nextElement)) {
 				ArrayList<Double> collection = (ArrayList<Double>) elementFreq
 						.getCollection(nextElement);
+				
 				data.put(nextElement, getFreqSum(collection));
 			}
 

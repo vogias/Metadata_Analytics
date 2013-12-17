@@ -48,20 +48,29 @@ public class OAITargetInput extends Input {
 		Vector<String> data = new Vector<>();
 		try {
 
+			System.out.println("Prefix:" + repoSelection);
 			IdentifiersList list = oaiPmhServer.listIdentifiers(repoSelection);
+
+			if (list.size() == 0)
+				System.err.println("There are no Identifiers");
 
 			while (more) {
 				for (Header header : list.asList()) {
 					// System.out.println(header.getIdentifier());
 
 					try {
-						Record record = oaiPmhServer.getRecord(
-								header.getIdentifier(), repoSelection);
+						String identifier = header.getIdentifier();
+						if (identifier == null)
+							System.err.println("Identifier empty...");
+						Record record = oaiPmhServer.getRecord(identifier,
+								repoSelection);
 
 						data.addElement(record.getMetadataAsString());
 					} catch (ErrorResponseException ex) {
+						ex.printStackTrace();
 						continue;
 					} catch (NullPointerException e) {
+						e.printStackTrace();
 						continue;
 					}
 
@@ -71,6 +80,7 @@ public class OAITargetInput extends Input {
 							.getResumptionToken());
 				else
 					more = false;
+
 			}
 
 			return data;
@@ -98,8 +108,9 @@ public class OAITargetInput extends Input {
 
 		OAITargetInput input = new OAITargetInput();
 		Collection<String> data = (Collection<String>) input
-				.getData("http://83.212.97.248:8080/oaitarget_ods/OAIHandler",
-						"oai_ods");
+				.getData(
+						"http://idea-pathway-creator.greenideasproject.org/greenideas/oai",
+						"oai_lom");
 		Iterator<String> iterator = data.iterator();
 
 		while (iterator.hasNext()) {

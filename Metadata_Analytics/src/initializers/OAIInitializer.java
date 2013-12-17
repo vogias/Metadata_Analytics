@@ -135,6 +135,7 @@ public class OAIInitializer extends InitializeProcess {
 
 			Collection<String> xmls;
 			if (flag) {
+				
 				xmls = (Collection<String>) input.getData(
 						(String) dataProviders.get(i), metadataFormats.get(i));
 			} else {
@@ -143,7 +144,8 @@ public class OAIInitializer extends InitializeProcess {
 
 			}
 			if (xmls == null || xmls.size() == 0) {
-				System.out.println("Exiting...");
+				System.err.println("Exiting...");
+				System.err.println("No XMLs found on target");
 				System.exit(-1);
 			}
 			try {
