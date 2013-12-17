@@ -3,18 +3,17 @@
  */
 package analytics.input;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import se.kb.oai.OAIException;
-import se.kb.oai.pmh.ErrorResponseException;
-import se.kb.oai.pmh.Header;
-import se.kb.oai.pmh.IdentifiersList;
-import se.kb.oai.pmh.OaiPmhServer;
-import se.kb.oai.pmh.Record;
+import org.ariadne.util.OaiUtils;
+import org.jdom.Element;
+
+import uiuc.oai.OAIRecord;
+import uiuc.oai.OAIRecordList;
+import uiuc.oai.OAIRepository;
 
 /**
  * @author vogias
@@ -22,75 +21,117 @@ import se.kb.oai.pmh.Record;
  */
 public class OAITargetInput extends Input {
 
-	OaiPmhServer oaiPmhServer;
+	// OaiPmhServer oaiPmhServer;
+	OAIRepository repos;
 
-	/**
-	 * @return the oaiPmhServer
-	 */
-	public OaiPmhServer getOaiPmhServer() {
-		return oaiPmhServer;
-	}
+	// /**
+	// * @return the oaiPmhServer
+	// */
+	// public OaiPmhServer getOaiPmhServer() {
+	// return oaiPmhServer;
+	// }
+	//
+	// /**
+	// * @param oaiPmhServer
+	// * the oaiPmhServer to set
+	// */
+	// public void setOaiPmhServer(OaiPmhServer oaiPmhServer) {
+	// this.oaiPmhServer = oaiPmhServer;
+	// }
 
-	/**
-	 * @param oaiPmhServer
-	 *            the oaiPmhServer to set
-	 */
-	public void setOaiPmhServer(OaiPmhServer oaiPmhServer) {
-		this.oaiPmhServer = oaiPmhServer;
+	@SuppressWarnings("deprecation")
+	private Collection<?> getOAIData(String path, String repoSelection) {
+		// TODO Auto-generated method stub
+
+		repos = new OAIRepository();
+		OAIRecordList records;
+
+		Vector<String> data = new Vector<>();
+		try {
+			repos.setBaseURL(path);
+			records = repos.listRecords(repoSelection);
+
+			while (records.moreItems()) {
+				OAIRecord item = records.getCurrentItem();
+				if (!item.deleted()) {
+					Element metadata = item.getMetadata();
+
+					if (metadata != null) {
+
+						String metadata2string = OaiUtils
+								.parseLom2Xmlstring(metadata);
+						data.addElement(metadata2string);
+
+					}
+				}
+				records.moveNext();
+			}
+
+		} catch (uiuc.oai.OAIException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+
+			return data;
+		}
+
+		return data;
+
 	}
 
 	@Override
 	public Collection<?> getData(String path, String repoSelection) {
 		// TODO Auto-generated method stub
 
-		oaiPmhServer = new OaiPmhServer(path);
-		boolean more = true;
-		Vector<String> data = new Vector<>();
-		try {
+		return getOAIData(path, repoSelection);
 
-			System.out.println("Prefix:" + repoSelection);
-			IdentifiersList list = oaiPmhServer.listIdentifiers(repoSelection);
-
-			if (list.size() == 0)
-				System.err.println("There are no Identifiers");
-
-			while (more) {
-				for (Header header : list.asList()) {
-					// System.out.println(header.getIdentifier());
-
-					try {
-						String identifier = header.getIdentifier();
-						if (identifier == null)
-							System.err.println("Identifier empty...");
-						Record record = oaiPmhServer.getRecord(identifier,
-								repoSelection);
-
-						data.addElement(record.getMetadataAsString());
-					} catch (ErrorResponseException ex) {
-						ex.printStackTrace();
-						continue;
-					} catch (NullPointerException e) {
-						e.printStackTrace();
-						continue;
-					}
-
-				}
-				if (list.getResumptionToken() != null)
-					list = oaiPmhServer.listIdentifiers(list
-							.getResumptionToken());
-				else
-					more = false;
-
-			}
-
-			return data;
-
-		} catch (OAIException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return data;
-
-		}
+		// oaiPmhServer = new OaiPmhServer(path);
+		// boolean more = true;
+		// Vector<String> data = new Vector<>();
+		// try {
+		//
+		// System.out.println("Prefix:" + repoSelection);
+		// IdentifiersList list = oaiPmhServer.listIdentifiers(repoSelection);
+		//
+		// if (list.size() == 0)
+		// System.err.println("There are no Identifiers");
+		//
+		// while (more) {
+		// for (Header header : list.asList()) {
+		// // System.out.println(header.getIdentifier());
+		//
+		// try {
+		// String identifier = header.getIdentifier();
+		// if (identifier == null)
+		// System.err.println("Identifier empty...");
+		// Record record = oaiPmhServer.getRecord(identifier,
+		// repoSelection);
+		//
+		// data.addElement(record.getMetadataAsString());
+		// } catch (ErrorResponseException ex) {
+		// ex.printStackTrace();
+		// continue;
+		// } catch (NullPointerException e) {
+		// e.printStackTrace();
+		// continue;
+		// }
+		//
+		// }
+		// if (list.getResumptionToken() != null)
+		// list = oaiPmhServer.listIdentifiers(list
+		// .getResumptionToken());
+		// else
+		// more = false;
+		//
+		// }
+		//
+		// return data;
+		//
+		// } catch (OAIException | IOException e1) {
+		// // TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// return data;
+		//
+		// }
 
 	}
 
@@ -107,6 +148,10 @@ public class OAITargetInput extends Input {
 		// TODO Auto-generated method stub
 
 		OAITargetInput input = new OAITargetInput();
+		// Collection<String> data = (Collection<String>) input
+		// .getData(
+		// "http://idea-pathway-creator.greenideasproject.org/greenideas/oai",
+		// "oai_lom");
 		Collection<String> data = (Collection<String>) input
 				.getData(
 						"http://idea-pathway-creator.greenideasproject.org/greenideas/oai",
@@ -122,16 +167,23 @@ public class OAITargetInput extends Input {
 	@Override
 	public String getRepoName() {
 		// TODO Auto-generated method stub
-		OaiPmhServer server = getOaiPmhServer();
-		String name;
+		// OaiPmhServer server = getOaiPmhServer();
 		try {
-			name = server.identify().getRepositoryName();
-			return name;
-		} catch (OAIException e) {
+			return repos.getRepositoryName();
+		} catch (uiuc.oai.OAIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "UnknownRepoName";
 		}
+		// String name;
+		// try {
+		// name = server.identify().getRepositoryName();
+		// return name;
+		// } catch (OAIException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// return "UnknownRepoName";
+		// }
 
 	}
 
