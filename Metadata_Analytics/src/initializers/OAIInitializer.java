@@ -135,7 +135,7 @@ public class OAIInitializer extends InitializeProcess {
 
 			Collection<String> xmls;
 			if (flag) {
-				
+
 				xmls = (Collection<String>) input.getData(
 						(String) dataProviders.get(i), metadataFormats.get(i));
 			} else {
@@ -242,7 +242,7 @@ public class OAIInitializer extends InitializeProcess {
 				federation.getElementsMaxDimensionality();
 				federation.getElementsMEntropy();
 				federation.getAttributesSumFreq();
-				// federation.getElementValueSumFreq(elementNames);
+				federation.getElementValueSumFreq(elmtVoc);
 				System.out.println("Average file size:"
 						+ federation.getAverageFileSize() + " Bytes");
 				System.out.println("Sum number of records:"

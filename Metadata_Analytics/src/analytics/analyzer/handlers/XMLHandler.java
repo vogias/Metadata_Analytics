@@ -134,10 +134,23 @@ public class XMLHandler extends DefaultHandler {
 		}
 
 		if (all == false) {
-			if (contains(elements2Analyze, elmt)) {
+			if (contains(elements2Analyze, elmt))
 				doCalculations(elmt);
+			else{
+				// entropy calculation
+				try {
+
+					repositoryHandler.addEvalue2File(elmt, tmpValue);
+
+				} catch (NullPointerException e) {
+					// TODO: handle exception
+
+					repositoryHandler.addEvalue2File(elmt, "");
+
+				}
 
 			}
+
 		} else {
 
 			doCalculations(elmt);
@@ -147,6 +160,7 @@ public class XMLHandler extends DefaultHandler {
 	}
 
 	private void doCalculations(String elmt) {
+
 		repositoryHandler.addxmlElements(elmt);
 
 		if (!dimensionalityMap.containsKey(elmt)) {
@@ -173,6 +187,7 @@ public class XMLHandler extends DefaultHandler {
 			repositoryHandler.addEvalue2File(elmt, "");
 
 		}
+
 	}
 
 	public void startDocument() {
