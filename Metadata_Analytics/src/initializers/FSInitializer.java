@@ -84,6 +84,7 @@ public class FSInitializer extends InitializeProcess {
 			System.exit(-1);
 		}
 
+		String[] elementVocs = elmtVoc.split(",");
 		for (int i = 0; i < dataProviders.size(); i++) {
 
 			String[] extensions = { "xml" };
@@ -98,7 +99,7 @@ public class FSInitializer extends InitializeProcess {
 				Repository repo = new Repository(xmls, elements2Analyze,
 						attributes, distinctAtts, xmlElements,
 						xmlElementsDistinct, elementDims, elementCompletness,
-						elementEntropy, props);
+						elementEntropy, props, elementVocs);
 
 				repo.setRepoName(((File) dataProviders.get(i)).getName());
 				repo.setRecordsNum(xmls.size());

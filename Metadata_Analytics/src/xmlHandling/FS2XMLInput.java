@@ -24,8 +24,8 @@ import analytics.analyzer.handlers.XMLHandler;
 public class FS2XMLInput extends XmlHandlerInput {
 
 	@Override
-	public void getInputData(Repository repo, String[] elements2Analyze)
-			throws ParserConfigurationException {
+	public void getInputData(Repository repo, String[] elements2Analyze,
+			String[] elementsVocs) throws ParserConfigurationException {
 		// TODO Auto-generated method stub
 		Iterator<File> iterator = (Iterator<File>) repo.getXmls().iterator();
 		// int j = 0;
@@ -35,7 +35,8 @@ public class FS2XMLInput extends XmlHandlerInput {
 		while (iterator.hasNext()) {
 			xml = iterator.next();
 
-			XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze);
+			XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze,
+					elementsVocs);
 
 			InputStream inS = null;
 			try {

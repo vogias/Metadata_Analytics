@@ -129,6 +129,7 @@ public class OAIInitializer extends InitializeProcess {
 		HashMap<String, Integer> elementCompletness = new HashMap<>();
 		Vector<String> elementEntropy = new Vector<>();
 
+		String[] elementVocs = elmtVoc.split(",");
 		for (int i = 0; i < dataProviders.size(); i++) {
 
 			OAITargetInput input = new OAITargetInput();
@@ -154,7 +155,7 @@ public class OAIInitializer extends InitializeProcess {
 				Repository repo = new Repository(xmls, elements2Analyze,
 						attributes, distinctAtts, xmlElements,
 						xmlElementsDistinct, elementDims, elementCompletness,
-						elementEntropy, props);
+						elementEntropy, props, elementVocs);
 				repo.setRepoName(input.getRepoName());
 				repo.setRecordsNum(xmls.size());
 

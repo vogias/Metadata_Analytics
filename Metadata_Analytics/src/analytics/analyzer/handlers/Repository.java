@@ -65,12 +65,13 @@ public class Repository {
 			Vector<String> xmlElements, Vector<String> xmlElementsDistinct,
 			HashMap<String, Integer> elementDims,
 			HashMap<String, Integer> elementCompletness,
-			Vector<String> elementEntropy, Properties props)
-			throws FileNotFoundException, IOException, SAXException,
-			ParserConfigurationException, InstantiationException,
+			Vector<String> elementEntropy, Properties props,
+			String[] elementsVocs) throws FileNotFoundException, IOException,
+			SAXException, ParserConfigurationException, InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
 
 		// TODO Auto-generated constructor stub
+
 		// xmlElements = new Vector<>();
 		this.xmlElements = xmlElements;
 
@@ -102,7 +103,7 @@ public class Repository {
 		XmlHandlerInput handlerInput = (XmlHandlerInput) this
 				.createXMLHandlerInputClass();
 
-		handlerInput.getInputData(this, elements2Analyze);
+		handlerInput.getInputData(this, elements2Analyze, elementsVocs);
 		this.storage = this.createStorageClass();
 
 	}

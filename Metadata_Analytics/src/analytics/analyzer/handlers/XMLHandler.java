@@ -38,10 +38,11 @@ public class XMLHandler extends DefaultHandler {
 	String branche;
 	String elPath;
 	Stack<String> xPaths;
-	String[] elements2Analyze;
+	String[] elements2Analyze, elementsVocs;
 	boolean all = false;
 
-	public XMLHandler(Repository repositoryHandler, String[] elements2Analyze) {
+	public XMLHandler(Repository repositoryHandler, String[] elements2Analyze,
+			String[] elementVocs) {
 		// TODO Auto-generated constructor stub
 		this.repositoryHandler = repositoryHandler;
 		this.elements2Analyze = elements2Analyze;
@@ -50,6 +51,8 @@ public class XMLHandler extends DefaultHandler {
 			all = true;
 		else
 			all = false;
+
+		this.elementsVocs = elementVocs;
 
 		elements = new Vector<>();
 		constants = new AnalyticsConstants();
@@ -136,8 +139,7 @@ public class XMLHandler extends DefaultHandler {
 		if (all == false) {
 			if (contains(elements2Analyze, elmt))
 				doCalculations(elmt);
-			else{
-				// entropy calculation
+			if (contains(elementsVocs, elmt)) {
 				try {
 
 					repositoryHandler.addEvalue2File(elmt, tmpValue);
@@ -148,7 +150,6 @@ public class XMLHandler extends DefaultHandler {
 					repositoryHandler.addEvalue2File(elmt, "");
 
 				}
-
 			}
 
 		} else {

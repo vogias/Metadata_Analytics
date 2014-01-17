@@ -15,6 +15,7 @@ import analytics.analyzer.handlers.Repository;
  */
 public abstract class XmlHandlerInput {
 
-	public abstract void getInputData(Repository repo,String[] elements2Analyze) throws SAXException,
-			ParserConfigurationException;
+	public abstract void getInputData(Repository repo,
+			String[] elements2Analyze, String[] elementsVocs)
+			throws SAXException, ParserConfigurationException;
 }

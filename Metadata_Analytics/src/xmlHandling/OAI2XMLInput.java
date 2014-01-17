@@ -22,15 +22,16 @@ import analytics.analyzer.handlers.XMLHandler;
 public class OAI2XMLInput extends XmlHandlerInput {
 
 	@Override
-	public void getInputData(Repository repo, String[] elements2Analyze)
-			throws ParserConfigurationException {
+	public void getInputData(Repository repo, String[] elements2Analyze,
+			String[] elementsVocs) throws ParserConfigurationException {
 		Iterator<String> iterator = (Iterator<String>) repo.getXmls()
 				.iterator();
 		// int j = 0;
 		try {
 			while (iterator.hasNext()) {
 				String xml = iterator.next();
-				XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze);
+				XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze,
+						elementsVocs);
 
 				InputStream inS = new ByteArrayInputStream(xml.getBytes());
 
