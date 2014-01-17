@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.commons.collections.MultiHashMap;
+import org.apache.commons.io.FileUtils;
 
 import analytics.constants.AnalyticsConstants;
 import analytics.storage.Storage;
@@ -197,7 +198,7 @@ public class Federation {
 			if (!data.containsKey(nextElement)) {
 				ArrayList<Double> collection = (ArrayList<Double>) elementFreq
 						.getCollection(nextElement);
-				
+
 				data.put(nextElement, getFreqSum(collection));
 			}
 
@@ -473,7 +474,7 @@ public class Federation {
 
 			}
 		}
-		// System.out.println(vocs);
+
 		saveVocsToCSV();
 
 	}
@@ -481,7 +482,11 @@ public class Federation {
 	private void saveVocsToCSV() throws IOException {
 
 		File an = new File("Analysis_Results");
+
 		File federationFolder = new File(an, "Federation");
+
+		if (federationFolder.exists())
+			federationFolder.mkdir();
 
 		Set<String> keySet = vocs.keySet();
 		Iterator<String> iterator = keySet.iterator();
@@ -489,6 +494,7 @@ public class Federation {
 		while (iterator.hasNext()) {
 			String key = iterator.next();
 			HashMap<String, Integer> map = vocs.get(key);
+
 			File f = new File(federationFolder, "Federation_" + key
 					+ "_ElementValue_Analysis.csv");
 

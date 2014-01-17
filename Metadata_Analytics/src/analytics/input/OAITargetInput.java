@@ -50,6 +50,7 @@ public class OAITargetInput extends Input {
 		try {
 			repos.setBaseURL(path);
 			records = repos.listRecords(repoSelection);
+		
 
 			while (records.moreItems()) {
 				OAIRecord item = records.getCurrentItem();

@@ -73,7 +73,7 @@ public class FSInitializer extends InitializeProcess {
 		Properties props = new Properties();
 		try {
 			props.load(new FileInputStream("configure.properties"));
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -136,6 +136,8 @@ public class FSInitializer extends InitializeProcess {
 					repo.storeRepoGeneralInfo(true);
 					federation.appendSchemas(repo.getSchema(false));
 					federation.appendRequirements(repo.getRequirements());
+					
+					
 
 					System.out.println("Repository:" + repo.getRepoName()
 							+ " analysis completed.");
@@ -188,7 +190,7 @@ public class FSInitializer extends InitializeProcess {
 				federation.getElementsMaxDimensionality();
 				federation.getElementsMEntropy();
 				federation.getAttributesSumFreq();
-				// federation.getElementValueSumFreq(elements);
+			    federation.getElementValueSumFreq(elmtVoc);
 				System.out.println("Average file size:"
 						+ federation.getAverageFileSize() + " Bytes");
 				System.out.println("Sum number of records:"
