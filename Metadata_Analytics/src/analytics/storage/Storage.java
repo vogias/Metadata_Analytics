@@ -17,7 +17,7 @@ public abstract class Storage {
 			String metricName,String dataProvider,String analysisType,String headerColumn);
 	
 	public abstract void storeElementValueData(HashMap<String, Integer> data,
-			String metricName,String dataProvider,String analysisType,String headerColumn);
+			String metricName,String dataProvider,String analysisType,String headerColumn,String element);
 	
 	public abstract void storeRepositoryData(String repoName,int noRecords,float avgFSize,float storageReq,String schema);
 	public abstract void appendRepositoryData(String repoName,int noRecords,float avgFSize,float storageReq,String schema) throws IOException;

@@ -369,7 +369,8 @@ public class Repository {
 				storageClass.storeElementValueData(
 						(HashMap<String, Integer>) cardinalityMap, "Frequency",
 						this.getRepoName(), "_" + strings[i]
-								+ "_ElementValue_Analysis", "Element Value");
+								+ "_ElementValue_Analysis", "Element Value",
+						strings[i]);
 
 			}
 		}

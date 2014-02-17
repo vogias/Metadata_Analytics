@@ -107,6 +107,34 @@ public class store2csv extends Storage {
 
 	}
 
+	private void createHeadersVoc(BufferedWriter writer, String metricName,
+			String vocValue) {
+
+		try {
+
+			writer.append("Element");
+			writer.append(',');
+			writer.append(vocValue);
+			writer.append(',');
+			writer.append(metricName);
+			writer.newLine();
+			// writer.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// finally {
+		// try {
+		// if (writer != null)
+		// writer.close();
+		// } catch (IOException ex) {
+		// ex.printStackTrace();
+		// }
+		// }
+
+	}
+
 	@Override
 	public void storeElementData(HashMap<String, Double> data,
 			String metricName, String dataProvider, String analysisType,
@@ -221,7 +249,7 @@ public class store2csv extends Storage {
 	@Override
 	public void storeElementValueData(HashMap<String, Integer> data,
 			String metricName, String dataProvider, String analysisType,
-			String headerColumn) {
+			String headerColumn, String element) {
 		// TODO Auto-generated method stub
 
 		String sFileName = dataProvider + analysisType + ".csv";
@@ -250,7 +278,7 @@ public class store2csv extends Storage {
 			if (!file.exists()) {
 				writer = new FileWriter(file);
 				bw = new BufferedWriter(writer);
-				createHeaders(bw, metricName, headerColumn);
+				createHeadersVoc(bw, metricName, headerColumn);
 
 				Set<String> keySet = data.keySet();
 				Iterator<String> iterator = keySet.iterator();
@@ -262,6 +290,8 @@ public class store2csv extends Storage {
 					if (key.contains(","))
 						key = key.replace(",", "/");
 
+					bw.append(element);
+					bw.append(',');
 					bw.append(key);
 					bw.append(',');
 					bw.append(String.valueOf(value));
