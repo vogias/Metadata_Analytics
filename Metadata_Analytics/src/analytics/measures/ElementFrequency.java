@@ -14,6 +14,9 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.commons.collections.MultiHashMap;
+import org.slf4j.Logger;
+
+import analytics.logging.ConfigureLogger;
 
 /**
  * @author vogias
@@ -59,7 +62,7 @@ public class ElementFrequency extends Metric {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void compute(MultiHashMap data, String provider) {
+	public void compute(MultiHashMap data, String provider, Logger logger) {
 
 		Set keySet = data.keySet();
 
@@ -86,7 +89,6 @@ public class ElementFrequency extends Metric {
 
 				Collection attValues = data.getCollection(attName);
 
-				
 				/*
 				 * // System.out.println("----------------------------------");
 				 * writer.write("----------------------------------");
@@ -104,7 +106,7 @@ public class ElementFrequency extends Metric {
 				Collection distinctAttsValues = atts.getCollection(attName);
 
 				computeDominantAttValue(attValues, distinctAttsValues, writer,
-						attName);
+						attName, provider, logger);
 			}
 			writer.close();
 		} catch (IOException e) {
@@ -114,14 +116,18 @@ public class ElementFrequency extends Metric {
 	}
 
 	private void computeDominantAttValue(Collection attValues,
-			Collection distinctAV, BufferedWriter writer, String attName)
-			throws IOException {
+			Collection distinctAV, BufferedWriter writer, String attName,
+			String provider, Logger logger) throws IOException {
 
 		Iterator iterator = distinctAV.iterator();
 
+		StringBuffer logstring = new StringBuffer();
 		while (iterator.hasNext()) {
 
 			writer.write(attName + ",");
+
+			logstring.append(provider);
+			logstring.append(" " + attName);
 
 			HashMap<String, String> key = (HashMap<String, String>) iterator
 					.next();
@@ -133,12 +139,17 @@ public class ElementFrequency extends Metric {
 					elementName.indexOf("{") + 1, elementName.indexOf("="));
 
 			writer.write(element + ",");
+			logstring.append(" " + element);
 			String value = elementName.substring(elementName.indexOf("=") + 1,
 					elementName.lastIndexOf("}"));
 			writer.write(value + ",");
-
+			logstring.append(" " + value);
 			writer.write(String.valueOf(frequency));
+			logstring.append(" " + frequency);
 			writer.newLine();
+
+			logger.info(logstring.toString());
+			logstring.delete(0, logstring.capacity());
 			// System.out.println("\tAttribute value:" + key + ", Frequency:"
 			// + frequency);
 

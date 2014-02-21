@@ -18,6 +18,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
 import analytics.analyzer.handlers.Federation;
@@ -25,6 +26,7 @@ import analytics.analyzer.handlers.Repository;
 import analytics.constants.AnalyticsConstants;
 import analytics.input.Input;
 import analytics.input.OAITargetInput;
+import analytics.logging.ConfigureLogger;
 
 /**
  * @author vogias
@@ -130,6 +132,12 @@ public class OAIInitializer extends InitializeProcess {
 		Vector<String> elementEntropy = new Vector<>();
 
 		String[] elementVocs = elmtVoc.split(",");
+		ConfigureLogger conf = new ConfigureLogger();
+		Logger logger = conf.getLogger("vocAnalysis", "Analysis_Results"
+				+ File.separator + "vocAnalysis.log");
+		Logger loggerAtt = conf.getLogger("attributeAnalysis",
+				"Analysis_Results" + File.separator + "attributeAnalysis.log");
+
 		for (int i = 0; i < dataProviders.size(); i++) {
 
 			OAITargetInput input = new OAITargetInput();
@@ -180,11 +188,11 @@ public class OAIInitializer extends InitializeProcess {
 					federation.appendEntropyElements(repo
 							.computeElementEntropy());
 
-					repo.computeElementValueFreq(elmtVoc);
+					repo.computeElementValueFreq(elmtVoc, logger);
 
 					FileUtils.deleteDirectory(new File("buffer"));
 
-					repo.getAttributeFrequency();
+					repo.getAttributeFrequency(loggerAtt);
 
 					// federation.appendFileSize(repo.getFileSizeDistribution());
 					federation.appendNoRecords(repo.getXmls().size());
@@ -207,13 +215,13 @@ public class OAIInitializer extends InitializeProcess {
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
 					repo.computeElementEntropy();
-					repo.computeElementValueFreq(elmtVoc);
+					repo.computeElementValueFreq(elmtVoc, logger);
 
 					// repo.storeRepoGeneralInfo();
 
 					FileUtils.deleteDirectory(new File("buffer"));
 
-					repo.getAttributeFrequency();
+					repo.getAttributeFrequency(loggerAtt);
 					System.out
 							.println("======================================");
 					System.out.println("Repository:" + repo.getRepoName()
@@ -242,8 +250,8 @@ public class OAIInitializer extends InitializeProcess {
 				federation.getElementsMCompletness();
 				federation.getElementsMaxDimensionality();
 				federation.getElementsMEntropy();
-				federation.getAttributesSumFreq();
-				federation.getElementValueSumFreq(elmtVoc);
+				federation.getAttributesSumFreq(loggerAtt);
+				federation.getElementValueSumFreq(elmtVoc, logger);
 				System.out.println("Average file size:"
 						+ federation.getAverageFileSize() + " Bytes");
 				System.out.println("Sum number of records:"

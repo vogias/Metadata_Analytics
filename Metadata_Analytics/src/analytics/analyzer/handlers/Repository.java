@@ -22,10 +22,12 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MultiHashMap;
+import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
 import xmlHandling.XmlHandlerInput;
 import analytics.constants.AnalyticsConstants;
+import analytics.logging.ConfigureLogger;
 import analytics.measures.ElementCompleteness;
 import analytics.measures.ElementFrequency;
 import analytics.measures.FileSizeMean;
@@ -343,8 +345,8 @@ public class Repository {
 
 	}
 
-	public void computeElementValueFreq(String elementName) throws IOException,
-			InstantiationException, IllegalAccessException,
+	public void computeElementValueFreq(String elementName, Logger logger)
+			throws IOException, InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
 		String[] strings = elementName.split(",");
@@ -366,11 +368,12 @@ public class Repository {
 					strings[i] = strings[i].replace(":", "_");
 
 				Storage storageClass = getStorageClass();
+
 				storageClass.storeElementValueData(
 						(HashMap<String, Integer>) cardinalityMap, "Frequency",
 						this.getRepoName(), "_" + strings[i]
 								+ "_ElementValue_Analysis", "Element Value",
-						strings[i]);
+						strings[i], logger);
 
 			}
 		}
@@ -605,14 +608,14 @@ public class Repository {
 		return data;
 	}
 
-	public void getAttributeFrequency() {
+	public void getAttributeFrequency(Logger logger) {
 
 		MultiHashMap atts = getDistinctAtts();
 
 		if (atts.size() > 0) {
 
 			ElementFrequency atFrequency = new ElementFrequency(atts);
-			atFrequency.compute(attributes, getRepoName());
+			atFrequency.compute(attributes, getRepoName(),logger);
 		}
 	}
 

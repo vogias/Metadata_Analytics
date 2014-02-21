@@ -14,6 +14,9 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+
+import analytics.logging.ConfigureLogger;
 
 /**
  * @author vogias
@@ -107,33 +110,33 @@ public class store2csv extends Storage {
 
 	}
 
-	private void createHeadersVoc(BufferedWriter writer, String metricName,
-			String vocValue) {
-
-		try {
-
-			writer.append("Element");
-			writer.append(',');
-			writer.append(vocValue);
-			writer.append(',');
-			writer.append(metricName);
-			writer.newLine();
-			// writer.close();
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// finally {
-		// try {
-		// if (writer != null)
-		// writer.close();
-		// } catch (IOException ex) {
-		// ex.printStackTrace();
-		// }
-		// }
-
-	}
+	// private void createHeadersVoc(BufferedWriter writer, String metricName,
+	// String vocValue) {
+	//
+	// try {
+	//
+	// writer.append("Element");
+	// writer.append(',');
+	// writer.append(vocValue);
+	// writer.append(',');
+	// writer.append(metricName);
+	// writer.newLine();
+	// // writer.close();
+	//
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// // finally {
+	// // try {
+	// // if (writer != null)
+	// // writer.close();
+	// // } catch (IOException ex) {
+	// // ex.printStackTrace();
+	// // }
+	// // }
+	//
+	// }
 
 	@Override
 	public void storeElementData(HashMap<String, Double> data,
@@ -249,7 +252,7 @@ public class store2csv extends Storage {
 	@Override
 	public void storeElementValueData(HashMap<String, Integer> data,
 			String metricName, String dataProvider, String analysisType,
-			String headerColumn, String element) {
+			String headerColumn, String element, Logger logger) {
 		// TODO Auto-generated method stub
 
 		String sFileName = dataProvider + analysisType + ".csv";
@@ -278,10 +281,11 @@ public class store2csv extends Storage {
 			if (!file.exists()) {
 				writer = new FileWriter(file);
 				bw = new BufferedWriter(writer);
-				createHeadersVoc(bw, metricName, headerColumn);
+				createHeaders(bw, metricName, headerColumn);
 
 				Set<String> keySet = data.keySet();
 				Iterator<String> iterator = keySet.iterator();
+				StringBuffer logString = new StringBuffer();
 
 				while (iterator.hasNext()) {
 					String key = iterator.next();
@@ -290,14 +294,22 @@ public class store2csv extends Storage {
 					if (key.contains(","))
 						key = key.replace(",", "/");
 
-					bw.append(element);
-					bw.append(',');
+					// bw.append(element);
+					// bw.append(',');
 					bw.append(key);
+					logString.append(dataProvider);
+					logString.append(" " + element);
+					logString.append(" " + key.replace(" ", "_"));
 					bw.append(',');
 					bw.append(String.valueOf(value));
+					logString.append(" " + String.valueOf(value));
 					bw.newLine();
+
+					logger.info(logString.toString());
+					logString.delete(0, logString.capacity());
 				}
 				bw.close();
+
 			} else {
 
 				reader = new BufferedReader(new FileReader(file));
@@ -312,7 +324,7 @@ public class store2csv extends Storage {
 
 				// Set<String> keySet = data.keySet();
 				// Iterator<String> iterator = keySet.iterator();
-
+				StringBuffer logString = new StringBuffer();
 				while ((line = reader.readLine()) != null) {
 					String[] split = line.split(",");
 					// System.out.println(line);
@@ -332,7 +344,15 @@ public class store2csv extends Storage {
 
 						line = line + "," + value;
 						bw.append(line);
+						logString.append(dataProvider);
+						logString.append(" " + element);
+						logString.append(" " + key.replace(" ", "_"));
+						logString.append(" " + value);
+
 						bw.newLine();
+
+						logger.info(logString.toString());
+						logString.delete(0, logString.capacity());
 					}
 
 					counter += 1;
@@ -354,6 +374,7 @@ public class store2csv extends Storage {
 					bw.close();
 				if (reader != null)
 					reader.close();
+
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
@@ -364,6 +385,8 @@ public class store2csv extends Storage {
 	public void storeRepositoryData(String repoName, int noRecords,
 			float avgFSize, float storageReq, String schema) {
 		// TODO Auto-generated method stub
+
+		ConfigureLogger conf = new ConfigureLogger();
 
 		String sFileName = repoName + "_GeneralInfo" + ".csv";
 
@@ -377,6 +400,11 @@ public class store2csv extends Storage {
 			dir.mkdir();
 
 		File file = new File(dir, sFileName);
+
+		Logger logger = conf.getLogger("generalInfo", anls + File.separator
+				+ "repoGeneralInfo.log");
+
+		StringBuffer logString = new StringBuffer();
 
 		this.setGeneralDataFilePath(file.getAbsolutePath());
 		FileWriter writer;
@@ -398,15 +426,22 @@ public class store2csv extends Storage {
 
 			// insert data
 			bw.append(repoName);
+			logString.append(repoName);
 			bw.append(",");
 			bw.append(String.valueOf(noRecords));
+			logString.append(" " + String.valueOf(noRecords));
 			bw.append(",");
 			bw.append(String.valueOf(avgFSize));
+			logString.append(" " + String.valueOf(avgFSize));
 			bw.append(",");
 			bw.append(String.valueOf(storageReq));
+			logString.append(" " + String.valueOf(storageReq));
 			bw.append(",");
 			bw.append(schema);
+			logString.append(" " + schema);
 			bw.close();
+
+			logger.info(logString.toString());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

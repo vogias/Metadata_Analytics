@@ -21,6 +21,7 @@ import java.util.Vector;
 
 import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
 
 import analytics.constants.AnalyticsConstants;
 import analytics.storage.Storage;
@@ -303,7 +304,7 @@ public class Federation {
 		return data;
 	}
 
-	public void getAttributesSumFreq() throws IOException {
+	public void getAttributesSumFreq(Logger logger) throws IOException {
 
 		Vector<String> repoNames = getRepoNames();
 
@@ -332,12 +333,12 @@ public class Federation {
 			}
 		}
 		// System.out.println(data);
-		saveAttFreqSums2File(data);
+		saveAttFreqSums2File(data, logger);
 
 	}
 
-	private void saveAttFreqSums2File(HashMap<String, Integer> data)
-			throws IOException {
+	private void saveAttFreqSums2File(HashMap<String, Integer> data,
+			Logger logger) throws IOException {
 		File an = new File("Analysis_Results");
 
 		if (!an.exists())
@@ -347,6 +348,8 @@ public class Federation {
 
 		if (!fedDir.exists())
 			fedDir.mkdir();
+
+		StringBuffer logStringBuffer = new StringBuffer();
 
 		File attInfo = new File(fedDir, "Federation" + "_Attribute_Analysis"
 				+ ".csv");
@@ -373,16 +376,24 @@ public class Federation {
 				String element = attributes[1];
 				String attValue = attributes[2];
 
+				logStringBuffer.append("Federation");
 				writer.append(attName);
+				logStringBuffer.append(" " + attName);
 				writer.append(",");
 				writer.append(element);
+				logStringBuffer.append(" " + element);
 				writer.append(",");
 				writer.append(attValue);
+				logStringBuffer.append(" " + attValue);
 				writer.append(",");
 
 				Integer freqValue = data.get(next);
 				writer.append(String.valueOf(freqValue));
+				logStringBuffer.append(" " + freqValue);
 				writer.newLine();
+				logger.info(logStringBuffer.toString());
+				logStringBuffer.delete(0, logStringBuffer.capacity());
+
 			} catch (ArrayIndexOutOfBoundsException ex) {
 				continue;
 			}
@@ -447,7 +458,7 @@ public class Federation {
 		return null;
 	}
 
-	public void getElementValueSumFreq(String elementsAnalyzed)
+	public void getElementValueSumFreq(String elementsAnalyzed, Logger logger)
 			throws IOException {
 
 		String[] elements = elementsAnalyzed.split(",");
@@ -475,11 +486,11 @@ public class Federation {
 			}
 		}
 
-		saveVocsToCSV();
+		saveVocsToCSV(logger);
 
 	}
 
-	private void saveVocsToCSV() throws IOException {
+	private void saveVocsToCSV(Logger logger) throws IOException {
 
 		File an = new File("Analysis_Results");
 
@@ -505,11 +516,19 @@ public class Federation {
 			Set<String> keySet2 = map.keySet();
 			Iterator<String> iterator2 = keySet2.iterator();
 
+			StringBuffer logstring = new StringBuffer();
+
 			while (iterator2.hasNext()) {
 				String key2 = iterator2.next();
 				Integer freq = map.get(key2);
 				writer.append(key2 + "," + String.valueOf(freq));
+				logstring.append("Federation");
+				logstring.append(" " + key);
+				logstring.append(" " + key2.replace(" ", "_"));
+				logstring.append(" " + freq);
 				writer.newLine();
+				logger.info(logstring.toString());
+				logstring.delete(0, logstring.capacity());
 			}
 
 			writer.close();
