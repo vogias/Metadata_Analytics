@@ -3,9 +3,11 @@
  */
 package initializers;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -138,6 +140,9 @@ public class OAIInitializer extends InitializeProcess {
 		Logger loggerAtt = conf.getLogger("attributeAnalysis",
 				"Analysis_Results" + File.separator + "attributeAnalysis.log");
 
+		Logger loggerEl = conf.getLogger("elementAnalysis", "Analysis_Results"
+				+ File.separator + "elementAnalysis.log");
+
 		for (int i = 0; i < dataProviders.size(); i++) {
 
 			OAITargetInput input = new OAITargetInput();
@@ -263,6 +268,43 @@ public class OAIInitializer extends InitializeProcess {
 				ex.printStackTrace();
 			}
 
+		}
+	}
+
+	@Override
+	public void logElementAnalysis(Logger logger, String providerName) {
+		// TODO Auto-generated method stub
+		File elAnalysisFile = new File("Analysis_Results" + File.separator
+				+ providerName + File.separator + providerName
+				+ "_Element_Analysis.csv");
+		BufferedReader br = null;
+		try {
+
+			String sCurrentLine;
+
+			br = new BufferedReader(new FileReader(elAnalysisFile));
+
+			int counter = 0;
+			StringBuffer buffer = new StringBuffer();
+			while ((sCurrentLine = br.readLine()) != null) {
+				if (counter > 0) {
+					buffer.append(providerName);
+					buffer.append(" " + sCurrentLine.replace(",", " "));
+					logger.info(buffer.toString());
+					buffer.delete(0, buffer.capacity());
+				}
+				counter++;
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 }

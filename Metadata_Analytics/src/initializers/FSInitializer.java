@@ -3,9 +3,11 @@
  */
 package initializers;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -95,6 +97,9 @@ public class FSInitializer extends InitializeProcess {
 		Logger loggerAtt = conf.getLogger("attributeAnalysis",
 				"Analysis_Results" + File.separator + "attributeAnalysis.log");
 
+		Logger loggerEl = conf.getLogger("elementAnalysis", "Analysis_Results"
+				+ File.separator + "elementAnalysis.log");
+
 		for (int i = 0; i < dataProviders.size(); i++) {
 
 			String[] extensions = { "xml" };
@@ -148,6 +153,8 @@ public class FSInitializer extends InitializeProcess {
 					federation.appendSchemas(repo.getSchema(false));
 					federation.appendRequirements(repo.getRequirements());
 
+					this.logElementAnalysis(loggerEl, repo.getRepoName());
+
 					System.out.println("Repository:" + repo.getRepoName()
 							+ " analysis completed.");
 					System.out
@@ -170,6 +177,8 @@ public class FSInitializer extends InitializeProcess {
 					FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency(loggerAtt);
+
+					this.logElementAnalysis(loggerEl, repo.getRepoName());
 					System.out
 							.println("======================================");
 					System.out.println("Repository:" + repo.getRepoName()
@@ -207,6 +216,7 @@ public class FSInitializer extends InitializeProcess {
 				System.out.println("Sum storage requirements:"
 						+ federation.getRequirements() + " bytes");
 				federation.storeGeneralInfo2CSV();
+				this.logElementAnalysis(loggerEl, "Federation");
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
@@ -232,5 +242,44 @@ public class FSInitializer extends InitializeProcess {
 				props.getProperty(AnalyticsConstants.analyzeRepositories));
 
 		return (List<?>) dataProviders;
+	}
+
+	@Override
+	public void logElementAnalysis(Logger logger, String providerName) {
+		// TODO Auto-generated method stub
+
+		File elAnalysisFile = new File("Analysis_Results" + File.separator
+				+ providerName + File.separator + providerName
+				+ "_Element_Analysis.csv");
+		BufferedReader br = null;
+		try {
+
+			String sCurrentLine;
+
+			br = new BufferedReader(new FileReader(elAnalysisFile));
+
+			int counter = 0;
+			StringBuffer buffer = new StringBuffer();
+			while ((sCurrentLine = br.readLine()) != null) {
+				if (counter > 0) {
+					buffer.append(providerName);
+					buffer.append(" " + sCurrentLine.replace(",", " "));
+					logger.info(buffer.toString());
+					buffer.delete(0, buffer.capacity());
+				}
+				counter++;
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+
 	}
 }
