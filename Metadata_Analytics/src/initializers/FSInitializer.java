@@ -141,7 +141,7 @@ public class FSInitializer extends InitializeProcess {
 					federation.appendEntropyElements(repo
 							.computeElementEntropy());
 
-					repo.computeElementValueFreq(elmtVoc, logger);
+					repo.computeElementValueFreq(elementVocs, logger);
 
 					FileUtils.deleteDirectory(new File("buffer"));
 
@@ -170,7 +170,7 @@ public class FSInitializer extends InitializeProcess {
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
 					repo.computeElementEntropy();
-					repo.computeElementValueFreq(elmtVoc, logger);
+					repo.computeElementValueFreq(elementVocs, logger);
 
 					repo.storeRepoGeneralInfo(false);
 

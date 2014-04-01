@@ -38,7 +38,8 @@ public class XMLHandler extends DefaultHandler {
 	String branche;
 	String elPath;
 	Stack<String> xPaths;
-	String[] elements2Analyze, elementsVocs;
+	String[] elements2Analyze;
+	String[] elementsVocs;
 	boolean all = false;
 
 	public XMLHandler(Repository repositoryHandler, String[] elements2Analyze,
@@ -136,10 +137,14 @@ public class XMLHandler extends DefaultHandler {
 			// System.out.println(elmt);
 		}
 
+		boolean controlFlag = false;
+
 		if (all == false) {
-			if (contains(elements2Analyze, elmt))
+			if (contains(elements2Analyze, elmt)) {
 				doCalculations(elmt);
-			if (contains(elementsVocs, elmt)) {
+				controlFlag = true;
+			}
+			if (contains(elementsVocs, elmt) && controlFlag == false) {
 				try {
 
 					repositoryHandler.addEvalue2File(elmt, tmpValue);

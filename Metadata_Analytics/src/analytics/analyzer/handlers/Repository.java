@@ -345,35 +345,35 @@ public class Repository {
 
 	}
 
-	public void computeElementValueFreq(String elementName, Logger logger)
+	public void computeElementValueFreq(String[] elementName, Logger logger)
 			throws IOException, InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
-		String[] strings = elementName.split(",");
+		//String[] strings = elementName.split(",");
 
-		for (int i = 0; i < strings.length; i++) {
+		for (int i = 0; i < elementName.length; i++) {
 			// HashMap<String, Double> data = new HashMap<>();
 
-			System.out.println("Element:" + strings[i]
+			System.out.println("Element:" + elementName[i]
 					+ " vocabulary statistical analysis");
 
-			Vector<String> vectorFromFile = getVectorFromFile(strings[i]);
+			Vector<String> vectorFromFile = getVectorFromFile(elementName[i]);
 
 			if (!vectorFromFile.contains("Element not found")) {
 
 				Map cardinalityMap = CollectionUtils
 						.getCardinalityMap(vectorFromFile);
 
-				if (strings[i].contains(":"))
-					strings[i] = strings[i].replace(":", "_");
+				if (elementName[i].contains(":"))
+					elementName[i] = elementName[i].replace(":", "_");
 
 				Storage storageClass = getStorageClass();
 
 				storageClass.storeElementValueData(
 						(HashMap<String, Integer>) cardinalityMap, "Frequency",
-						this.getRepoName(), "_" + strings[i]
+						this.getRepoName(), "_" + elementName[i]
 								+ "_ElementValue_Analysis", "Element Value",
-						strings[i], logger);
+								elementName[i], logger);
 
 			}
 		}

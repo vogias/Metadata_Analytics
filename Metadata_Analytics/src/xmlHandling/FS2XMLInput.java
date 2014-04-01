@@ -37,10 +37,12 @@ public class FS2XMLInput extends XmlHandlerInput {
 
 			XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze,
 					elementsVocs);
+			
 
 			InputStream inS = null;
 			try {
 				inS = new FileInputStream(xml);
+				
 				xmlHandler.parseDocument(inS);
 
 			} catch (SAXException e) {
