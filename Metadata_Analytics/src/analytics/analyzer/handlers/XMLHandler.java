@@ -80,6 +80,12 @@ public class XMLHandler extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 
+		if (qName.contains(":")) {
+			String qname = qName.substring(0, qName.indexOf(":") + 1);
+			qName = qName.replace(qname, "");
+		}
+
+		
 		branche += qName.toLowerCase();
 		xPaths.push(branche);
 		HashMap<String, String> elmt = new HashMap<>();
@@ -126,6 +132,12 @@ public class XMLHandler extends DefaultHandler {
 
 		String elmt = "";
 		qName = qName.toLowerCase();
+		if (qName.contains(":")) {
+			String qname = qName.substring(0, qName.indexOf(":")+1);
+			qName = qName.replace(qname, "");
+		}
+
+		System.out.println(qName);
 
 		if (branche.endsWith(qName + "" + ".")) {
 			branche = branche.substring(0, branche.length() - qName.length()
@@ -225,7 +237,9 @@ public class XMLHandler extends DefaultHandler {
 	public void parseDocument(InputStream is) throws SAXException, IOException,
 			ParserConfigurationException {
 		// TODO Auto-generated method stub
+
 		SAXParserFactory spf = SAXParserFactory.newInstance();
+		// spf.setNamespaceAware(false);
 
 		Reader reader = new InputStreamReader(is, "UTF-8");
 
@@ -234,7 +248,7 @@ public class XMLHandler extends DefaultHandler {
 
 		SAXParser parser = spf.newSAXParser();
 
+		// parser.parse(inputStream, this);
 		parser.parse(inputStream, this);
-
 	}
 }
