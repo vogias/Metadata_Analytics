@@ -41,6 +41,7 @@ public class XMLHandler extends DefaultHandler {
 	String[] elements2Analyze;
 	String[] elementsVocs;
 	boolean all = false;
+	StringBuffer buffer;
 
 	public XMLHandler(Repository repositoryHandler, String[] elements2Analyze,
 			String[] elementVocs) {
@@ -60,6 +61,7 @@ public class XMLHandler extends DefaultHandler {
 		branche = "";
 		elPath = "";
 		xPaths = new Stack<>();
+		buffer = new StringBuffer();
 	}
 
 	private boolean contains(String[] els, String input) {
@@ -81,11 +83,12 @@ public class XMLHandler extends DefaultHandler {
 			Attributes attributes) throws SAXException {
 
 		if (qName.contains(":")) {
-			String qname = qName.substring(0, qName.indexOf(":") + 1);
-			qName = qName.replace(qname, "");
+
+			buffer.append(qName.substring(0, qName.indexOf(":") + 1));
+			qName = qName.replace(buffer.toString(), "");
+			buffer.delete(0, buffer.capacity());
 		}
 
-		
 		branche += qName.toLowerCase();
 		xPaths.push(branche);
 		HashMap<String, String> elmt = new HashMap<>();
@@ -133,8 +136,9 @@ public class XMLHandler extends DefaultHandler {
 		String elmt = "";
 		qName = qName.toLowerCase();
 		if (qName.contains(":")) {
-			String qname = qName.substring(0, qName.indexOf(":")+1);
-			qName = qName.replace(qname, "");
+			buffer.append(qName.substring(0, qName.indexOf(":") + 1));
+			qName = qName.replace(buffer.toString(), "");
+			buffer.delete(0, buffer.capacity());
 		}
 
 		System.out.println(qName);
