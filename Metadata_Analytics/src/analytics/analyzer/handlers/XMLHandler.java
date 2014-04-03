@@ -141,7 +141,6 @@ public class XMLHandler extends DefaultHandler {
 			buffer.delete(0, buffer.capacity());
 		}
 
-		System.out.println(qName);
 
 		if (branche.endsWith(qName + "" + ".")) {
 			branche = branche.substring(0, branche.length() - qName.length()
