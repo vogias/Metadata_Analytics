@@ -41,6 +41,7 @@ public class OAI2XMLInput extends XmlHandlerInput {
 		int size = repo.getXmls().size();
 		int count = 1;
 		try {
+			long startExp = System.currentTimeMillis();
 			while (iterator.hasNext()) {
 				String xml = iterator.next();
 				XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze,
@@ -51,9 +52,14 @@ public class OAI2XMLInput extends XmlHandlerInput {
 				try {
 					System.out.println("Parsing file:" + count + " of " + size);
 					count++;
+					long start = System.currentTimeMillis();
 					xmlHandler.parseDocument(inS);
+					long end = System.currentTimeMillis();
+					long diff = end - start;
+					System.out.print(",Parsing time(ms):" + diff + "\n");
 					// j++;
 					inS.close();
+
 				} catch (SAXException e) {
 					// TODO Auto-generated catch block
 
@@ -61,6 +67,9 @@ public class OAI2XMLInput extends XmlHandlerInput {
 					continue;
 				}
 			}
+			long endExp = System.currentTimeMillis();
+			long res = (endExp - startExp) / 1000;
+			System.out.println("Repository parsing duration(s):" + res + "\n");
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

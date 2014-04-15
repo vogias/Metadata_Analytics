@@ -44,6 +44,7 @@ public class FS2XMLInput extends XmlHandlerInput {
 		int size = repo.getXmls().size();
 		int count = 1;
 
+		long startExp = System.currentTimeMillis();
 		while (iterator.hasNext()) {
 			xml = iterator.next();
 
@@ -53,11 +54,16 @@ public class FS2XMLInput extends XmlHandlerInput {
 			InputStream inS = null;
 			try {
 				inS = new FileInputStream(xml);
-				
-				
-				System.out.println("Parsing file:" + count + " of" + size);
+
+				System.out.print("Parsing file:" + count + " of " + size);
 				count++;
+
+				long start = System.currentTimeMillis();
+
 				xmlHandler.parseDocument(inS);
+				long end = System.currentTimeMillis();
+				long diff = end - start;
+				System.out.print(",Parsing time(ms):" + diff + "\n");
 
 			} catch (SAXException e) {
 				// TODO Auto-generated catch block
@@ -83,6 +89,9 @@ public class FS2XMLInput extends XmlHandlerInput {
 			}
 
 		}
+		long endExp = System.currentTimeMillis();
+		long res = (endExp - startExp)/1000;
+		System.out.println("Repository parsing duration(s):" + res + "\n");
 		// } catch (IOException ex) {
 		// ex.printStackTrace();
 		//
