@@ -41,18 +41,22 @@ public class FS2XMLInput extends XmlHandlerInput {
 		// int j = 0;
 		File xml = null;
 		// try {
+		int size = repo.getXmls().size();
+		int count = 1;
 
 		while (iterator.hasNext()) {
 			xml = iterator.next();
 
 			XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze,
 					elementsVocs);
-			
 
 			InputStream inS = null;
 			try {
 				inS = new FileInputStream(xml);
 				
+				
+				System.out.println("Parsing file:" + count + " of" + size);
+				count++;
 				xmlHandler.parseDocument(inS);
 
 			} catch (SAXException e) {

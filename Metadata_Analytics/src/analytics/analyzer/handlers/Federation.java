@@ -168,6 +168,7 @@ public class Federation {
 
 	public void appendDimensionalityElements(HashMap<String, Double> elements) {
 
+		
 		Set<String> keySet = elements.keySet();
 		Iterator<String> iterator = keySet.iterator();
 		while (iterator.hasNext()) {

@@ -102,7 +102,7 @@ public class Main {
 			} else {
 				System.out
 						.println("Federated statistical analysis is deactivated.");
-				System.out.println("Analyzing...");
+				System.out.println("Analysis initialization...");
 			}
 
 			String elements2AnalyzeSTR = props
@@ -120,11 +120,13 @@ public class Main {
 
 				System.out.println(elements2Analyze[i]);
 			}
+			
 			System.out.println("======================================");
 
 			String elementsVocs = props
 					.getProperty(AnalyticsConstants.elementVocaulary);
 
+			System.out.println("Analyzing...");
 			initProcess.doAnalysis(federation, dp, fedFlag, elements2Analyze,
 					elementsVocs);
 

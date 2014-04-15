@@ -37,6 +37,9 @@ public class OAI2XMLInput extends XmlHandlerInput {
 		Iterator<String> iterator = (Iterator<String>) repo.getXmls()
 				.iterator();
 		// int j = 0;
+
+		int size = repo.getXmls().size();
+		int count = 1;
 		try {
 			while (iterator.hasNext()) {
 				String xml = iterator.next();
@@ -46,6 +49,8 @@ public class OAI2XMLInput extends XmlHandlerInput {
 				InputStream inS = new ByteArrayInputStream(xml.getBytes());
 
 				try {
+					System.out.println("Parsing file:" + count + " of " + size);
+					count++;
 					xmlHandler.parseDocument(inS);
 					// j++;
 					inS.close();

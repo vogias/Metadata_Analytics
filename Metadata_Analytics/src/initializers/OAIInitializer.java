@@ -175,10 +175,9 @@ public class OAIInitializer extends InitializeProcess {
 			try {
 				// Repository repo = new Repository(xmls,elements2Analyze);
 
-				Repository repo = new Repository(xmls, elements2Analyze,
-						attributes, distinctAtts, xmlElements,
-						xmlElementsDistinct, elementDims, elementCompletness,
-						elementEntropy, props, elementVocs);
+				Repository repo = new Repository(xmls, attributes,
+						distinctAtts, xmlElements, xmlElementsDistinct,
+						elementDims, elementCompletness, elementEntropy, props);
 				repo.setRepoName(input.getRepoName());
 				repo.setRecordsNum(xmls.size());
 
@@ -191,6 +190,7 @@ public class OAIInitializer extends InitializeProcess {
 					System.out.println("Analysing repository:"
 							+ repo.getRepoName());
 					System.out.println("Number of records:" + xmls.size());
+					repo.parseXMLs(elements2Analyze, elementVocs);
 
 					federation.appendFreqElements(repo.getElementFrequency());
 
@@ -226,6 +226,7 @@ public class OAIInitializer extends InitializeProcess {
 							+ repo.getRepoName());
 					System.out.println("Number of records:"
 							+ repo.getXmls().size());
+					repo.parseXMLs(elements2Analyze, elementVocs);
 					repo.getElementFrequency();
 					repo.getElementCompleteness();
 					repo.getElementDimensions();

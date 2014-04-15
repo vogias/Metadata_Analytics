@@ -121,10 +121,9 @@ public class FSInitializer extends InitializeProcess {
 
 				// Repository repo = new Repository(xmls, elements2Analyze);
 
-				Repository repo = new Repository(xmls, elements2Analyze,
-						attributes, distinctAtts, xmlElements,
-						xmlElementsDistinct, elementDims, elementCompletness,
-						elementEntropy, props, elementVocs);
+				Repository repo = new Repository(xmls, attributes,
+						distinctAtts, xmlElements, xmlElementsDistinct,
+						elementDims, elementCompletness, elementEntropy, props);
 
 				repo.setRepoName(((File) dataProviders.get(i)).getName());
 				repo.setRecordsNum(xmls.size());
@@ -139,6 +138,7 @@ public class FSInitializer extends InitializeProcess {
 					System.out.println("Analysing repository:"
 							+ repo.getRepoName());
 					System.out.println("Number of records:" + xmls.size());
+					repo.parseXMLs(elements2Analyze, elementVocs);
 
 					federation.appendFreqElements(repo.getElementFrequency());
 
@@ -176,6 +176,7 @@ public class FSInitializer extends InitializeProcess {
 							+ repo.getRepoName());
 					System.out.println("Number of records:"
 							+ repo.getXmls().size());
+					repo.parseXMLs(elements2Analyze, elementVocs);
 					repo.getElementFrequency();
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
