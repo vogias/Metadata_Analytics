@@ -180,7 +180,9 @@ public class FSInitializer extends InitializeProcess {
 					repo.getElementFrequency();
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
+
 					repo.computeElementEntropy();
+
 					repo.computeElementValueFreq(elementVocs, logger);
 
 					repo.storeRepoGeneralInfo(false);
@@ -208,6 +210,7 @@ public class FSInitializer extends InitializeProcess {
 			distinctAtts.clear();
 			elementDims.clear();
 			elementCompletness.clear();
+
 			elementEntropy.clear();
 
 		}

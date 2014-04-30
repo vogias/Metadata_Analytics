@@ -58,6 +58,8 @@ public class RelativeEntropy extends Metric {
 		// TODO Auto-generated method stub
 		Map cardinalityMap = CollectionUtils.getCardinalityMap(data);
 
+		
+		
 		Set keySet = cardinalityMap.keySet();
 		int size = data.size();
 		Iterator iterator = keySet.iterator();

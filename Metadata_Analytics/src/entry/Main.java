@@ -120,13 +120,15 @@ public class Main {
 
 				System.out.println(elements2Analyze[i]);
 			}
-			
+
 			System.out.println("======================================");
 
 			String elementsVocs = props
 					.getProperty(AnalyticsConstants.elementVocaulary);
 
 			System.out.println("Analyzing...");
+
+			
 			initProcess.doAnalysis(federation, dp, fedFlag, elements2Analyze,
 					elementsVocs);
 
