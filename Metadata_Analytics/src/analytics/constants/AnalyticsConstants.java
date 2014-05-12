@@ -36,6 +36,9 @@ public class AnalyticsConstants {
 	
 	public static String resultsPath = "analyzer.results.path";
 	public static String logsPath="analyzer.logs.path";
+	
+	public static String filteringEnabled="analytics.filtering";
+	public static String xpathExpression="analytics.filtering.xpath.expression";
 
 	// public static String temporalMode = "temporal.analysis.mode";
 

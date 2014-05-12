@@ -21,6 +21,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
@@ -35,6 +36,7 @@ import org.xml.sax.SAXException;
 import analytics.analyzer.handlers.Federation;
 import analytics.analyzer.handlers.Repository;
 import analytics.constants.AnalyticsConstants;
+import analytics.filtering.Filtering;
 import analytics.input.Input;
 import analytics.logging.ConfigureLogger;
 
@@ -120,6 +122,27 @@ public class FSInitializer extends InitializeProcess {
 			FileUtils utils = new FileUtils();
 			Collection<File> xmls = utils.listFiles(
 					(File) dataProviders.get(i), extensions, true);
+			String filterXMLs = props
+					.getProperty(AnalyticsConstants.filteringEnabled);
+
+			if (filterXMLs.equalsIgnoreCase("true")) {
+				Filtering filtering = new Filtering();
+				String expression = props
+						.getProperty(AnalyticsConstants.xpathExpression);
+				System.out.println("Filtering is enabled.");
+				Iterator<File> iterator = xmls.iterator();
+				while (iterator.hasNext()) {
+					File next = iterator.next();
+					if (!filtering.filterXML(next, expression)) {
+						System.out.println("File:" + next.getName()
+								+ " is filtered out.");
+						iterator.remove();
+					} else
+						System.out.println("File:" + next.getName()
+								+ " is kept in xmls' collection.");
+
+				}
+			}
 
 			try {
 
