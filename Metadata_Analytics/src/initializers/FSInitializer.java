@@ -50,6 +50,7 @@ public class FSInitializer extends InitializeProcess {
 
 		String repo2Analyze = props
 				.getProperty(AnalyticsConstants.analyzeRepositories);
+
 		try {
 			if (repo2Analyze.equals(""))
 				repo2Analyze = "*";
@@ -98,17 +99,20 @@ public class FSInitializer extends InitializeProcess {
 			System.exit(-1);
 		}
 
+		String resultsPath = props.getProperty(AnalyticsConstants.resultsPath);
 		String[] elementVocs = elmtVoc.split(",");
 
 		ConfigureLogger conf = new ConfigureLogger();
-		Logger logger = conf.getLogger("vocAnalysis", "Analysis_Results"
-				+ File.separator + "vocAnalysis.log");
+		Logger logger = conf.getLogger("vocAnalysis", resultsPath
+				+ "Analysis_Results" + File.separator + "vocAnalysis.log");
 
-		Logger loggerAtt = conf.getLogger("attributeAnalysis",
-				"Analysis_Results" + File.separator + "attributeAnalysis.log");
+		Logger loggerAtt = conf
+				.getLogger("attributeAnalysis", resultsPath
+						+ "Analysis_Results" + File.separator
+						+ "attributeAnalysis.log");
 
-		Logger loggerEl = conf.getLogger("elementAnalysis", "Analysis_Results"
-				+ File.separator + "elementAnalysis.log");
+		Logger loggerEl = conf.getLogger("elementAnalysis", resultsPath
+				+ "Analysis_Results" + File.separator + "elementAnalysis.log");
 
 		for (int i = 0; i < dataProviders.size(); i++) {
 
@@ -163,7 +167,8 @@ public class FSInitializer extends InitializeProcess {
 					federation.appendSchemas(repo.getSchema(false));
 					federation.appendRequirements(repo.getRequirements());
 
-					this.logElementAnalysis(loggerEl, repo.getRepoName());
+					this.logElementAnalysis(loggerEl, repo.getRepoName(),
+							resultsPath);
 
 					System.out.println("Repository:" + repo.getRepoName()
 							+ " analysis completed.");
@@ -191,7 +196,8 @@ public class FSInitializer extends InitializeProcess {
 
 					repo.getAttributeFrequency(loggerAtt);
 
-					this.logElementAnalysis(loggerEl, repo.getRepoName());
+					this.logElementAnalysis(loggerEl, repo.getRepoName(),
+							resultsPath);
 					System.out
 							.println("======================================");
 					System.out.println("Repository:" + repo.getRepoName()
@@ -230,7 +236,7 @@ public class FSInitializer extends InitializeProcess {
 				System.out.println("Sum storage requirements:"
 						+ federation.getRequirements() + " bytes");
 				federation.storeGeneralInfo2CSV();
-				this.logElementAnalysis(loggerEl, "Federation");
+				this.logElementAnalysis(loggerEl, "Federation", resultsPath);
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
@@ -259,11 +265,12 @@ public class FSInitializer extends InitializeProcess {
 	}
 
 	@Override
-	public void logElementAnalysis(Logger logger, String providerName) {
+	public void logElementAnalysis(Logger logger, String providerName,
+			String resultsPath) {
 		// TODO Auto-generated method stub
 
-		File elAnalysisFile = new File("Analysis_Results" + File.separator
-				+ providerName + File.separator + providerName
+		File elAnalysisFile = new File(resultsPath + "Analysis_Results"
+				+ File.separator + providerName + File.separator + providerName
 				+ "_Element_Analysis.csv");
 		BufferedReader br = null;
 		try {

@@ -15,17 +15,21 @@ package analytics.measures;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.collections.MultiHashMap;
 import org.slf4j.Logger;
 
+import analytics.constants.AnalyticsConstants;
 import analytics.logging.ConfigureLogger;
 
 /**
@@ -78,7 +82,22 @@ public class ElementFrequency extends Metric {
 
 		Iterator iterator = keySet.iterator();
 
-		File anls = new File("Analysis_Results");
+		Properties props = new Properties();
+		try {
+			props.load(new FileInputStream("configure.properties"));
+
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+
+		String path = props.getProperty(AnalyticsConstants.resultsPath);
+		File anls = new File(path + "Analysis_Results");
 
 		if (!anls.exists())
 			anls.mkdir();

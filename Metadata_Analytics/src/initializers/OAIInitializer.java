@@ -143,15 +143,19 @@ public class OAIInitializer extends InitializeProcess {
 		HashMap<String, Integer> elementCompletness = new HashMap<>();
 		Vector<String> elementEntropy = new Vector<>();
 
+		String resultsPath = props.getProperty(AnalyticsConstants.resultsPath);
+
 		String[] elementVocs = elmtVoc.split(",");
 		ConfigureLogger conf = new ConfigureLogger();
-		Logger logger = conf.getLogger("vocAnalysis", "Analysis_Results"
-				+ File.separator + "vocAnalysis.log");
-		Logger loggerAtt = conf.getLogger("attributeAnalysis",
-				"Analysis_Results" + File.separator + "attributeAnalysis.log");
+		Logger logger = conf.getLogger("vocAnalysis", resultsPath
+				+ "Analysis_Results" + File.separator + "vocAnalysis.log");
+		Logger loggerAtt = conf
+				.getLogger("attributeAnalysis", resultsPath
+						+ "Analysis_Results" + File.separator
+						+ "attributeAnalysis.log");
 
-		Logger loggerEl = conf.getLogger("elementAnalysis", "Analysis_Results"
-				+ File.separator + "elementAnalysis.log");
+		Logger loggerEl = conf.getLogger("elementAnalysis", resultsPath
+				+ "Analysis_Results" + File.separator + "elementAnalysis.log");
 
 		for (int i = 0; i < dataProviders.size(); i++) {
 
@@ -209,11 +213,13 @@ public class OAIInitializer extends InitializeProcess {
 
 					repo.getAttributeFrequency(loggerAtt);
 
-					// federation.appendFileSize(repo.getFileSizeDistribution());
+					federation.appendFileSize(repo.getFileSizeDistribution());
 					federation.appendNoRecords(repo.getXmls().size());
-					// repo.storeRepoGeneralInfo();
+					repo.storeRepoGeneralInfo(true);
 					federation.appendSchemas(repo.getSchema(false));
-					// federation.appendRequirements(repo.getRequirements());
+					federation.appendRequirements(repo.getRequirements());
+					this.logElementAnalysis(loggerEl, repo.getRepoName(),
+							resultsPath);
 
 					System.out.println("Repository:" + repo.getRepoName()
 							+ " analysis completed.");
@@ -238,6 +244,9 @@ public class OAIInitializer extends InitializeProcess {
 					FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency(loggerAtt);
+
+					this.logElementAnalysis(loggerEl, repo.getRepoName(),
+							resultsPath);
 					System.out
 							.println("======================================");
 					System.out.println("Repository:" + repo.getRepoName()
@@ -274,7 +283,8 @@ public class OAIInitializer extends InitializeProcess {
 						+ federation.getRecordsSum() + " records");
 				System.out.println("Sum storage requirements:"
 						+ federation.getRequirements() + " bytes");
-				// federation.storeGeneralInfo2CSV();
+				federation.storeGeneralInfo2CSV();
+				this.logElementAnalysis(loggerEl, "Federation", resultsPath);
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
@@ -283,10 +293,11 @@ public class OAIInitializer extends InitializeProcess {
 	}
 
 	@Override
-	public void logElementAnalysis(Logger logger, String providerName) {
+	public void logElementAnalysis(Logger logger, String providerName,
+			String resultsPath) {
 		// TODO Auto-generated method stub
-		File elAnalysisFile = new File("Analysis_Results" + File.separator
-				+ providerName + File.separator + providerName
+		File elAnalysisFile = new File(resultsPath + "Analysis_Results"
+				+ File.separator + providerName + File.separator + providerName
 				+ "_Element_Analysis.csv");
 		BufferedReader br = null;
 		try {

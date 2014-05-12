@@ -40,5 +40,6 @@ public abstract class InitializeProcess {
 			IllegalAccessException, ClassNotFoundException, SAXException,
 			ParserConfigurationException;
 
-	public abstract void logElementAnalysis(Logger logger, String providerName);
+	public abstract void logElementAnalysis(Logger logger, String providerName,
+			String resultsPath);
 }

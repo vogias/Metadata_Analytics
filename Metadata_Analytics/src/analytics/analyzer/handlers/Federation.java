@@ -56,6 +56,7 @@ public class Federation {
 	boolean temporalAnalysis;
 	Vector<Integer> noRecords;
 	Vector<String> schemas;
+	String resultsPath;
 
 	public Federation(int repoNum)// , boolean temporal
 			throws FileNotFoundException, IOException {
@@ -73,6 +74,8 @@ public class Federation {
 		repoNames = new Vector<>();
 		props = new Properties();
 		props.load(new FileInputStream("configure.properties"));
+
+		resultsPath = props.getProperty(AnalyticsConstants.resultsPath);
 		// temporalAnalysis = temporal;
 	}
 
@@ -168,7 +171,6 @@ public class Federation {
 
 	public void appendDimensionalityElements(HashMap<String, Double> elements) {
 
-		
 		Set<String> keySet = elements.keySet();
 		Iterator<String> iterator = keySet.iterator();
 		while (iterator.hasNext()) {
@@ -321,7 +323,7 @@ public class Federation {
 
 		HashMap<String, Integer> data = new HashMap<>();
 		for (int i = 0; i < repoNames.size(); i++) {
-			File repoFolder = new File("Analysis_Results",
+			File repoFolder = new File(resultsPath + "Analysis_Results",
 					repoNames.elementAt(i));
 			File attAnalysisCsv = new File(repoFolder, repoNames.elementAt(i)
 					+ "_Attribute_Analysis.csv");
@@ -350,12 +352,12 @@ public class Federation {
 
 	private void saveAttFreqSums2File(HashMap<String, Integer> data,
 			Logger logger) throws IOException {
-		File an = new File("Analysis_Results");
+		File an = new File(resultsPath + "Analysis_Results");
 
 		if (!an.exists())
 			an.mkdir();
 
-		File fedDir = new File("Analysis_Results", "Federation");
+		File fedDir = new File(resultsPath + "Analysis_Results", "Federation");
 
 		if (!fedDir.exists())
 			fedDir.mkdir();
@@ -475,7 +477,7 @@ public class Federation {
 		String[] elements = elementsAnalyzed.split(",");
 		Vector<String> repos = getRepoNames();
 
-		File ar = new File("Analysis_Results");
+		File ar = new File(resultsPath + "Analysis_Results");
 
 		vocs = new HashMap<>();
 		for (int i = 0; i < repos.size(); i++) {
@@ -503,7 +505,7 @@ public class Federation {
 
 	private void saveVocsToCSV(Logger logger) throws IOException {
 
-		File an = new File("Analysis_Results");
+		File an = new File(resultsPath + "Analysis_Results");
 
 		File federationFolder = new File(an, "Federation");
 

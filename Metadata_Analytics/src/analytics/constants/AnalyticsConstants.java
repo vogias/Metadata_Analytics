@@ -33,7 +33,9 @@ public class AnalyticsConstants {
 	public static String metadataFormats = "analytics.repositories.metadataFormat";
 
 	public static String elementVocaulary = "vocabulary.element.values";
-
+	
+	public static String resultsPath = "analyzer.results.path";
+	public static String logsPath="analyzer.logs.path";
 
 	// public static String temporalMode = "temporal.analysis.mode";
 

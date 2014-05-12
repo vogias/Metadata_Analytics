@@ -16,16 +16,20 @@ package analytics.storage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 
+import analytics.constants.AnalyticsConstants;
 import analytics.logging.ConfigureLogger;
 
 /**
@@ -156,7 +160,21 @@ public class store2csv extends Storage {
 
 		String sFileName = dataProvider + analysisType + ".csv";
 
-		File anls = new File("Analysis_Results");
+		Properties props = new Properties();
+		try {
+			props.load(new FileInputStream("configure.properties"));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		;
+		File anls = new File(props.getProperty(AnalyticsConstants.resultsPath)
+				+ "Analysis_Results");
 
 		if (!anls.exists())
 			anls.mkdir();
@@ -267,7 +285,21 @@ public class store2csv extends Storage {
 
 		String sFileName = dataProvider + analysisType + ".csv";
 
-		File anls = new File("Analysis_Results");
+		Properties props = new Properties();
+		try {
+			props.load(new FileInputStream("configure.properties"));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		;
+		File anls = new File(props.getProperty(AnalyticsConstants.resultsPath)
+				+ "Analysis_Results");
 
 		if (!anls.exists())
 			anls.mkdir();
@@ -400,7 +432,21 @@ public class store2csv extends Storage {
 
 		String sFileName = repoName + "_GeneralInfo" + ".csv";
 
-		File anls = new File("Analysis_Results");
+		Properties props = new Properties();
+		try {
+			props.load(new FileInputStream("configure.properties"));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		;
+		File anls = new File(props.getProperty(AnalyticsConstants.resultsPath)
+				+ "Analysis_Results");
 
 		if (!anls.exists())
 			anls.mkdir();
@@ -498,7 +544,21 @@ public class store2csv extends Storage {
 		// TODO Auto-generated method stub
 		String sFileName = "Federation" + "_GeneralInfo" + ".csv";
 
-		File anls = new File("Analysis_Results");
+		Properties props = new Properties();
+		try {
+			props.load(new FileInputStream("configure.properties"));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.exit(-1);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		;
+		File anls = new File(props.getProperty(AnalyticsConstants.resultsPath)
+				+ "Analysis_Results");
 
 		if (!anls.exists())
 			anls.mkdir();
