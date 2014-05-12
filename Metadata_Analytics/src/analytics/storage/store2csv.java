@@ -191,7 +191,14 @@ public class store2csv extends Storage {
 
 		BufferedReader reader = null;
 		try {
-			if (!file.exists()) {
+
+			if (file.exists() && isAppendData() == false) {
+				file.delete();
+				setAppendData(true);
+			} else if (!file.exists() && isAppendData() == false)
+				setAppendData(true);
+
+			if (!file.exists() && isAppendData() == true) {
 				writer = new FileWriter(file);
 				bw = new BufferedWriter(writer);
 				createHeaders(bw, metricName, headerColumn);
@@ -211,7 +218,7 @@ public class store2csv extends Storage {
 
 				bw.close();
 				writer.close();
-			} else {
+			} else if(file.exists() && isAppendData() == true){
 
 				reader = new BufferedReader(new FileReader(file));
 
@@ -240,7 +247,8 @@ public class store2csv extends Storage {
 					} else {
 
 						Double value = data.get(key);
-						// System.out.println("Appending key:" + key + " value:"
+						// System.out.println("Appending key:" + key +
+						// " value:"
 						// + value);
 						line = line + "," + value;
 						// /System.out.println("Appending line:" + line);
