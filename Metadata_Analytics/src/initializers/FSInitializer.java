@@ -80,7 +80,8 @@ public class FSInitializer extends InitializeProcess {
 			ClassNotFoundException, SAXException, ParserConfigurationException {
 		// TODO Auto-generated method stub
 
-		Vector<String> xmlElements = new Vector<>();
+		// Vector<String> xmlElements = new Vector<>();
+		HashMap<String, Double> xmlElements = new HashMap<>();
 		Vector<String> xmlElementsDistinct = new Vector<>();
 		MultiHashMap attributes = new MultiHashMap();
 		MultiHashMap distinctAtts = new MultiHashMap();
@@ -167,6 +168,7 @@ public class FSInitializer extends InitializeProcess {
 					System.out.println("Number of records:" + xmls.size());
 					repo.parseXMLs(elements2Analyze, elementVocs);
 
+					
 					federation.appendFreqElements(repo.getElementFrequency());
 
 					federation.appendCompletnessElements(repo

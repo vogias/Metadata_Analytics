@@ -137,7 +137,8 @@ public class OAIInitializer extends InitializeProcess {
 		if (dataProviders.size() == metadataFormats.size())
 			flag = true;
 
-		Vector<String> xmlElements = new Vector<>();
+		// Vector<String> xmlElements = new Vector<>();
+		HashMap<String, Double> xmlElements = new HashMap<>();
 		Vector<String> xmlElementsDistinct = new Vector<>();
 		MultiHashMap attributes = new MultiHashMap();
 		MultiHashMap distinctAtts = new MultiHashMap();
@@ -178,7 +179,7 @@ public class OAIInitializer extends InitializeProcess {
 				System.err.println("No XMLs found on target");
 				System.exit(-1);
 			}
-			
+
 			try {
 				// Repository repo = new Repository(xmls,elements2Analyze);
 

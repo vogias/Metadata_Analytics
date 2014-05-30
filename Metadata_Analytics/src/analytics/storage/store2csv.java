@@ -155,7 +155,7 @@ public class store2csv extends Storage {
 	@Override
 	public void storeElementData(HashMap<String, Double> data,
 			String metricName, String dataProvider, String analysisType,
-			String headerColumn) {
+			String headerColumn, Boolean fed) {
 		// TODO Auto-generated method stub
 
 		String sFileName = dataProvider + analysisType + ".csv";
@@ -193,7 +193,9 @@ public class store2csv extends Storage {
 		try {
 
 			if (file.exists() && isAppendData() == false) {
-				file.delete();
+
+				if (fed == false)
+					file.delete();
 				setAppendData(true);
 			} else if (!file.exists() && isAppendData() == false)
 				setAppendData(true);
@@ -218,7 +220,7 @@ public class store2csv extends Storage {
 
 				bw.close();
 				writer.close();
-			} else if(file.exists() && isAppendData() == true){
+			} else if (file.exists() && isAppendData() == true) {
 
 				reader = new BufferedReader(new FileReader(file));
 

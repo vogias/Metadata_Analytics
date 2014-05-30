@@ -50,7 +50,9 @@ import analytics.storage.Storage;
  */
 public class Repository {
 
-	Vector<String> xmlElements;
+	// Vector<String> xmlElements;
+
+	HashMap<String, Double> xmlElements;
 	Vector<String> xmlElementsDistinct;
 	MultiHashMap attributes, distinctAtts;
 	HashMap<String, Integer> elementDims;
@@ -72,8 +74,11 @@ public class Repository {
 	// HashMap<String, Integer> elementCompletness,
 	// Vector<String> elementEntropy, Properties props)
 
-	public Repository(Collection<?> xmls, MultiHashMap attributes,
-			MultiHashMap distinctAtts, Vector<String> xmlElements,
+	public Repository(
+			Collection<?> xmls,
+			MultiHashMap attributes,
+			MultiHashMap distinctAtts,
+			HashMap<String, Double> xmlElements,// Vector<String> xmlElements
 			Vector<String> xmlElementsDistinct,
 			HashMap<String, Integer> elementDims,
 			HashMap<String, Integer> elementCompletness,
@@ -344,9 +349,8 @@ public class Repository {
 			InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
-		
 		System.out.println("Computing elements' entropy");
-		
+
 		Vector<String> elementsDistinct = getXmlElementsDistinct();
 
 		HashMap<String, Double> data = new HashMap<>();
@@ -362,7 +366,7 @@ public class Repository {
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(data, "Entropy", this.getRepoName(),
-				"_Element_Analysis", "Element Name");
+				"_Element_Analysis", "Element Name",false);
 
 		System.out.println("Done.");
 		return data;
@@ -469,7 +473,7 @@ public class Repository {
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(data, "Dimensions", this.getRepoName(),
-				"_Element_Analysis", "Element Name");
+				"_Element_Analysis", "Element Name",false);
 		System.out.println("Done.");
 		return data;
 	}
@@ -580,7 +584,14 @@ public class Repository {
 
 	public void addxmlElements(String elementName) {
 
-		xmlElements.addElement(elementName);
+		// xmlElements.addElement(elementName);
+
+		if (!xmlElements.containsKey(elementName)) {
+			xmlElements.put(elementName, (double) 1);
+		} else {
+			xmlElements.put(elementName, xmlElements.get(elementName) + 1);
+		}
+
 		if (!xmlElementsDistinct.contains(elementName))
 			xmlElementsDistinct.addElement(elementName);
 	}
@@ -604,7 +615,7 @@ public class Repository {
 	/**
 	 * @return the xmlElements
 	 */
-	public Vector<String> getXmlElements() {
+	public HashMap<String, Double> getXmlElements() {
 		return xmlElements;
 	}
 
@@ -612,7 +623,7 @@ public class Repository {
 	 * @param xmlElements
 	 *            the xmlElements to set
 	 */
-	public void setXmlElements(Vector<String> xmlElements) {
+	public void setXmlElements(HashMap<String, Double> xmlElements) {
 		this.xmlElements = xmlElements;
 	}
 
@@ -624,19 +635,20 @@ public class Repository {
 		ElementFrequency elFrequency = new ElementFrequency(
 				getXmlElementsDistinct());
 		// System.out.println(getXmlElementsDistinct());
-		HashMap<String, Double> data = elFrequency.compute(xmlElements);
+		// HashMap<String, Double> data = elFrequency.compute(xmlElements);
+
+		HashMap<String, Double> data = this.getXmlElements();
 
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(data, "Frequency", this.getRepoName(),
-				"_Element_Analysis", "Element Name");
+				"_Element_Analysis", "Element Name",false);
 		System.out.println("Done.");
 		return data;
 	}
 
 	public void getAttributeFrequency(Logger logger) {
 
-		
 		System.out.println("Computing attributes' frequency.");
 		MultiHashMap atts = getDistinctAtts();
 
@@ -651,7 +663,7 @@ public class Repository {
 	public HashMap<String, Double> getElementCompleteness()
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
-		
+
 		System.out.println("Computing elements' completeness...");
 		ElementCompleteness completeness = new ElementCompleteness(
 				getRecordsNum());
@@ -662,7 +674,7 @@ public class Repository {
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(map, "Completeness(%)",
-				this.getRepoName(), "_Element_Analysis", "Element Name");
+				this.getRepoName(), "_Element_Analysis", "Element Name",false);
 		System.out.println("Done.");
 		return map;
 	}

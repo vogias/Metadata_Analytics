@@ -217,9 +217,10 @@ public class Federation {
 			}
 
 		}
+		
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Sum Frequency", "Federation",
-				"_Element_Analysis", "Element Name");
+				"_Element_Analysis", "Element Name",true);
 
 		return data;
 	}
@@ -256,7 +257,7 @@ public class Federation {
 		}
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Average Completeness(%)",
-				"Federation", "_Element_Analysis", "Element Name");
+				"Federation", "_Element_Analysis", "Element Name",true);
 
 		return data;
 	}
@@ -284,7 +285,7 @@ public class Federation {
 		}
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Max Dimensionality", "Federation",
-				"_Element_Analysis", "Element Name");
+				"_Element_Analysis", "Element Name",true);
 
 		return data;
 	}
@@ -312,7 +313,7 @@ public class Federation {
 		}
 		Storage storageClass = getStorageClass();
 		storageClass.storeElementData(data, "Average Entropy", "Federation",
-				"_Element_Analysis", "Element Name");
+				"_Element_Analysis", "Element Name",true);
 
 		return data;
 	}
