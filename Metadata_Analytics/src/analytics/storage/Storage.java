@@ -45,4 +45,6 @@ public abstract class Storage {
 	public abstract String getAttributeDataFilePath();
 
 	public abstract String getGeneralIngoFilePath();
+
+	
 }

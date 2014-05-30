@@ -52,14 +52,6 @@ public class store2csv extends Storage {
 	}
 
 	/**
-	 * @param appendData
-	 *            the appendData to set
-	 */
-	public void setAppendData(boolean appendData) {
-		this.appendData = appendData;
-	}
-
-	/**
 	 * @return the generalDataFilePath
 	 */
 	public String getGeneralDataFilePath() {
@@ -155,7 +147,7 @@ public class store2csv extends Storage {
 	@Override
 	public void storeElementData(HashMap<String, Double> data,
 			String metricName, String dataProvider, String analysisType,
-			String headerColumn, Boolean fed) {
+			String headerColumn,Boolean fed) {
 		// TODO Auto-generated method stub
 
 		String sFileName = dataProvider + analysisType + ".csv";
@@ -194,11 +186,11 @@ public class store2csv extends Storage {
 
 			if (file.exists() && isAppendData() == false) {
 
-				if (fed == false)
-					file.delete();
-				setAppendData(true);
+			if (fed == false)
+				file.delete();
+				setAppend(true);
 			} else if (!file.exists() && isAppendData() == false)
-				setAppendData(true);
+				setAppend(true);
 
 			if (!file.exists() && isAppendData() == true) {
 				writer = new FileWriter(file);
@@ -590,7 +582,7 @@ public class store2csv extends Storage {
 
 			if (!isAppendData()) {
 
-				setAppendData(true);
+				setAppend(true);
 				// create header
 				bw.append("Repository Name");
 				bw.append(",");
@@ -640,6 +632,11 @@ public class store2csv extends Storage {
 			}
 		}
 
+	}
+
+	public void setAppend(Boolean append) {
+		// TODO Auto-generated method stub
+		this.appendData = append;
 	}
 
 }
