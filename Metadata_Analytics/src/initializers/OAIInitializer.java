@@ -227,6 +227,8 @@ public class OAIInitializer extends InitializeProcess {
 					federation.appendFileSize(repo.getFileSizeDistribution());
 					federation.appendNoRecords(repo.getXmls().size());
 					repo.storeRepoGeneralInfo(true);
+					federation.appendInformativeness(repo
+							.getAvgRepoInformativeness());
 					federation.appendSchemas(repo.getSchema(false));
 					federation.appendRequirements(repo.getRequirements());
 					this.logElementAnalysis(loggerEl, repo.getRepoName(),
@@ -297,6 +299,8 @@ public class OAIInitializer extends InitializeProcess {
 						+ federation.getRecordsSum() + " records");
 				System.out.println("Sum storage requirements:"
 						+ federation.getRequirements() + " bytes");
+				System.out.println("AVG informativeness(bits):"
+						+ federation.getAVGInformativeness());
 				federation.storeGeneralInfo2CSV();
 				this.logElementAnalysis(loggerEl, "Federation", resultsPath);
 			} catch (IOException ex) {

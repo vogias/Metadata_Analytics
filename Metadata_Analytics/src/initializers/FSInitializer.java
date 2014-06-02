@@ -277,6 +277,7 @@ public class FSInitializer extends InitializeProcess {
 
 				federation.storeGeneralInfo2CSV();
 				this.logElementAnalysis(loggerEl, "Federation", resultsPath);
+
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
@@ -343,4 +344,5 @@ public class FSInitializer extends InitializeProcess {
 		}
 
 	}
+
 }

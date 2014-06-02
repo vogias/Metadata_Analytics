@@ -603,6 +603,8 @@ public class store2csv extends Storage {
 		if (!file.exists())
 			file.createNewFile();
 
+	
+		
 		FileWriter writer;
 		BufferedWriter bw = null;
 		try {
