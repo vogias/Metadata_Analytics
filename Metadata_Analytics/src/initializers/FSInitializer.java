@@ -173,14 +173,20 @@ public class FSInitializer extends InitializeProcess {
 
 					federation.appendFreqElements(repo.getElementFrequency());
 
-					federation.appendCompletnessElements(repo
-							.getElementCompleteness());
+					federation
+							.appendCompletnessElements(
+									repo.getElementCompleteness(),
+									dataProviders.size());
+					federation.appendImportanceElements(
+							repo.getElementImportance(), dataProviders.size());
 
 					federation.appendDimensionalityElements(repo
 							.getElementDimensions());
 
-					federation.appendEntropyElements(repo
-							.computeElementEntropy());
+					federation.appendEntropyElements(
+							repo.computeElementEntropy(), dataProviders.size());
+
+					
 
 					repo.computeElementValueFreq(elementVocs, logger);
 
@@ -254,6 +260,7 @@ public class FSInitializer extends InitializeProcess {
 			try {
 				federation.getElementsSFrequency();
 				federation.getElementsMCompletness();
+				federation.getElementsMImportance();
 				federation.getElementsMaxDimensionality();
 				federation.getElementsMEntropy();
 				federation.getAttributesSumFreq(loggerAtt);

@@ -29,8 +29,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
-import org.apache.commons.collections.MultiHashMap;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 
 import analytics.constants.AnalyticsConstants;
@@ -44,9 +42,11 @@ public class Federation {
 
 	// MultiHashMap elementFreq;
 	HashMap<String, Double> elementFreq;
-	MultiHashMap elementComp;
-	MultiHashMap elementDim;
-	MultiHashMap elementEntropy;
+	// MultiHashMap elementComp;
+	HashMap<String, Double> elementComp;
+	HashMap<String, Double> elementDim;
+	HashMap<String, Double> elementEntropy;
+	HashMap<String, Double> elementImportance;
 	Vector<Float> fileSize;
 
 	HashMap<String, HashMap<String, Integer>> vocs;
@@ -64,9 +64,10 @@ public class Federation {
 		// TODO Auto-generated constructor stub
 		// elementFreq = new MultiHashMap();
 		elementFreq = new HashMap<>();
-		elementComp = new MultiHashMap();
-		elementDim = new MultiHashMap();
-		elementEntropy = new MultiHashMap();
+		elementComp = new HashMap<>();
+		elementImportance = new HashMap<>();
+		elementDim = new HashMap<>();
+		elementEntropy = new HashMap<>();
 		fileSize = new Vector<>();
 
 		schemas = new Vector<>();
@@ -164,16 +165,26 @@ public class Federation {
 		this.fileSize = fileSize;
 	}
 
-	public void appendCompletnessElements(HashMap<String, Double> elements) {
+	public void appendCompletnessElements(HashMap<String, Double> elements,
+			int repoNumber) {
 
 		Set<String> keySet = elements.keySet();
 		Iterator<String> iterator = keySet.iterator();
+
+		StringBuffer elName = new StringBuffer();
 		while (iterator.hasNext()) {
-			String elName = iterator.next();
-			Double value = elements.get(elName);
+			// String elName = iterator.next();
+			elName.append(iterator.next());
+			Double value = elements.get(elName.toString());
 
-			elementComp.put(elName, value);
+			if (!elementComp.containsKey(elName.toString()))
+				elementComp.put(elName.toString(), value / repoNumber);
+			else
+				elementComp.put(elName.toString(),
+						elementComp.get(elName.toString())
+								+ (value / repoNumber));
 
+			elName.delete(0, elName.length());
 		}
 
 	}
@@ -182,24 +193,66 @@ public class Federation {
 
 		Set<String> keySet = elements.keySet();
 		Iterator<String> iterator = keySet.iterator();
+		StringBuffer elName = new StringBuffer();
 		while (iterator.hasNext()) {
-			String elName = iterator.next();
-			Double value = elements.get(elName);
+			// String elName = iterator.next();
+			elName.append(iterator.next());
+			Double value = elements.get(elName.toString());
 
-			elementDim.put(elName, value);
+			if (!elementDim.containsKey(elName.toString()))
+				elementDim.put(elName.toString(), value);
+			else {
+				if (value > elementDim.get(elName.toString()))
+					elementDim.put(elName.toString(), value);
+			}
+
+			elName.delete(0, elName.length());
 		}
 
 	}
 
-	public void appendEntropyElements(HashMap<String, Double> elements) {
+	public void appendImportanceElements(HashMap<String, Double> elements,
+			int repoNumber) {
 
 		Set<String> keySet = elements.keySet();
 		Iterator<String> iterator = keySet.iterator();
+		StringBuffer elName = new StringBuffer();
 		while (iterator.hasNext()) {
-			String elName = iterator.next();
-			Double value = elements.get(elName);
+			// String elName = iterator.next();
+			elName.append(iterator.next());
+			Double value = elements.get(elName.toString());
 
-			elementEntropy.put(elName, value);
+			if (!elementImportance.containsKey(elName.toString()))
+				elementImportance.put(elName.toString(), value / repoNumber);
+			else
+				elementImportance.put(elName.toString(),
+						elementImportance.get(elName.toString())
+								+ (value / repoNumber));
+
+			elName.delete(0, elName.length());
+		}
+
+	}
+
+	public void appendEntropyElements(HashMap<String, Double> elements,
+			int repoNumber) {
+
+		Set<String> keySet = elements.keySet();
+		Iterator<String> iterator = keySet.iterator();
+		StringBuffer elName = new StringBuffer();
+		while (iterator.hasNext()) {
+			// String elName = iterator.next();
+			elName.append(iterator.next());
+			Double value = elements.get(elName.toString());
+
+			if (!elementEntropy.containsKey(elName.toString()))
+				elementEntropy.put(elName.toString(), value / repoNumber);
+			else
+				elementEntropy.put(elName.toString(),
+						elementEntropy.get(elName.toString())
+								+ (value / repoNumber));
+
+			elName.delete(0, elName.length());
 		}
 
 	}
@@ -230,28 +283,40 @@ public class Federation {
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
-		Set keySet = elementComp.keySet();
-
-		HashMap<String, Double> data = new HashMap<>();
-
-		Iterator iterator = keySet.iterator();
-
-		while (iterator.hasNext()) {
-			String nextElement = (String) iterator.next();
-
-			if (!data.containsKey(nextElement)) {
-				ArrayList<Double> collection = (ArrayList<Double>) elementComp
-						.getCollection(nextElement);
-				data.put(nextElement, getAvg(collection));
-			}
-
-		}
+		// Set keySet = elementComp.keySet();
+		//
+		// HashMap<String, Double> data = new HashMap<>();
+		//
+		// Iterator iterator = keySet.iterator();
+		//
+		// while (iterator.hasNext()) {
+		// String nextElement = (String) iterator.next();
+		//
+		// if (!data.containsKey(nextElement)) {
+		// ArrayList<Double> collection = (ArrayList<Double>) elementComp
+		// .getCollection(nextElement);
+		// data.put(nextElement, getAvg(collection));
+		// }
+		//
+		// }
 		Storage storageClass = getStorageClass();
 
-		storageClass.storeElementData(data, "Average Completeness(%)",
+		storageClass.storeElementData(elementComp, "Average Completeness(%)",
 				"Federation", "_Element_Analysis", "Element Name", true);
 
-		return data;
+		return elementComp;
+	}
+
+	public HashMap<String, Double> getElementsMImportance()
+			throws InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
+
+		Storage storageClass = getStorageClass();
+
+		storageClass.storeElementData(elementImportance, "Average Importance",
+				"Federation", "_Element_Analysis", "Element Name", true);
+
+		return elementImportance;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -259,28 +324,28 @@ public class Federation {
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
-		Set keySet = elementDim.keySet();
-
-		HashMap<String, Double> data = new HashMap<>();
-
-		Iterator iterator = keySet.iterator();
-
-		while (iterator.hasNext()) {
-			String nextElement = (String) iterator.next();
-
-			if (!data.containsKey(nextElement)) {
-				ArrayList<Double> collection = (ArrayList<Double>) elementDim
-						.getCollection(nextElement);
-				data.put(nextElement, getMaxDimensionality(collection));
-			}
-
-		}
+		// Set keySet = elementDim.keySet();
+		//
+		// HashMap<String, Double> data = new HashMap<>();
+		//
+		// Iterator iterator = keySet.iterator();
+		//
+		// while (iterator.hasNext()) {
+		// String nextElement = (String) iterator.next();
+		//
+		// if (!data.containsKey(nextElement)) {
+		// ArrayList<Double> collection = (ArrayList<Double>) elementDim
+		// .getCollection(nextElement);
+		// data.put(nextElement, getMaxDimensionality(collection));
+		// }
+		//
+		// }
 		Storage storageClass = getStorageClass();
 
-		storageClass.storeElementData(data, "Max Dimensionality", "Federation",
-				"_Element_Analysis", "Element Name", true);
+		storageClass.storeElementData(elementDim, "Max Dimensionality",
+				"Federation", "_Element_Analysis", "Element Name", true);
 
-		return data;
+		return elementDim;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -288,28 +353,28 @@ public class Federation {
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
-		Set keySet = elementEntropy.keySet();
-
-		HashMap<String, Double> data = new HashMap<>();
-
-		Iterator iterator = keySet.iterator();
-
-		while (iterator.hasNext()) {
-			String nextElement = (String) iterator.next();
-
-			if (!data.containsKey(nextElement)) {
-				ArrayList<Double> collection = (ArrayList<Double>) elementEntropy
-						.getCollection(nextElement);
-				data.put(nextElement, getAvg(collection));
-			}
-
-		}
+		// Set keySet = elementEntropy.keySet();
+		//
+		// HashMap<String, Double> data = new HashMap<>();
+		//
+		// Iterator iterator = keySet.iterator();
+		//
+		// while (iterator.hasNext()) {
+		// String nextElement = (String) iterator.next();
+		//
+		// if (!data.containsKey(nextElement)) {
+		// ArrayList<Double> collection = (ArrayList<Double>) elementEntropy
+		// .getCollection(nextElement);
+		// data.put(nextElement, getAvg(collection));
+		// }
+		//
+		// }
 		Storage storageClass = getStorageClass();
 
-		storageClass.storeElementData(data, "Average Entropy", "Federation",
-				"_Element_Analysis", "Element Name", true);
+		storageClass.storeElementData(elementEntropy, "Average Entropy",
+				"Federation", "_Element_Analysis", "Element Name", true);
 
-		return data;
+		return elementEntropy;
 	}
 
 	public void getAttributesSumFreq(Logger logger) throws IOException {
