@@ -88,6 +88,7 @@ public class FSInitializer extends InitializeProcess {
 		HashMap<String, Integer> elementDims = new HashMap<>();
 		HashMap<String, Integer> elementCompletness = new HashMap<>();
 		Vector<String> elementEntropy = new Vector<>();
+		HashMap<String, Double> elementImportance = new HashMap<>();
 
 		Properties props = new Properties();
 		try {
@@ -152,7 +153,8 @@ public class FSInitializer extends InitializeProcess {
 
 				Repository repo = new Repository(xmls, attributes,
 						distinctAtts, xmlElements, xmlElementsDistinct,
-						elementDims, elementCompletness, elementEntropy, props);
+						elementDims, elementCompletness, elementEntropy,
+						elementImportance, props);
 
 				repo.setRepoName(((File) dataProviders.get(i)).getName());
 				repo.setRecordsNum(xmls.size());
@@ -210,6 +212,7 @@ public class FSInitializer extends InitializeProcess {
 					repo.getElementFrequency();
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
+					repo.getElementImportance();
 
 					repo.computeElementEntropy();
 
@@ -243,6 +246,7 @@ public class FSInitializer extends InitializeProcess {
 			elementCompletness.clear();
 
 			elementEntropy.clear();
+			elementImportance.clear();
 
 		}
 

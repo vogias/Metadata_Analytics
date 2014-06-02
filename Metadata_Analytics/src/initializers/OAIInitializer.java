@@ -145,6 +145,7 @@ public class OAIInitializer extends InitializeProcess {
 		HashMap<String, Integer> elementDims = new HashMap<>();
 		HashMap<String, Integer> elementCompletness = new HashMap<>();
 		Vector<String> elementEntropy = new Vector<>();
+		HashMap<String, Double> elementImportance = new HashMap<>();
 
 		String resultsPath = props.getProperty(AnalyticsConstants.resultsPath);
 
@@ -185,7 +186,8 @@ public class OAIInitializer extends InitializeProcess {
 
 				Repository repo = new Repository(xmls, attributes,
 						distinctAtts, xmlElements, xmlElementsDistinct,
-						elementDims, elementCompletness, elementEntropy, props);
+						elementDims, elementCompletness, elementEntropy,
+						elementImportance, props);
 				repo.setRepoName(input.getRepoName());
 				repo.setRecordsNum(xmls.size());
 
@@ -270,6 +272,7 @@ public class OAIInitializer extends InitializeProcess {
 			elementDims.clear();
 			elementCompletness.clear();
 			elementEntropy.clear();
+			elementImportance.clear();
 
 		}
 

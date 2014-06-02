@@ -42,7 +42,8 @@ import analytics.storage.Storage;
  */
 public class Federation {
 
-	MultiHashMap elementFreq;
+	// MultiHashMap elementFreq;
+	HashMap<String, Double> elementFreq;
 	MultiHashMap elementComp;
 	MultiHashMap elementDim;
 	MultiHashMap elementEntropy;
@@ -61,7 +62,8 @@ public class Federation {
 	public Federation(int repoNum)// , boolean temporal
 			throws FileNotFoundException, IOException {
 		// TODO Auto-generated constructor stub
-		elementFreq = new MultiHashMap();
+		// elementFreq = new MultiHashMap();
+		elementFreq = new HashMap<>();
 		elementComp = new MultiHashMap();
 		elementDim = new MultiHashMap();
 		elementEntropy = new MultiHashMap();
@@ -83,11 +85,18 @@ public class Federation {
 
 		Set<String> keySet = elements.keySet();
 		Iterator<String> iterator = keySet.iterator();
+		StringBuffer elName = new StringBuffer();
 		while (iterator.hasNext()) {
-			String elName = iterator.next();
-			Double value = elements.get(elName);
+			// String elName = iterator.next();
+			elName.append(iterator.next());
+			Double value = elements.get(elName.toString());
 
-			elementFreq.put(elName, value);
+			if (!elementFreq.containsKey(elName.toString()))
+				elementFreq.put(elName.toString(), value);
+			else
+				elementFreq.put(elName.toString(),
+						elementFreq.get(elName.toString()) + value);
+			elName.delete(0, elName.length());
 		}
 
 	}
@@ -200,29 +209,11 @@ public class Federation {
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
-		Set keySet = elementFreq.keySet();
-
-		HashMap<String, Double> data = new HashMap<>();
-
-		Iterator iterator = keySet.iterator();
-
-		while (iterator.hasNext()) {
-			String nextElement = (String) iterator.next();
-
-			if (!data.containsKey(nextElement)) {
-				ArrayList<Double> collection = (ArrayList<Double>) elementFreq
-						.getCollection(nextElement);
-
-				data.put(nextElement, getFreqSum(collection));
-			}
-
-		}
-
 		Storage storageClass = getStorageClass();
-		storageClass.storeElementData(data, "Sum Frequency", "Federation",
-				"_Element_Analysis", "Element Name",false);
+		storageClass.storeElementData(elementFreq, "Sum Frequency",
+				"Federation", "_Element_Analysis", "Element Name", false);
 
-		return data;
+		return elementFreq;
 	}
 
 	public float getAverageFileSize() {
@@ -256,9 +247,9 @@ public class Federation {
 
 		}
 		Storage storageClass = getStorageClass();
-		
+
 		storageClass.storeElementData(data, "Average Completeness(%)",
-				"Federation", "_Element_Analysis", "Element Name",true);
+				"Federation", "_Element_Analysis", "Element Name", true);
 
 		return data;
 	}
@@ -285,9 +276,9 @@ public class Federation {
 
 		}
 		Storage storageClass = getStorageClass();
-		
+
 		storageClass.storeElementData(data, "Max Dimensionality", "Federation",
-				"_Element_Analysis", "Element Name",true);
+				"_Element_Analysis", "Element Name", true);
 
 		return data;
 	}
@@ -314,9 +305,9 @@ public class Federation {
 
 		}
 		Storage storageClass = getStorageClass();
-		
+
 		storageClass.storeElementData(data, "Average Entropy", "Federation",
-				"_Element_Analysis", "Element Name",true);
+				"_Element_Analysis", "Element Name", true);
 
 		return data;
 	}
@@ -659,15 +650,6 @@ public class Federation {
 		}
 		avg = avg / this.numberOfRepos;
 		return avg;
-	}
-
-	private Double getFreqSum(ArrayList<Double> data) {
-		Double sum = 0.0;
-		for (int i = 0; i < data.size(); i++) {
-
-			sum += data.get(i);
-		}
-		return sum;
 	}
 
 	public void addRepoName(String repoName) {

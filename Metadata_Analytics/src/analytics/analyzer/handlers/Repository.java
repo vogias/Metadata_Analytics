@@ -58,6 +58,7 @@ public class Repository {
 	MultiHashMap attributes, distinctAtts;
 	HashMap<String, Integer> elementDims;
 	HashMap<String, Integer> elementCompletness;
+	HashMap<String, Double> elementImportance;
 	Vector<String> elementEntropy;
 	int recordsNum;
 	String repoName;
@@ -67,6 +68,7 @@ public class Repository {
 	Collection<?> xmls;
 	float fileSizeM;
 	float requirements;
+	HashMap<String, Double> completenessMap;
 
 	// public Repository(Collection<?> xmls, String[] elements2Analyze,
 	// MultiHashMap attributes, MultiHashMap distinctAtts,
@@ -75,16 +77,13 @@ public class Repository {
 	// HashMap<String, Integer> elementCompletness,
 	// Vector<String> elementEntropy, Properties props)
 
-	public Repository(
-			Collection<?> xmls,
-			MultiHashMap attributes,
-			MultiHashMap distinctAtts,
-			HashMap<String, Double> xmlElements,// Vector<String> xmlElements
+	public Repository(Collection<?> xmls, MultiHashMap attributes,
+			MultiHashMap distinctAtts, HashMap<String, Double> xmlElements,
 			Vector<String> xmlElementsDistinct,
 			HashMap<String, Integer> elementDims,
 			HashMap<String, Integer> elementCompletness,
-			Vector<String> elementEntropy, Properties props)
-			//
+			Vector<String> elementEntropy,
+			HashMap<String, Double> elementImportance, Properties props)
 			throws FileNotFoundException, IOException, SAXException,
 			ParserConfigurationException, InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
@@ -102,11 +101,14 @@ public class Repository {
 		// distinctAtts = new MultiHashMap();
 		this.distinctAtts = distinctAtts;
 
+		this.elementImportance = elementImportance;
 		// elementCompletness = new HashMap<>();
 		this.elementCompletness = elementCompletness;
 
 		// xmlElementsDistinct = new Vector<>();
 		this.xmlElementsDistinct = xmlElementsDistinct;
+
+		// completenessMap = new HashMap<>();
 
 		// elementDims = new HashMap<>();
 		this.elementDims = elementDims;
@@ -125,6 +127,13 @@ public class Repository {
 		// handlerInput.getInputData(this, elements2Analyze, elementsVocs);
 		this.storage = this.createStorageClass();
 
+	}
+
+	/**
+	 * @return the completenessMap
+	 */
+	public HashMap<String, Double> getCompletenessMap() {
+		return completenessMap;
 	}
 
 	public void parseXMLs(String[] elements2Analyze, String[] elementsVocs)
@@ -633,13 +642,39 @@ public class Repository {
 		this.xmlElements = xmlElements;
 	}
 
+	public HashMap<String, Double> getElementImportance() {
+
+		System.out.println("Computing elements' Importance...");
+		Set<String> keySet = this.getXmlElements().keySet();
+		Iterator<String> iterator = keySet.iterator();
+		StringBuffer key = new StringBuffer();
+
+		while (iterator.hasNext()) {
+
+			key.append(iterator.next());
+			Double frequency = this.getXmlElements().get(key.toString());
+			Double completeness = this.getCompletenessMap().get(key.toString());
+			elementImportance.put(key.toString(), frequency * completeness);
+			key.delete(0, key.length());
+		}
+
+		Storage storageClass = getStorageClass();
+
+		storageClass.storeElementData(elementImportance, "Importance", this.getRepoName(),
+				"_Element_Analysis", "Element Name", false);
+
+		System.out.println("Done.");
+		return elementImportance;
+	}
+
 	public HashMap<String, Double> getElementFrequency()
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
 		System.out.println("Computing elements' Frequency...");
-		ElementFrequency elFrequency = new ElementFrequency(
-				getXmlElementsDistinct());
+		// ElementFrequency elFrequency = new ElementFrequency(
+		// getXmlElementsDistinct());
+
 		// System.out.println(getXmlElementsDistinct());
 		// HashMap<String, Double> data = elFrequency.compute(xmlElements);
 
@@ -674,15 +709,16 @@ public class Repository {
 		ElementCompleteness completeness = new ElementCompleteness(
 				getRecordsNum());
 
-		HashMap<String, Double> map = completeness
-				.compute(getElementCompletnessMatrix());
+		// HashMap<String, Double> map = completeness
+		// .compute(getElementCompletnessMatrix());
+		completenessMap = completeness.compute(getElementCompletnessMatrix());
 
 		Storage storageClass = getStorageClass();
 
-		storageClass.storeElementData(map, "Completeness(%)",
+		storageClass.storeElementData(completenessMap, "Completeness(%)",
 				this.getRepoName(), "_Element_Analysis", "Element Name", false);
 		System.out.println("Done.");
-		return map;
+		return completenessMap;
 	}
 
 	public float getApproStorageRequirements() {
