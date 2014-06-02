@@ -273,8 +273,8 @@ public class FSInitializer extends InitializeProcess {
 				System.out.println("Sum storage requirements:"
 						+ federation.getRequirements() + " bytes");
 				System.out.println("AVG informativeness(bits):"
-						+ federation.getAVGInformativeness() + " bits");
-				
+						+ federation.getAVGInformativeness());
+
 				federation.storeGeneralInfo2CSV();
 				this.logElementAnalysis(loggerEl, "Federation", resultsPath);
 			} catch (IOException ex) {
