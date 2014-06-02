@@ -57,8 +57,6 @@ public class RelativeEntropy extends Metric {
 	public double compute(Vector<String> data) {
 		// TODO Auto-generated method stub
 		Map cardinalityMap = CollectionUtils.getCardinalityMap(data);
-
-		
 		
 		Set keySet = cardinalityMap.keySet();
 		int size = data.size();

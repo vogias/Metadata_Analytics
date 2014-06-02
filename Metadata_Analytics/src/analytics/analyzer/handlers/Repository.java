@@ -366,7 +366,7 @@ public class Repository {
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(data, "Entropy", this.getRepoName(),
-				"_Element_Analysis", "Element Name",false);
+				"_Element_Analysis", "Element Name", false);
 
 		System.out.println("Done.");
 		return data;
@@ -463,17 +463,21 @@ public class Repository {
 		Set<String> keySet = elementDims.keySet();
 		Iterator<String> iterator = keySet.iterator();
 		HashMap<String, Double> data = new HashMap<>();
+		StringBuffer key = new StringBuffer();
 		while (iterator.hasNext()) {
-			String key = iterator.next();
+			// String key = iterator.next();
+			key.append(iterator.next());
 			// System.out.println("Element:" + key + ", Dimensions:"
 			// + elementDims.get(key));
-			data.put(key, (double) elementDims.get(key));
+			data.put(key.toString(), (double) elementDims.get(key.toString()));
+			key.delete(0, key.length());
 		}
 
+		
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(data, "Dimensions", this.getRepoName(),
-				"_Element_Analysis", "Element Name",false);
+				"_Element_Analysis", "Element Name", false);
 		System.out.println("Done.");
 		return data;
 	}
@@ -607,6 +611,7 @@ public class Repository {
 		// if (!attributes.containsValue(value))
 
 		attributes.put(name, value);
+
 		if (!distinctAtts.containsValue(value))
 			distinctAtts.put(name, value);
 
@@ -642,7 +647,7 @@ public class Repository {
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(data, "Frequency", this.getRepoName(),
-				"_Element_Analysis", "Element Name",false);
+				"_Element_Analysis", "Element Name", false);
 		System.out.println("Done.");
 		return data;
 	}
@@ -674,7 +679,7 @@ public class Repository {
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(map, "Completeness(%)",
-				this.getRepoName(), "_Element_Analysis", "Element Name",false);
+				this.getRepoName(), "_Element_Analysis", "Element Name", false);
 		System.out.println("Done.");
 		return map;
 	}

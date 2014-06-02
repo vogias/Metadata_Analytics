@@ -42,9 +42,13 @@ public class ElementCompleteness extends Metric {
 		Set<String> keySet = data.keySet();
 		Iterator<String> iterator = keySet.iterator();
 		HashMap<String, Double> output = new HashMap<>();
+		StringBuffer key = new StringBuffer();
+
 		while (iterator.hasNext()) {
-			String key = iterator.next();
-			Integer value = data.get(key);
+
+			key.append(iterator.next());
+			// String key = iterator.next();
+			Integer value = data.get(key.toString());
 
 			float percentage = ((float) value / records) * 100;
 
@@ -56,7 +60,8 @@ public class ElementCompleteness extends Metric {
 
 			// System.out.println("Element:" + key + ", Completeness:"
 			// + percentage + "%");
-			output.put(key, (double) percentage);
+			output.put(key.toString(), (double) percentage);
+			key.delete(0, key.length());
 		}
 
 		return output;

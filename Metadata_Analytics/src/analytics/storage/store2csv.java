@@ -147,7 +147,7 @@ public class store2csv extends Storage {
 	@Override
 	public void storeElementData(HashMap<String, Double> data,
 			String metricName, String dataProvider, String analysisType,
-			String headerColumn,Boolean fed) {
+			String headerColumn, Boolean fed) {
 		// TODO Auto-generated method stub
 
 		String sFileName = dataProvider + analysisType + ".csv";
@@ -186,8 +186,8 @@ public class store2csv extends Storage {
 
 			if (file.exists() && isAppendData() == false) {
 
-			if (fed == false)
-				file.delete();
+				if (fed == false)
+					file.delete();
 				setAppend(true);
 			} else if (!file.exists() && isAppendData() == false)
 				setAppend(true);
@@ -200,14 +200,17 @@ public class store2csv extends Storage {
 				Set<String> keySet = data.keySet();
 				Iterator<String> iterator = keySet.iterator();
 
+				StringBuffer key = new StringBuffer();
 				while (iterator.hasNext()) {
-					String key = iterator.next();
+					// String key = iterator.next();
+					key.append(iterator.next());
 					// System.out.println(key);
-					bw.append(key);
+					bw.append(key.toString());
 					bw.append(',');
-					Double value = data.get(key);
+					Double value = data.get(key.toString());
 					bw.append(String.valueOf(value));
 					bw.newLine();
+					key.delete(0, key.length());
 				}
 
 				bw.close();
@@ -227,12 +230,14 @@ public class store2csv extends Storage {
 				// Set<String> keySet = data.keySet();
 				// Iterator<String> iterator = keySet.iterator();
 
-				while ((line = reader.readLine()) != null) {// iterator.hasNext()
+				StringBuffer key = new StringBuffer();
+				while ((line = reader.readLine()) != null) {
 
 					String[] split = line.split(",");
-					// System.out.println(line);
 
-					String key = split[0];
+					// String key = split[0];
+					key.append(split[0]);
+
 					if (counter == 0) {
 						line = line + "," + metricName;
 						bw.append(line);
@@ -240,7 +245,7 @@ public class store2csv extends Storage {
 
 					} else {
 
-						Double value = data.get(key);
+						Double value = data.get(key.toString());
 						// System.out.println("Appending key:" + key +
 						// " value:"
 						// + value);
@@ -251,6 +256,7 @@ public class store2csv extends Storage {
 					}
 
 					counter += 1;
+					key.delete(0, key.length());
 
 				}
 				bw.close();
@@ -331,19 +337,26 @@ public class store2csv extends Storage {
 				Iterator<String> iterator = keySet.iterator();
 				StringBuffer logString = new StringBuffer();
 
-				while (iterator.hasNext()) {
-					String key = iterator.next();
-					Integer value = data.get(key);
+				StringBuffer key = new StringBuffer();
 
-					if (key.contains(","))
-						key = key.replace(",", "/");
+				while (iterator.hasNext()) {
+					// String key = iterator.next();
+					key.append(iterator.next());
+
+					Integer value = data.get(key.toString());
+
+					if (key.toString().contains(","))
+						key.replace(0, key.length(),
+								key.toString().replace(",", "/"));
+					// key = key.toString().replace(",", "/");
 
 					// bw.append(element);
 					// bw.append(',');
 					bw.append(key);
 					logString.append(dataProvider);
 					logString.append(" " + element);
-					logString.append(" " + key.replace(" ", "_"));
+					logString.append(" " + key.toString().replace(" ", "_"));
+					// logString.append(" " + key.replace(" ", "_"));
 					bw.append(',');
 					bw.append(String.valueOf(value));
 					logString.append(" " + String.valueOf(value));
@@ -351,6 +364,7 @@ public class store2csv extends Storage {
 
 					logger.info(logString.toString());
 					logString.delete(0, logString.capacity());
+					key.delete(0, key.length());
 				}
 				bw.close();
 
@@ -369,6 +383,7 @@ public class store2csv extends Storage {
 				// Set<String> keySet = data.keySet();
 				// Iterator<String> iterator = keySet.iterator();
 				StringBuffer logString = new StringBuffer();
+				StringBuffer key = new StringBuffer();
 				while ((line = reader.readLine()) != null) {
 					String[] split = line.split(",");
 					// System.out.println(line);
@@ -380,23 +395,29 @@ public class store2csv extends Storage {
 
 					} else {
 						// String key = iterator.next();
-						String key = split[0];
+						// String key = split[0];
+						key.append(split[0]);
 						Integer value = data.get(key);
 
-						if (key.contains(","))
-							key = key.replace(",", "/");
+						// if (key.contains(","))
+						// key = key.replace(",", "/");
+						if (key.toString().contains(","))
+							key.replace(0, key.length(), key.toString()
+									.replace(",", "/"));
 
 						line = line + "," + value;
 						bw.append(line);
 						logString.append(dataProvider);
 						logString.append(" " + element);
-						logString.append(" " + key.replace(" ", "_"));
+						logString
+								.append(" " + key.toString().replace(" ", "_"));
 						logString.append(" " + value);
 
 						bw.newLine();
 
 						logger.info(logString.toString());
 						logString.delete(0, logString.capacity());
+						key.delete(0, key.length());
 					}
 
 					counter += 1;
