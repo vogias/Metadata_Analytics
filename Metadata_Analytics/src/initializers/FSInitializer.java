@@ -88,6 +88,7 @@ public class FSInitializer extends InitializeProcess {
 		HashMap<String, Integer> elementDims = new HashMap<>();
 		HashMap<String, Integer> elementCompletness = new HashMap<>();
 		Vector<String> elementEntropy = new Vector<>();
+
 		Properties props = new Properties();
 		try {
 			props.load(new FileInputStream("configure.properties"));
@@ -168,7 +169,6 @@ public class FSInitializer extends InitializeProcess {
 					System.out.println("Number of records:" + xmls.size());
 					repo.parseXMLs(elements2Analyze, elementVocs);
 
-					
 					federation.appendFreqElements(repo.getElementFrequency());
 
 					federation.appendCompletnessElements(repo

@@ -53,6 +53,7 @@ public class Repository {
 	// Vector<String> xmlElements;
 
 	HashMap<String, Double> xmlElements;
+
 	Vector<String> xmlElementsDistinct;
 	MultiHashMap attributes, distinctAtts;
 	HashMap<String, Integer> elementDims;
@@ -83,6 +84,7 @@ public class Repository {
 			HashMap<String, Integer> elementDims,
 			HashMap<String, Integer> elementCompletness,
 			Vector<String> elementEntropy, Properties props)
+			//
 			throws FileNotFoundException, IOException, SAXException,
 			ParserConfigurationException, InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
@@ -473,7 +475,6 @@ public class Repository {
 			key.delete(0, key.length());
 		}
 
-		
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(data, "Dimensions", this.getRepoName(),
