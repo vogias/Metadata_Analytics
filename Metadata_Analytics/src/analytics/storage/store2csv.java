@@ -574,6 +574,7 @@ public class store2csv extends Storage {
 
 		// TODO Auto-generated method stub
 		String sFileName = "Federation" + "_GeneralInfo" + ".csv";
+		ConfigureLogger conf = new ConfigureLogger();
 
 		Properties props = new Properties();
 		try {
@@ -603,8 +604,11 @@ public class store2csv extends Storage {
 		if (!file.exists())
 			file.createNewFile();
 
-	
-		
+		Logger logger = conf.getLogger("generalInfo", anls + File.separator
+				+ "repoGeneralInfo.log");
+
+		StringBuffer logString = new StringBuffer();
+
 		FileWriter writer;
 		BufferedWriter bw = null;
 		try {
@@ -616,6 +620,7 @@ public class store2csv extends Storage {
 				setAppend(true);
 				// create header
 				bw.append("Repository Name");
+
 				bw.append(",");
 				bw.append("Number of records");
 				bw.append(",");
@@ -628,34 +633,48 @@ public class store2csv extends Storage {
 				bw.append("Metadata schema namespace");
 				bw.newLine();
 				bw.append(repoName);
+				logString.append(repoName);
 				bw.append(",");
 				bw.append(String.valueOf(noRecords));
+				logString.append(" " + String.valueOf(noRecords));
 				bw.append(",");
 				bw.append(String.valueOf(avgFSize));
+				logString.append(" " + String.valueOf(avgFSize));
 				bw.append(",");
 				bw.append(String.valueOf(storageReq));
+				logString.append(" " + String.valueOf(storageReq));
 				bw.append(",");
 				bw.append(String.valueOf(informativeness));
+				logString.append(" " + String.valueOf(informativeness));
 				bw.append(",");
 				bw.append(schema);
+				logString.append(" " + String.valueOf(schema));
 				bw.newLine();
 				bw.close();
+
 			} else {
 				// insert data
 				bw.append(repoName);
+				logString.append(repoName);
 				bw.append(",");
 				bw.append(String.valueOf(noRecords));
+				logString.append(" " + String.valueOf(noRecords));
 				bw.append(",");
 				bw.append(String.valueOf(avgFSize));
+				logString.append(" " + String.valueOf(avgFSize));
 				bw.append(",");
 				bw.append(String.valueOf(storageReq));
+				logString.append(" " + String.valueOf(storageReq));
 				bw.append(",");
 				bw.append(String.valueOf(informativeness));
+				logString.append(" " + String.valueOf(informativeness));
 				bw.append(",");
 				bw.append(schema);
+				logString.append(" " + String.valueOf(schema));
 				bw.newLine();
 				bw.close();
 			}
+			logger.info(logString.toString());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
