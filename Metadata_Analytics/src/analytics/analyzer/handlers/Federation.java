@@ -53,6 +53,7 @@ public class Federation {
 	int numberOfRepos;
 	Vector<String> repoNames;
 	Vector<Float> requirements;
+	Vector<Float> informativeness;
 	Properties props;
 	boolean temporalAnalysis;
 	Vector<Integer> noRecords;
@@ -72,6 +73,7 @@ public class Federation {
 
 		schemas = new Vector<>();
 		requirements = new Vector<>();
+		informativeness = new Vector<>();
 		noRecords = new Vector<>();
 		numberOfRepos = repoNum;
 		repoNames = new Vector<>();
@@ -104,6 +106,7 @@ public class Federation {
 
 	public void appendFileSize(float fileSize) {
 		this.fileSize.addElement(fileSize);
+
 	}
 
 	public void appendSchemas(String sch) {
@@ -116,6 +119,10 @@ public class Federation {
 
 	public void appendRequirements(float req) {
 		requirements.addElement(req);
+	}
+
+	public void appendInformativeness(float req) {
+		this.informativeness.addElement(req);
 	}
 
 	public Vector<Float> getRequirementsVector() {
@@ -150,6 +157,16 @@ public class Federation {
 	public Vector<Float> getFileSize() {
 
 		return fileSize;
+	}
+
+	public float getAVGInformativeness() {
+		int size = this.informativeness.size();
+
+		float sum = 0;
+		for (int i = 0; i < this.informativeness.size(); i++) {
+			sum += this.informativeness.elementAt(i);
+		}
+		return sum / size;
 	}
 
 	public float getRequirements() {
@@ -765,15 +782,19 @@ public class Federation {
 		Vector<String> schemas = getSchemas();
 		Vector<Float> fileSize = getFileSize();
 
+		Vector<Float> informativeness = this.informativeness;
+
 		for (int i = 0; i < repos; i++) {
 
 			storageClass.appendRepositoryData(names.elementAt(i),
 					records.elementAt(i), fileSize.elementAt(i),
-					requirementsVector.elementAt(i), schemas.elementAt(i));
+					requirementsVector.elementAt(i),
+					informativeness.elementAt(i), schemas.elementAt(i));
 		}
 
 		storageClass.appendRepositoryData("FEDERATION", getRecordsSum(),
-				getAverageFileSize(), getRequirements(), "----");
+				getAverageFileSize(), getRequirements(),
+				getAVGInformativeness(), "----");
 		// TODO Auto-generated method stub
 
 	}

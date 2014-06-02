@@ -37,7 +37,8 @@ public abstract class Storage {
 			String schema);
 
 	public abstract void appendRepositoryData(String repoName, int noRecords,
-			float avgFSize, float storageReq, String schema) throws IOException;
+			float avgFSize, float storageReq, float informativeness,
+			String schema) throws IOException;
 
 	public abstract String getElementDataFilePath();
 

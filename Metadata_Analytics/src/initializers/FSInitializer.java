@@ -186,8 +186,6 @@ public class FSInitializer extends InitializeProcess {
 					federation.appendEntropyElements(
 							repo.computeElementEntropy(), dataProviders.size());
 
-					
-
 					repo.computeElementValueFreq(elementVocs, logger);
 
 					FileUtils.deleteDirectory(new File("buffer"));
@@ -195,8 +193,11 @@ public class FSInitializer extends InitializeProcess {
 					repo.getAttributeFrequency(loggerAtt);
 
 					federation.appendFileSize(repo.getFileSizeDistribution());
+
 					federation.appendNoRecords(repo.getXmls().size());
 					repo.storeRepoGeneralInfo(true);
+					federation.appendInformativeness(repo
+							.getAvgRepoInformativeness());
 					federation.appendSchemas(repo.getSchema(false));
 					federation.appendRequirements(repo.getRequirements());
 
@@ -271,6 +272,9 @@ public class FSInitializer extends InitializeProcess {
 						+ federation.getRecordsSum() + " records");
 				System.out.println("Sum storage requirements:"
 						+ federation.getRequirements() + " bytes");
+				System.out.println("AVG informativeness(bits):"
+						+ federation.getAVGInformativeness() + " bits");
+				
 				federation.storeGeneralInfo2CSV();
 				this.logElementAnalysis(loggerEl, "Federation", resultsPath);
 			} catch (IOException ex) {

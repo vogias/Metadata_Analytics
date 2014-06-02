@@ -569,7 +569,8 @@ public class store2csv extends Storage {
 
 	@Override
 	public void appendRepositoryData(String repoName, int noRecords,
-			float avgFSize, float storageReq, String schema) throws IOException {
+			float avgFSize, float storageReq, float informativeness,
+			String schema) throws IOException {
 
 		// TODO Auto-generated method stub
 		String sFileName = "Federation" + "_GeneralInfo" + ".csv";
@@ -620,6 +621,8 @@ public class store2csv extends Storage {
 				bw.append(",");
 				bw.append("Approximate Storage requirements(bytes)");
 				bw.append(",");
+				bw.append("AVG informativeness(bits)");
+				bw.append(",");
 				bw.append("Metadata schema namespace");
 				bw.newLine();
 				bw.append(repoName);
@@ -629,6 +632,8 @@ public class store2csv extends Storage {
 				bw.append(String.valueOf(avgFSize));
 				bw.append(",");
 				bw.append(String.valueOf(storageReq));
+				bw.append(",");
+				bw.append(String.valueOf(informativeness));
 				bw.append(",");
 				bw.append(schema);
 				bw.newLine();
@@ -642,6 +647,8 @@ public class store2csv extends Storage {
 				bw.append(String.valueOf(avgFSize));
 				bw.append(",");
 				bw.append(String.valueOf(storageReq));
+				bw.append(",");
+				bw.append(String.valueOf(informativeness));
 				bw.append(",");
 				bw.append(schema);
 				bw.newLine();
