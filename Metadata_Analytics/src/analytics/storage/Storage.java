@@ -26,14 +26,15 @@ public abstract class Storage {
 
 	public abstract void storeElementData(HashMap<String, Double> data,
 			String metricName, String dataProvider, String analysisType,
-			String headerColumn,Boolean fed);
+			String headerColumn, Boolean fed);
 
 	public abstract void storeElementValueData(HashMap<String, Integer> data,
 			String metricName, String dataProvider, String analysisType,
 			String headerColumn, String element, Logger logger);
 
 	public abstract void storeRepositoryData(String repoName, int noRecords,
-			float avgFSize, float storageReq, String schema);
+			float avgFSize, float storageReq, float informativeness,
+			String schema);
 
 	public abstract void appendRepositoryData(String repoName, int noRecords,
 			float avgFSize, float storageReq, String schema) throws IOException;
@@ -46,5 +47,4 @@ public abstract class Storage {
 
 	public abstract String getGeneralIngoFilePath();
 
-	
 }

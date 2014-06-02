@@ -448,7 +448,8 @@ public class store2csv extends Storage {
 
 	@Override
 	public void storeRepositoryData(String repoName, int noRecords,
-			float avgFSize, float storageReq, String schema) {
+			float avgFSize, float storageReq, float informativeness,
+			String schema) {
 		// TODO Auto-generated method stub
 
 		ConfigureLogger conf = new ConfigureLogger();
@@ -500,6 +501,8 @@ public class store2csv extends Storage {
 			bw.append(",");
 			bw.append("Approximate Storage requirements(bytes)");
 			bw.append(",");
+			bw.append("Repository Informativeness(bits)");
+			bw.append(",");
 			bw.append("Metadata schema namespace");
 			bw.newLine();
 
@@ -515,6 +518,10 @@ public class store2csv extends Storage {
 			bw.append(",");
 			bw.append(String.valueOf(storageReq));
 			logString.append(" " + String.valueOf(storageReq));
+
+			bw.append(",");
+			bw.append(String.valueOf(informativeness));
+			logString.append(" " + String.valueOf(informativeness));
 			bw.append(",");
 			bw.append(schema);
 			logString.append(" " + schema);

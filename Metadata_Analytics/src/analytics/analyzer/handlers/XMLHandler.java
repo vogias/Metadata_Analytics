@@ -177,7 +177,7 @@ public class XMLHandler extends DefaultHandler {
 				} catch (NullPointerException e) {
 					// TODO: handle exception
 
-					repositoryHandler.addEvalue2File(elmt, "noText");
+					repositoryHandler.addEvalue2File(elmt, "");
 
 				}
 			}

@@ -59,7 +59,9 @@ public class Repository {
 	HashMap<String, Integer> elementDims;
 	HashMap<String, Integer> elementCompletness;
 	HashMap<String, Double> elementImportance;
+	HashMap<String, Double> entropyData;
 	Vector<String> elementEntropy;
+	float avgRepoInformativeness;
 	int recordsNum;
 	String repoName;
 	Properties props;
@@ -92,9 +94,10 @@ public class Repository {
 
 		// xmlElements = new Vector<>();
 		this.xmlElements = xmlElements;
-
+		avgRepoInformativeness = 0;
 		fileSizeM = 0;
 		requirements = 0;
+		entropyData = new HashMap<>();
 		this.xmls = xmls;
 		// attributes = new MultiHashMap();
 		this.attributes = attributes;
@@ -127,6 +130,21 @@ public class Repository {
 		// handlerInput.getInputData(this, elements2Analyze, elementsVocs);
 		this.storage = this.createStorageClass();
 
+	}
+
+	/**
+	 * @return the avgRepoInformativeness
+	 */
+	public float getAvgRepoInformativeness() {
+		return avgRepoInformativeness;
+	}
+
+	/**
+	 * @param avgRepoInformativeness
+	 *            the avgRepoInformativeness to set
+	 */
+	private void setAvgRepoInformativeness(float avgRepoInformativeness) {
+		this.avgRepoInformativeness = avgRepoInformativeness;
 	}
 
 	/**
@@ -312,6 +330,13 @@ public class Repository {
 		}
 	}
 
+	/**
+	 * @return the entropyData
+	 */
+	public HashMap<String, Double> getEntropyData() {
+		return entropyData;
+	}
+
 	private Vector<String> getVectorFromFile(String filename) {
 
 		if (filename.contains(":"))
@@ -364,23 +389,53 @@ public class Repository {
 
 		Vector<String> elementsDistinct = getXmlElementsDistinct();
 
-		HashMap<String, Double> data = new HashMap<>();
+		StringBuffer element = new StringBuffer();
+
 		for (int i = 0; i < elementsDistinct.size(); i++) {
-			String element = elementsDistinct.elementAt(i);
+			// String element = elementsDistinct.elementAt(i);
+			element.append(elementsDistinct.elementAt(i));
 			// System.out.println("Element:" + element);
 
-			Vector<String> vectorFromFile = getVectorFromFile(element);
+			Vector<String> vectorFromFile = getVectorFromFile(element
+					.toString());
 			RelativeEntropy entropy = new RelativeEntropy();
-			data.put(element, entropy.compute(vectorFromFile));
+			// data.put(element, entropy.compute(vectorFromFile));
+			getEntropyData().put(element.toString(),
+					entropy.compute(vectorFromFile));
+
+			element.delete(0, element.length());
 		}
 
 		Storage storageClass = getStorageClass();
 
-		storageClass.storeElementData(data, "Entropy", this.getRepoName(),
-				"_Element_Analysis", "Element Name", false);
+		storageClass.storeElementData(getEntropyData(), "Entropy",
+				this.getRepoName(), "_Element_Analysis", "Element Name", false);
 
 		System.out.println("Done.");
-		return data;
+		return getEntropyData();
+
+	}
+
+	private void computeAVGRepoInformativeness() {
+
+		int noe = getEntropyData().size();
+
+		Set<String> keySet = getEntropyData().keySet();
+
+		Iterator<String> iterator = keySet.iterator();
+
+		float sum = 0;
+
+		StringBuffer elName = new StringBuffer();
+		while (iterator.hasNext()) {
+			elName.append(iterator.next());
+
+			sum += getEntropyData().get(elName.toString());
+
+			elName.delete(0, elName.length());
+		}
+
+		this.setAvgRepoInformativeness(sum / noe);
 
 	}
 
@@ -660,8 +715,8 @@ public class Repository {
 
 		Storage storageClass = getStorageClass();
 
-		storageClass.storeElementData(elementImportance, "Importance", this.getRepoName(),
-				"_Element_Analysis", "Element Name", false);
+		storageClass.storeElementData(elementImportance, "Importance",
+				this.getRepoName(), "_Element_Analysis", "Element Name", false);
 
 		System.out.println("Done.");
 		return elementImportance;
@@ -733,15 +788,16 @@ public class Repository {
 
 	public void storeRepoGeneralInfo(boolean fed) {
 		Storage storageClass = getStorageClass();
+		this.computeAVGRepoInformativeness();
 
 		if (fed == false)
 			storageClass.storeRepositoryData(repoName, xmls.size(),
 					getFileSizeDistribution(), getApproStorageRequirements(),
-					getSchema(true));
+					getAvgRepoInformativeness(), getSchema(true));
 		else
 			storageClass.storeRepositoryData(repoName, xmls.size(),
 					getFileSizeM(), getApproStorageRequirements(),
-					getSchema(true));
+					getAvgRepoInformativeness(), getSchema(true));
 	}
 
 	public String getGeneralDataFilePath() {
