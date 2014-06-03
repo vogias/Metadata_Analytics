@@ -50,7 +50,7 @@ public class OAI2XMLInput extends XmlHandlerInput {
 				InputStream inS = new ByteArrayInputStream(xml.getBytes());
 
 				try {
-					System.out.println("Parsing file:" + count + " of " + size);
+					System.out.print("Parsing file:" + count + " of " + size);
 					count++;
 					long start = System.currentTimeMillis();
 					xmlHandler.parseDocument(inS);
