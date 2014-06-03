@@ -151,7 +151,6 @@ public class XMLHandler extends DefaultHandler {
 			buffer.delete(0, buffer.capacity());
 		}
 
-
 		if (branche.endsWith(qName + "" + ".")) {
 			branche = branche.substring(0, branche.length() - qName.length()
 					- 1);
@@ -172,13 +171,14 @@ public class XMLHandler extends DefaultHandler {
 			if (contains(elementsVocs, elmt) && controlFlag == false) {
 				try {
 
-					repositoryHandler.addEvalue2File(elmt, tmpValue);
+					// repositoryHandler.addEvalue2File(elmt, tmpValue);
+					repositoryHandler.addVoc(elmt, tmpValue);
 
 				} catch (NullPointerException e) {
 					// TODO: handle exception
 
-					repositoryHandler.addEvalue2File(elmt, "");
-
+					// repositoryHandler.addEvalue2File(elmt, "");
+					repositoryHandler.addVoc(elmt, "");
 				}
 			}
 
@@ -210,12 +210,14 @@ public class XMLHandler extends DefaultHandler {
 		// entropy calculation
 		try {
 
-			repositoryHandler.addEvalue2File(elmt, tmpValue);
+			// repositoryHandler.addEvalue2File(elmt, tmpValue);
 
+			repositoryHandler.addVoc(elmt, tmpValue);
 		} catch (NullPointerException e) {
 			// TODO: handle exception
 
-			repositoryHandler.addEvalue2File(elmt, "");
+			// repositoryHandler.addEvalue2File(elmt, "");
+			repositoryHandler.addVoc(elmt, "");
 
 		}
 

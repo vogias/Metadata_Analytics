@@ -37,7 +37,6 @@ import org.xml.sax.SAXException;
 
 import xmlHandling.XmlHandlerInput;
 import analytics.constants.AnalyticsConstants;
-import analytics.logging.ConfigureLogger;
 import analytics.measures.ElementCompleteness;
 import analytics.measures.ElementFrequency;
 import analytics.measures.FileSizeMean;
@@ -61,6 +60,7 @@ public class Repository {
 	HashMap<String, Double> elementImportance;
 	HashMap<String, Double> entropyData;
 	Vector<String> elementEntropy;
+	HashMap<String, HashMap<String, Integer>> vocabularies;
 	float avgRepoInformativeness;
 	int recordsNum;
 	String repoName;
@@ -122,6 +122,8 @@ public class Repository {
 
 		// props = new Properties();
 		this.props = props;
+
+		vocabularies = new HashMap<>();
 		// props.load(new FileInputStream("configure.properties"));
 		//
 		// XmlHandlerInput handlerInput = (XmlHandlerInput) this
@@ -130,6 +132,13 @@ public class Repository {
 		// handlerInput.getInputData(this, elements2Analyze, elementsVocs);
 		this.storage = this.createStorageClass();
 
+	}
+
+	/**
+	 * @return the vocabularies
+	 */
+	public HashMap<String, HashMap<String, Integer>> getVocabularies() {
+		return vocabularies;
 	}
 
 	/**
@@ -254,6 +263,31 @@ public class Repository {
 
 	public Vector<String> getElementEntropy() {
 		return elementEntropy;
+	}
+
+	public void addVoc(String element, String voc) {
+
+		HashMap<String, Integer> data = new HashMap<>();
+		if (!getVocabularies().containsKey(element)) {
+
+			data.put(voc, 1);
+			getVocabularies().put(element, data);
+			// data.clear();
+		} else {
+
+			data = getVocabularies().get(element);
+
+			if (!data.containsKey(voc)) {
+				data.put(voc, 1);
+			} else {
+				data.put(voc, data.get(voc) + 1);
+			}
+
+			getVocabularies().put(element, data);
+			// data.clear();
+		}
+	//	data.clear();
+
 	}
 
 	public void addEvalue2File(String name, String value) {
@@ -396,12 +430,18 @@ public class Repository {
 			element.append(elementsDistinct.elementAt(i));
 			// System.out.println("Element:" + element);
 
-			Vector<String> vectorFromFile = getVectorFromFile(element
-					.toString());
+			// Vector<String> vectorFromFile = getVectorFromFile(element
+			// .toString());
+
+			HashMap<String, Integer> vocs = this.getVocabularies().get(
+					element.toString());
+
+			
 			RelativeEntropy entropy = new RelativeEntropy();
 			// data.put(element, entropy.compute(vectorFromFile));
-			getEntropyData().put(element.toString(),
-					entropy.compute(vectorFromFile));
+			// getEntropyData().put(element.toString(),
+			// entropy.compute(vectorFromFile));
+			getEntropyData().put(element.toString(), entropy.compute(vocs));
 
 			element.delete(0, element.length());
 		}
@@ -451,20 +491,25 @@ public class Repository {
 			System.out.println("Element:" + elementName[i]
 					+ " vocabulary statistical analysis");
 
-			Vector<String> vectorFromFile = getVectorFromFile(elementName[i]);
+			// Vector<String> vectorFromFile =
+			// getVectorFromFile(elementName[i]);
+			HashMap<String, Integer> vocs = this.getVocabularies().get(
+					elementName[i]);
 
-			if (!vectorFromFile.contains("Element not found")) {
+			// !vectorFromFile.contains("Element not found")
 
-				Map cardinalityMap = CollectionUtils
-						.getCardinalityMap(vectorFromFile);
+			if (vocs != null) {
+
+				// Map cardinalityMap = CollectionUtils
+				// .getCardinalityMap(vectorFromFile);
 
 				if (elementName[i].contains(":"))
 					elementName[i] = elementName[i].replace(":", "_");
 
 				Storage storageClass = getStorageClass();
 
-				storageClass.storeElementValueData(
-						(HashMap<String, Integer>) cardinalityMap, "Frequency",
+				// (HashMap<String, Integer>) cardinalityMap
+				storageClass.storeElementValueData(vocs, "Frequency",
 						this.getRepoName(), "_" + elementName[i]
 								+ "_ElementValue_Analysis", "Element Value",
 						elementName[i], logger);

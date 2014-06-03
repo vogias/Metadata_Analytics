@@ -188,7 +188,7 @@ public class FSInitializer extends InitializeProcess {
 
 					repo.computeElementValueFreq(elementVocs, logger);
 
-					FileUtils.deleteDirectory(new File("buffer"));
+				//	FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency(loggerAtt);
 
@@ -222,12 +222,15 @@ public class FSInitializer extends InitializeProcess {
 					repo.getElementImportance();
 
 					repo.computeElementEntropy();
+					
+					
+					//System.out.println(repo.getVocabularies());
 
 					repo.computeElementValueFreq(elementVocs, logger);
 
 					repo.storeRepoGeneralInfo(false);
 
-					FileUtils.deleteDirectory(new File("buffer"));
+			//		FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency(loggerAtt);
 
