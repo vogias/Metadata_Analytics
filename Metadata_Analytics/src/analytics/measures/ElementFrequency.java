@@ -39,16 +39,17 @@ import analytics.logging.ConfigureLogger;
 public class ElementFrequency extends Metric {
 
 	Collection<?> dData;
-	MultiHashMap atts;
+	HashMap<String, HashMap<HashMap<String, String>, Integer>> attributes;
 
 	public ElementFrequency(Collection<?> dData) {
 		// TODO Auto-generated constructor stub
 		this.dData = dData;
 	}
 
-	public ElementFrequency(MultiHashMap atts) {
+	public ElementFrequency(
+			HashMap<String, HashMap<HashMap<String, String>, Integer>> attributes) {
 		// TODO Auto-generated constructor stub
-		this.atts = atts;
+		this.attributes = attributes;
 	}
 
 	@Override
@@ -76,7 +77,9 @@ public class ElementFrequency extends Metric {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void compute(MultiHashMap data, String provider, Logger logger) {
+	public void compute(
+			HashMap<String, HashMap<HashMap<String, String>, Integer>> data,
+			String provider, Logger logger) {
 
 		Set keySet = data.keySet();
 
@@ -116,32 +119,73 @@ public class ElementFrequency extends Metric {
 			while (iterator.hasNext()) {
 				String attName = (String) iterator.next();
 
-				Collection attValues = data.getCollection(attName);
+				HashMap<HashMap<String, String>, Integer> hashMap = data
+						.get(attName);
 
-				/*
-				 * // System.out.println("----------------------------------");
-				 * writer.write("----------------------------------");
-				 * writer.newLine();
-				 * 
-				 * // System.out.println("Attribute:" + attName + ", Frequency:"
-				 * // + attValues.size()); writer.write("Attribute_Name:" +
-				 * attName + ",Sum_Frequency:" + attValues.size());
-				 * writer.newLine();
-				 * writer.write("----------------------------------");
-				 * writer.newLine(); //
-				 * System.out.println("----------------------------------");
-				 */
+				// Collection attValues = data.getCollection(attName);
+				//
+				//
+				// Collection distinctAttsValues = atts.getCollection(attName);
+				//
+				// computeDominantAttValue(attValues, distinctAttsValues,
+				// writer,
+				// attName, provider, logger);
 
-				Collection distinctAttsValues = atts.getCollection(attName);
-
-				computeDominantAttValue(attValues, distinctAttsValues, writer,
-						attName, provider, logger);
+				writeAtts2file(writer, attName, hashMap, logger, provider);
 			}
 			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private void writeAtts2file(BufferedWriter writer, String name,
+			HashMap<HashMap<String, String>, Integer> hashMap, Logger logger,
+			String provider) {
+
+		try {
+
+			Set<HashMap<String, String>> keySet = hashMap.keySet();
+			Iterator<HashMap<String, String>> iterator = keySet.iterator();
+
+			StringBuffer logstring = new StringBuffer();
+			while (iterator.hasNext()) {
+
+				writer.write(name + ",");
+				logstring.append(provider);
+				logstring.append(" " + name);
+
+				HashMap<String, String> next = iterator.next();
+
+				Set<String> keySet2 = next.keySet();
+				String next2 = keySet2.iterator().next();
+
+				writer.write(next2 + ",");
+				logstring.append(" " + next2);
+
+				writer.write(next.get(next2) + ",");
+				logstring.append(" " + next.get(next2));
+				
+				
+				Integer integer = hashMap.get(next);
+				
+				
+				
+				writer.write(integer.toString());
+				logstring.append(" " + integer);
+				
+				writer.newLine();
+				logger.info(logstring.toString());
+				logstring.delete(0, logstring.capacity());
+
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	private void computeDominantAttValue(Collection attValues,

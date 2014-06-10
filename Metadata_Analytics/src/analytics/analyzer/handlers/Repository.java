@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -32,6 +33,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MultiHashMap;
+import org.apache.commons.collections.MultiMap;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -54,7 +56,10 @@ public class Repository {
 	HashMap<String, Double> xmlElements;
 
 	Vector<String> xmlElementsDistinct;
-	MultiHashMap attributes, distinctAtts;
+	// MultiHashMap attributes, distinctAtts;
+
+	HashMap<String, HashMap<HashMap<String, String>, Integer>> attributes;
+
 	HashMap<String, Integer> elementDims;
 	HashMap<String, Integer> elementCompletness;
 	HashMap<String, Double> elementImportance;
@@ -79,8 +84,11 @@ public class Repository {
 	// HashMap<String, Integer> elementCompletness,
 	// Vector<String> elementEntropy, Properties props)
 
-	public Repository(Collection<?> xmls, MultiHashMap attributes,
-			MultiHashMap distinctAtts, HashMap<String, Double> xmlElements,
+	// MultiHashMap distinctAtts,
+	public Repository(
+			Collection<?> xmls,
+			HashMap<String, HashMap<HashMap<String, String>, Integer>> attributes,
+			HashMap<String, Double> xmlElements,
 			Vector<String> xmlElementsDistinct,
 			HashMap<String, Integer> elementDims,
 			HashMap<String, Integer> elementCompletness,
@@ -102,7 +110,7 @@ public class Repository {
 		// attributes = new MultiHashMap();
 		this.attributes = attributes;
 		// distinctAtts = new MultiHashMap();
-		this.distinctAtts = distinctAtts;
+		// this.distinctAtts = distinctAtts;
 
 		this.elementImportance = elementImportance;
 		// elementCompletness = new HashMap<>();
@@ -286,7 +294,7 @@ public class Repository {
 			getVocabularies().put(element, data);
 			// data.clear();
 		}
-	//	data.clear();
+		// data.clear();
 
 	}
 
@@ -436,7 +444,6 @@ public class Repository {
 			HashMap<String, Integer> vocs = this.getVocabularies().get(
 					element.toString());
 
-			
 			RelativeEntropy entropy = new RelativeEntropy();
 			// data.put(element, entropy.compute(vectorFromFile));
 			// getEntropyData().put(element.toString(),
@@ -610,17 +617,17 @@ public class Repository {
 	/**
 	 * @return the distinctAtts
 	 */
-	public MultiHashMap getDistinctAtts() {
-		return distinctAtts;
-	}
+	// public MultiHashMap getDistinctAtts() {
+	// return distinctAtts;
+	// }
 
 	/**
 	 * @param distinctAtts
-	 *            the distinctAtts to set
+	 *            the distinctAtts to set //
 	 */
-	public void setDistinctAtts(MultiHashMap distinctAtts) {
-		this.distinctAtts = distinctAtts;
-	}
+	// public void setDistinctAtts(MultiHashMap distinctAtts) {
+	// this.distinctAtts = distinctAtts;
+	// }
 
 	public float getFileSizeDistribution() {
 		FileSizeMean fileSizeMean = new FileSizeMean();
@@ -679,14 +686,19 @@ public class Repository {
 	/**
 	 * @return the attributes
 	 */
-	public MultiHashMap getAttributes() {
-		return attributes;
-	}
+	// public MultiHashMap getAttributes() {
+	// return attributes;
+	// }
+	//
+	// public void showAttributes() {
+	//
+	// System.out.println(distinctAtts.toString());
+	// }
 
-	public void showAttributes() {
-
-		System.out.println(distinctAtts.toString());
-	}
+	// public void showAttributes() {
+	//
+	// System.out.println(distinctAtts.toString());
+	// }
 
 	/**
 	 * @param attributes
@@ -716,14 +728,35 @@ public class Repository {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public void addAttributes(String name, HashMap<String, String> value) {
 
-		// if (!attributes.containsValue(value))
+		if (!attributes.containsKey(name)) {
 
-		attributes.put(name, value);
+			HashMap<HashMap<String, String>, Integer> data = new HashMap<>();
 
-		if (!distinctAtts.containsValue(value))
-			distinctAtts.put(name, value);
+			data.put(value, 1);
+
+			attributes.put(name, data);
+
+		} else {
+
+			HashMap<HashMap<String, String>, Integer> hashMap = attributes
+					.get(name);
+			if (hashMap.containsKey(value)) {
+				hashMap.put(value, hashMap.get(value) + 1);
+				attributes.put(name, hashMap);
+			} else {
+
+				hashMap.put(value, 1);
+				attributes.put(name, hashMap);
+			}
+		}
+
+		// attributes.put(name, value);
+		//
+		// if (!distinctAtts.containsValue(value))
+		// distinctAtts.put(name, value);
 
 	}
 
@@ -791,13 +824,17 @@ public class Repository {
 	public void getAttributeFrequency(Logger logger) {
 
 		System.out.println("Computing attributes' frequency.");
-		MultiHashMap atts = getDistinctAtts();
+		// MultiHashMap atts = getDistinctAtts();
 
-		if (atts.size() > 0) {
+		// System.out.println("Distinct atts:"+atts);
+	//	System.out.println("All atts:" + attributes);
+		if (attributes.size() > 0) {
 
-			ElementFrequency atFrequency = new ElementFrequency(atts);
+			ElementFrequency atFrequency = new ElementFrequency(attributes);
 			atFrequency.compute(attributes, getRepoName(), logger);
+
 		}
+
 		System.out.println("Done");
 	}
 

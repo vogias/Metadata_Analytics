@@ -140,8 +140,10 @@ public class OAIInitializer extends InitializeProcess {
 		// Vector<String> xmlElements = new Vector<>();
 		HashMap<String, Double> xmlElements = new HashMap<>();
 		Vector<String> xmlElementsDistinct = new Vector<>();
-		MultiHashMap attributes = new MultiHashMap();
-		MultiHashMap distinctAtts = new MultiHashMap();
+//		MultiHashMap attributes = new MultiHashMap();
+//		MultiHashMap distinctAtts = new MultiHashMap();
+
+		HashMap<String,HashMap<HashMap<String, String>, Integer>> attributes = new HashMap<>();
 		HashMap<String, Integer> elementDims = new HashMap<>();
 		HashMap<String, Integer> elementCompletness = new HashMap<>();
 		Vector<String> elementEntropy = new Vector<>();
@@ -184,8 +186,9 @@ public class OAIInitializer extends InitializeProcess {
 			try {
 				// Repository repo = new Repository(xmls,elements2Analyze);
 
+				//distinctAtts,
 				Repository repo = new Repository(xmls, attributes,
-						distinctAtts, xmlElements, xmlElementsDistinct,
+						 xmlElements, xmlElementsDistinct,
 						elementDims, elementCompletness, elementEntropy,
 						elementImportance, props);
 				repo.setRepoName(input.getRepoName());
@@ -276,7 +279,7 @@ public class OAIInitializer extends InitializeProcess {
 			xmlElements.clear();
 			xmlElementsDistinct.clear();
 			attributes.clear();
-			distinctAtts.clear();
+		//	distinctAtts.clear();
 			elementDims.clear();
 			elementCompletness.clear();
 			elementEntropy.clear();

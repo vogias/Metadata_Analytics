@@ -29,6 +29,7 @@ import java.util.Vector;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.collections.MultiHashMap;
+import org.apache.commons.collections.MultiMap;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
@@ -83,8 +84,10 @@ public class FSInitializer extends InitializeProcess {
 		// Vector<String> xmlElements = new Vector<>();
 		HashMap<String, Double> xmlElements = new HashMap<>();
 		Vector<String> xmlElementsDistinct = new Vector<>();
-		MultiHashMap attributes = new MultiHashMap();
-		MultiHashMap distinctAtts = new MultiHashMap();
+		// MultiHashMap attributes = new MultiHashMap();
+		// MultiHashMap distinctAtts = new MultiHashMap();
+		HashMap<String,HashMap<HashMap<String, String>, Integer>> attributes = new HashMap<>();
+
 		HashMap<String, Integer> elementDims = new HashMap<>();
 		HashMap<String, Integer> elementCompletness = new HashMap<>();
 		Vector<String> elementEntropy = new Vector<>();
@@ -151,8 +154,9 @@ public class FSInitializer extends InitializeProcess {
 
 				// Repository repo = new Repository(xmls, elements2Analyze);
 
+				//distinctAtts, 
 				Repository repo = new Repository(xmls, attributes,
-						distinctAtts, xmlElements, xmlElementsDistinct,
+						xmlElements, xmlElementsDistinct,
 						elementDims, elementCompletness, elementEntropy,
 						elementImportance, props);
 
@@ -188,7 +192,7 @@ public class FSInitializer extends InitializeProcess {
 
 					repo.computeElementValueFreq(elementVocs, logger);
 
-				//	FileUtils.deleteDirectory(new File("buffer"));
+					// FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency(loggerAtt);
 
@@ -222,15 +226,14 @@ public class FSInitializer extends InitializeProcess {
 					repo.getElementImportance();
 
 					repo.computeElementEntropy();
-					
-					
-					//System.out.println(repo.getVocabularies());
+
+					// System.out.println(repo.getVocabularies());
 
 					repo.computeElementValueFreq(elementVocs, logger);
 
 					repo.storeRepoGeneralInfo(false);
 
-			//		FileUtils.deleteDirectory(new File("buffer"));
+					// FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency(loggerAtt);
 
@@ -251,7 +254,7 @@ public class FSInitializer extends InitializeProcess {
 			xmlElements.clear();
 			xmlElementsDistinct.clear();
 			attributes.clear();
-			distinctAtts.clear();
+		//	distinctAtts.clear();
 			elementDims.clear();
 			elementCompletness.clear();
 
