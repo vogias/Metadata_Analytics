@@ -164,7 +164,7 @@ public class store2csv extends Storage {
 			e1.printStackTrace();
 			System.exit(-1);
 		}
-		;
+
 		File anls = new File(props.getProperty(AnalyticsConstants.resultsPath)
 				+ "Analysis_Results");
 
@@ -288,7 +288,7 @@ public class store2csv extends Storage {
 	@Override
 	public void storeElementValueData(HashMap<String, Integer> data,
 			String metricName, String dataProvider, String analysisType,
-			String headerColumn, String element, Logger logger) {
+			String headerColumn, String element, Logger logger, int time) {
 		// TODO Auto-generated method stub
 
 		String sFileName = dataProvider + analysisType + ".csv";
@@ -328,107 +328,152 @@ public class store2csv extends Storage {
 		BufferedWriter bw = null;
 		BufferedReader reader = null;
 		try {
-			if (!file.exists()) {
-				writer = new FileWriter(file);
-				bw = new BufferedWriter(writer);
-				createHeaders(bw, metricName, headerColumn);
 
-				Set<String> keySet = data.keySet();
-				Iterator<String> iterator = keySet.iterator();
-				StringBuffer logString = new StringBuffer();
+			if (file.exists() && time == 0)
+				file.delete();
 
-				StringBuffer key = new StringBuffer();
+			// if (!file.exists() && time == 0) {
+			writer = new FileWriter(file);
+			bw = new BufferedWriter(writer);
+			createHeaders(bw, metricName, headerColumn);
 
-				while (iterator.hasNext()) {
-					// String key = iterator.next();
-					key.append(iterator.next());
+			Set<String> keySet = data.keySet();
+			Iterator<String> iterator = keySet.iterator();
+			StringBuffer logString = new StringBuffer();
 
-					Integer value = data.get(key.toString());
+			StringBuffer key = new StringBuffer();
 
-					if (key.toString().contains(","))
-						key.replace(0, key.length(),
-								key.toString().replace(",", "/"));
-					// key = key.toString().replace(",", "/");
+			while (iterator.hasNext()) {
+				// String key = iterator.next();
+				key.append(iterator.next());
 
-					// bw.append(element);
-					// bw.append(',');
-					bw.append(key);
-					logString.append(dataProvider);
-					logString.append(" " + element);
-					logString.append(" " + key.toString().replace(" ", "_"));
-					// logString.append(" " + key.replace(" ", "_"));
-					bw.append(',');
-					bw.append(String.valueOf(value));
-					logString.append(" " + String.valueOf(value));
-					bw.newLine();
+				Integer value = data.get(key.toString());
 
-					logger.info(logString.toString());
-					logString.delete(0, logString.capacity());
-					key.delete(0, key.length());
-				}
-				bw.close();
+				if (key.toString().contains(","))
+					key.replace(0, key.length(),
+							key.toString().replace(",", "/"));
+				// key = key.toString().replace(",", "/");
 
-			} else {
+				// bw.append(element);
+				// bw.append(',');
+				bw.append(key);
+				logString.append(dataProvider);
+				logString.append(" " + element);
+				logString.append(" " + key.toString().replace(" ", "_"));
+				// logString.append(" " + key.replace(" ", "_"));
+				bw.append(',');
+				bw.append(String.valueOf(value));
+				logString.append(" " + String.valueOf(value));
+				bw.newLine();
 
-				reader = new BufferedReader(new FileReader(file));
-
-				File temp = new File(dir, "temp.csv");
-
-				writer = new FileWriter(temp);
-				bw = new BufferedWriter(writer);
-
-				String line;
-				int counter = 0;
-
-				// Set<String> keySet = data.keySet();
-				// Iterator<String> iterator = keySet.iterator();
-				StringBuffer logString = new StringBuffer();
-				StringBuffer key = new StringBuffer();
-				while ((line = reader.readLine()) != null) {
-					String[] split = line.split(",");
-					// System.out.println(line);
-
-					if (counter == 0) {
-						line = line + "," + metricName;
-						bw.append(line);
-						bw.newLine();
-
-					} else {
-						// String key = iterator.next();
-						// String key = split[0];
-						key.append(split[0]);
-						Integer value = data.get(key);
-
-						// if (key.contains(","))
-						// key = key.replace(",", "/");
-						if (key.toString().contains(","))
-							key.replace(0, key.length(), key.toString()
-									.replace(",", "/"));
-
-						line = line + "," + value;
-						bw.append(line);
-						logString.append(dataProvider);
-						logString.append(" " + element);
-						logString
-								.append(" " + key.toString().replace(" ", "_"));
-						logString.append(" " + value);
-
-						bw.newLine();
-
-						logger.info(logString.toString());
-						logString.delete(0, logString.capacity());
-						key.delete(0, key.length());
-					}
-
-					counter += 1;
-
-				}
-				bw.close();
-				FileUtils.copyFile(temp, file);
-				temp.delete();
-				reader.close();
-
+				logger.info(logString.toString());
+				logString.delete(0, logString.capacity());
+				key.delete(0, key.length());
 			}
+			bw.close();
+
+			// } else if (file.exists() && time == 0) {
+			// file.delete();
+			// writer = new FileWriter(file);
+			// bw = new BufferedWriter(writer);
+			// createHeaders(bw, metricName, headerColumn);
+			//
+			// Set<String> keySet = data.keySet();
+			// Iterator<String> iterator = keySet.iterator();
+			// StringBuffer logString = new StringBuffer();
+			//
+			// StringBuffer key = new StringBuffer();
+			//
+			// while (iterator.hasNext()) {
+			// // String key = iterator.next();
+			// key.append(iterator.next());
+			//
+			// Integer value = data.get(key.toString());
+			//
+			// if (key.toString().contains(","))
+			// key.replace(0, key.length(),
+			// key.toString().replace(",", "/"));
+			// // key = key.toString().replace(",", "/");
+			//
+			// // bw.append(element);
+			// // bw.append(',');
+			// bw.append(key);
+			// logString.append(dataProvider);
+			// logString.append(" " + element);
+			// logString.append(" " + key.toString().replace(" ", "_"));
+			// // logString.append(" " + key.replace(" ", "_"));
+			// bw.append(',');
+			// bw.append(String.valueOf(value));
+			// logString.append(" " + String.valueOf(value));
+			// bw.newLine();
+			//
+			// logger.info(logString.toString());
+			// logString.delete(0, logString.capacity());
+			// key.delete(0, key.length());
+			// }
+			// bw.close();
+
+			// } else if (file.exists() && time > 0) {
+			//
+			// reader = new BufferedReader(new FileReader(file));
+			//
+			// File temp = new File(dir, "temp.csv");
+			//
+			// writer = new FileWriter(temp);
+			// bw = new BufferedWriter(writer);
+			//
+			// String line;
+			// int counter = 0;
+			//
+			// // Set<String> keySet = data.keySet();
+			// // Iterator<String> iterator = keySet.iterator();
+			// StringBuffer logString = new StringBuffer();
+			// StringBuffer key = new StringBuffer();
+			// while ((line = reader.readLine()) != null) {
+			// String[] split = line.split(",");
+			// // System.out.println(line);
+			//
+			// if (counter == 0) {
+			// line = line + "," + metricName;
+			// bw.append(line);
+			// bw.newLine();
+			//
+			// } else {
+			// // String key = iterator.next();
+			// // String key = split[0];
+			// key.append(split[0]);
+			// Integer value = data.get(key);
+			//
+			// // if (key.contains(","))
+			// // key = key.replace(",", "/");
+			// if (key.toString().contains(","))
+			// key.replace(0, key.length(), key.toString()
+			// .replace(",", "/"));
+			//
+			// line = line + "," + value;
+			// bw.append(line);
+			// logString.append(dataProvider);
+			// logString.append(" " + element);
+			// logString
+			// .append(" " + key.toString().replace(" ", "_"));
+			// logString.append(" " + value);
+			//
+			// bw.newLine();
+			//
+			// logger.info(logString.toString());
+			// logString.delete(0, logString.capacity());
+			// key.delete(0, key.length());
+			// }
+			//
+			// counter += 1;
+			//
+			// }
+			// bw.close();
+			// FileUtils.copyFile(temp, file);
+			// temp.delete();
+			// reader.close();
+			//
+			// }
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

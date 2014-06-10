@@ -503,6 +503,7 @@ public class Repository {
 
 		// String[] strings = elementName.split(",");
 
+		int time = 0;
 		for (int i = 0; i < elementName.length; i++) {
 			// HashMap<String, Double> data = new HashMap<>();
 
@@ -514,6 +515,7 @@ public class Repository {
 			HashMap<String, Integer> vocs = this.getVocabularies().get(
 					elementName[i]);
 
+			System.out.println(vocs);
 			// !vectorFromFile.contains("Element not found")
 
 			if (vocs != null) {
@@ -527,10 +529,12 @@ public class Repository {
 				Storage storageClass = getStorageClass();
 
 				// (HashMap<String, Integer>) cardinalityMap
+
 				storageClass.storeElementValueData(vocs, "Frequency",
 						this.getRepoName(), "_" + elementName[i]
 								+ "_ElementValue_Analysis", "Element Value",
-						elementName[i], logger);
+						elementName[i], logger, time);
+				
 
 			}
 		}
