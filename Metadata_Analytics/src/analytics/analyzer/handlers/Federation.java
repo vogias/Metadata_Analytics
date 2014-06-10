@@ -567,6 +567,7 @@ public class Federation {
 				File repoFolder = new File(ar, repo);
 				File csvFile = new File(repoFolder, elementName);
 
+				System.out.println("File to take:"+csvFile.getName());
 				if (csvFile.exists()) {
 
 					appendVocabularies(elements[j],

@@ -172,13 +172,18 @@ public class XMLHandler extends DefaultHandler {
 				try {
 
 					// repositoryHandler.addEvalue2File(elmt, tmpValue);
-					repositoryHandler.addVoc(elmt, tmpValue);
+					
+
+					if (!tmpValue.toString().equals(""))
+						repositoryHandler.addVoc(elmt, tmpValue);
+					else
+						repositoryHandler.addVoc(elmt, "empty");
 
 				} catch (NullPointerException e) {
 					// TODO: handle exception
-
+					
 					// repositoryHandler.addEvalue2File(elmt, "");
-					repositoryHandler.addVoc(elmt, "");
+					repositoryHandler.addVoc(elmt, "empty");
 				}
 			}
 
@@ -212,12 +217,16 @@ public class XMLHandler extends DefaultHandler {
 
 			// repositoryHandler.addEvalue2File(elmt, tmpValue);
 
-			repositoryHandler.addVoc(elmt, tmpValue);
+			if (!tmpValue.toString().equals(""))
+				repositoryHandler.addVoc(elmt, tmpValue);
+			else
+				repositoryHandler.addVoc(elmt, "empty");
 		} catch (NullPointerException e) {
 			// TODO: handle exception
 
 			// repositoryHandler.addEvalue2File(elmt, "");
-			repositoryHandler.addVoc(elmt, "");
+
+			repositoryHandler.addVoc(elmt, "empty");
 
 		}
 

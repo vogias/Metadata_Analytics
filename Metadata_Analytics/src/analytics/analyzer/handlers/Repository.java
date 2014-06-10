@@ -276,9 +276,16 @@ public class Repository {
 	public void addVoc(String element, String voc) {
 
 		HashMap<String, Integer> data = new HashMap<>();
+
+		voc = voc.trim();
+
+		if (voc.equals(""))
+			voc = "empty";
+
 		if (!getVocabularies().containsKey(element)) {
 
 			data.put(voc, 1);
+
 			getVocabularies().put(element, data);
 			// data.clear();
 		} else {
@@ -286,9 +293,13 @@ public class Repository {
 			data = getVocabularies().get(element);
 
 			if (!data.containsKey(voc)) {
+
 				data.put(voc, 1);
+
 			} else {
+
 				data.put(voc, data.get(voc) + 1);
+
 			}
 
 			getVocabularies().put(element, data);
@@ -827,7 +838,7 @@ public class Repository {
 		// MultiHashMap atts = getDistinctAtts();
 
 		// System.out.println("Distinct atts:"+atts);
-	//	System.out.println("All atts:" + attributes);
+		// System.out.println("All atts:" + attributes);
 		if (attributes.size() > 0) {
 
 			ElementFrequency atFrequency = new ElementFrequency(attributes);
