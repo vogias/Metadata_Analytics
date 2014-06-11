@@ -101,41 +101,41 @@ public class XMLHandler extends DefaultHandler {
 
 		branche += qName.toLowerCase();
 		xPaths.push(branche);
-		HashMap<String, String> elmt = new HashMap<>();
+		// HashMap<String, String> elmt = new HashMap<>();
 
-		System.out.println("==================================");
+		String elmt = "";
 		
+
 		for (int i = 0; i < attributes.getLength(); i++) {
 
 			String name = attributes.getLocalName(i);
 
-			// System.out.println("Element:"+branche+",Att name:" + name);
 			String value = attributes.getValue(i);
 
 			if (!name.contains("xsi:schemaLocation") && !name.contains("xmlns")) {
-				// System.out.println("Name:" + attributes.getLocalName(i)
-				// + " Value:" + attributes.getValue(i));
 
 				if (all == false) {
 					if (contains(elements2Analyze, branche)) {
 
 						// HashMap<String, String> elmt = new HashMap<>();
-						elmt.clear();
+					//	elmt.clear();
 
-						elmt.put(branche, value);
-						
-						System.out.println("Attribute:" + name + ", Info:" + elmt);
+					//	elmt.put(branche, value);
+						elmt=name+"--"+branche+"--"+value;
 
-						repositoryHandler.addAttributes(name, elmt);
+						//repositoryHandler.addAttributes(name, elmt);
+						repositoryHandler.addAttributes(elmt);
 					}
 				} else {
 
 					// HashMap<String, String> elmt = new HashMap<>();
-					elmt.clear();
-					elmt.put(branche, value);
+				//	elmt.clear();
+					//elmt.put(branche, value);
 
-					System.out.println("Attribute:" + name + ", Info:" + elmt);
-					repositoryHandler.addAttributes(name, elmt);
+				//	System.out.println("Attribute:" + name + ", Info:" + elmt);
+					elmt=name+"--"+branche+"--"+value;
+					//repositoryHandler.addAttributes(name, elmt);
+					repositoryHandler.addAttributes(elmt);
 				}
 			} else if (name.contains("xmlns")) {
 				repositoryHandler.setSchema(value);

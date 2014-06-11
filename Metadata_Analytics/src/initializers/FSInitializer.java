@@ -82,9 +82,9 @@ public class FSInitializer extends InitializeProcess {
 		// Vector<String> xmlElements = new Vector<>();
 		HashMap<String, Double> xmlElements = new HashMap<>();
 		Vector<String> xmlElementsDistinct = new Vector<>();
-		// MultiHashMap attributes = new MultiHashMap();
-		// MultiHashMap distinctAtts = new MultiHashMap();
-		HashMap<String,HashMap<HashMap<String, String>, Integer>> attributes = new HashMap<>();
+		
+		//HashMap<String,HashMap<HashMap<String, String>, Integer>> attributes = new HashMap<>();
+		HashMap<String,Integer> attributes = new HashMap<>();
 
 		HashMap<String, Integer> elementDims = new HashMap<>();
 		HashMap<String, Integer> elementCompletness = new HashMap<>();

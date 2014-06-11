@@ -49,11 +49,10 @@ public class Repository {
 	HashMap<String, Double> xmlElements;
 
 	Vector<String> xmlElementsDistinct;
-	// MultiHashMap attributes, distinctAtts;
 
-	//HashMap<String, HashMap<HashMap<String, String>, Integer>> attributes;
-	
-	HashMap<String, HashMap<HashMap<String, String>, Integer>> attributes;
+	// HashMap<String, HashMap<HashMap<String, String>, Integer>> attributes;
+
+	HashMap<String, Integer> attributes;
 
 	HashMap<String, Integer> elementDims;
 	HashMap<String, Integer> elementCompletness;
@@ -72,17 +71,7 @@ public class Repository {
 	float requirements;
 	HashMap<String, Double> completenessMap;
 
-	// public Repository(Collection<?> xmls, String[] elements2Analyze,
-	// MultiHashMap attributes, MultiHashMap distinctAtts,
-	// Vector<String> xmlElements, Vector<String> xmlElementsDistinct,
-	// HashMap<String, Integer> elementDims,
-	// HashMap<String, Integer> elementCompletness,
-	// Vector<String> elementEntropy, Properties props)
-
-	// MultiHashMap distinctAtts,
-	public Repository(
-			Collection<?> xmls,
-			HashMap<String, HashMap<HashMap<String, String>, Integer>> attributes,
+	public Repository(Collection<?> xmls, HashMap<String, Integer> attributes,
 			HashMap<String, Double> xmlElements,
 			Vector<String> xmlElementsDistinct,
 			HashMap<String, Integer> elementDims,
@@ -737,58 +726,63 @@ public class Repository {
 		}
 	}
 
-	public void addAttributes(String name, HashMap<String, String> value) {
+	// String name, HashMap<String, String> value
+	public void addAttributes(String name) {
 
 		if (!attributes.containsKey(name)) {
-
-			System.out.println("Attributes matrix dont contain:" + name);
-			System.out.println("Value:"+value);
-			HashMap<HashMap<String, String>, Integer> data = new HashMap<>();
-
-			data.put(value, 1);
-
-			System.out.println("Adding:" + name + " putting:" + data);
-
-			attributes.put(name, data);
-		
-			
-			System.out.println("Attributes matrix:" + attributes);
-			
-			
-
+			attributes.put(name, 1);
 		} else {
 
-			System.out.println("Attributes matrix contain:" + name);
-
-			HashMap<HashMap<String, String>, Integer> hashMap = attributes
-					.get(name);
-
-			System.out.println("HashMap with key:" + name + "=" + hashMap);
-
-			if (hashMap.containsKey(value)) {
-
-				int newdata = hashMap.get(value) + 1;
-				System.out
-						.println("adding:" + value + " with value:" + newdata);
-
-				hashMap.put(value, newdata);
-				attributes.put(name, hashMap);
-				System.out.println("Attributes matrix:" + attributes);
-			} else {
-
-				System.out.println("adding:" + value + " with value:" + 1);
-				hashMap.put(value, 1);
-				attributes.put(name, hashMap);
-
-				System.out.println("Attributes matrix:" + attributes);
-			}
+			attributes.put(name, attributes.get(name) + 1);
 		}
 
-		// attributes.put(name, value);
+		// if (!attributes.containsKey(name)) {
 		//
-		// if (!distinctAtts.containsValue(value))
-		// distinctAtts.put(name, value);
+		// System.out.println("Attributes matrix dont contain:" + name);
+		// System.out.println("Value:" + value);
+		// HashMap<HashMap<String, String>, Integer> data = new HashMap<>();
+		//
+		// data.put(value, 1);
+		//
+		// System.out.println("Adding:" + name + " putting:" + data);
+		//
+		// attributes.put(name, data);
+		//
+		// System.out.println("Attributes matrix:" + attributes);
+		//
+		// } else {
+		//
+		// System.out.println("Attributes matrix contain:" + name);
+		//
+		// HashMap<HashMap<String, String>, Integer> hashMap = attributes
+		// .get(name);
+		//
+		// System.out.println("HashMap with key:" + name + "=" + hashMap);
+		//
+		// if (hashMap.containsKey(value)) {
+		//
+		// int newdata = hashMap.get(value) + 1;
+		// System.out
+		// .println("adding:" + value + " with value:" + newdata);
+		//
+		// hashMap.put(value, newdata);
+		// attributes.put(name, hashMap);
+		// System.out.println("Attributes matrix:" + attributes);
+		// } else {
+		//
+		// System.out.println("adding:" + value + " with value:" + 1);
+		// hashMap.put(value, 1);
+		// attributes.put(name, hashMap);
+		//
+		// System.out.println("Attributes matrix:" + attributes);
+		// }
+		// }
 
+		// // attributes.put(name, value);
+		// //
+		// // if (!distinctAtts.containsValue(value))
+		// // distinctAtts.put(name, value);
+		//
 	}
 
 	/**
@@ -858,7 +852,8 @@ public class Repository {
 		// MultiHashMap atts = getDistinctAtts();
 
 		// System.out.println("Distinct atts:"+atts);
-		// System.out.println("All atts:" + attributes);
+	//	System.out.println("All atts:" + attributes);
+		
 		if (attributes.size() > 0) {
 
 			ElementFrequency atFrequency = new ElementFrequency(attributes);
