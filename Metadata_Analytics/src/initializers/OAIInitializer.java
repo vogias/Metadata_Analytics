@@ -15,21 +15,17 @@ package initializers;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
@@ -37,7 +33,6 @@ import org.xml.sax.SAXException;
 import analytics.analyzer.handlers.Federation;
 import analytics.analyzer.handlers.Repository;
 import analytics.constants.AnalyticsConstants;
-import analytics.filtering.Filtering;
 import analytics.input.Input;
 import analytics.input.OAITargetInput;
 import analytics.logging.ConfigureLogger;

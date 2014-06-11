@@ -21,6 +21,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
 
 /**
@@ -38,7 +39,7 @@ public class ConfigureLogger {
 		ple.setContext(lc);
 		ple.start();
 
-		FileAppender fileAppender = new FileAppender();
+		FileAppender<ILoggingEvent> fileAppender = new FileAppender<ILoggingEvent>();
 		fileAppender.setFile(file);
 		fileAppender.setEncoder(ple);
 		fileAppender.setContext(lc);

@@ -76,14 +76,15 @@ public class ElementFrequency extends Metric {
 
 	}
 
-	@SuppressWarnings("deprecation")
+	
 	public void compute(
 			HashMap<String, HashMap<HashMap<String, String>, Integer>> data,
 			String provider, Logger logger) {
 
-		Set keySet = data.keySet();
+	//	System.out.println(data);
+		Set<String> keySet = data.keySet();
 
-		Iterator iterator = keySet.iterator();
+		Iterator<String> iterator = keySet.iterator();
 
 		Properties props = new Properties();
 		try {
@@ -166,15 +167,12 @@ public class ElementFrequency extends Metric {
 
 				writer.write(next.get(next2) + ",");
 				logstring.append(" " + next.get(next2));
-				
-				
+
 				Integer integer = hashMap.get(next);
-				
-				
-				
+			
 				writer.write(integer.toString());
 				logstring.append(" " + integer);
-				
+
 				writer.newLine();
 				logger.info(logstring.toString());
 				logstring.delete(0, logstring.capacity());
@@ -188,45 +186,45 @@ public class ElementFrequency extends Metric {
 
 	}
 
-	private void computeDominantAttValue(Collection attValues,
-			Collection distinctAV, BufferedWriter writer, String attName,
-			String provider, Logger logger) throws IOException {
-
-		Iterator iterator = distinctAV.iterator();
-
-		StringBuffer logstring = new StringBuffer();
-		while (iterator.hasNext()) {
-
-			writer.write(attName + ",");
-
-			logstring.append(provider);
-			logstring.append(" " + attName);
-
-			HashMap<String, String> key = (HashMap<String, String>) iterator
-					.next();
-
-			int frequency = Collections.frequency(attValues, key);
-
-			String elementName = key.toString();
-			String element = elementName.substring(
-					elementName.indexOf("{") + 1, elementName.indexOf("="));
-
-			writer.write(element + ",");
-			logstring.append(" " + element);
-			String value = elementName.substring(elementName.indexOf("=") + 1,
-					elementName.lastIndexOf("}"));
-			writer.write(value + ",");
-			logstring.append(" " + value);
-			writer.write(String.valueOf(frequency));
-			logstring.append(" " + frequency);
-			writer.newLine();
-
-			logger.info(logstring.toString());
-			logstring.delete(0, logstring.capacity());
-			// System.out.println("\tAttribute value:" + key + ", Frequency:"
-			// + frequency);
-
-		}
-
-	}
+//	private void computeDominantAttValue(Collection attValues,
+//			Collection distinctAV, BufferedWriter writer, String attName,
+//			String provider, Logger logger) throws IOException {
+//
+//		Iterator iterator = distinctAV.iterator();
+//
+//		StringBuffer logstring = new StringBuffer();
+//		while (iterator.hasNext()) {
+//
+//			writer.write(attName + ",");
+//
+//			logstring.append(provider);
+//			logstring.append(" " + attName);
+//
+//			HashMap<String, String> key = (HashMap<String, String>) iterator
+//					.next();
+//
+//			int frequency = Collections.frequency(attValues, key);
+//
+//			String elementName = key.toString();
+//			String element = elementName.substring(
+//					elementName.indexOf("{") + 1, elementName.indexOf("="));
+//
+//			writer.write(element + ",");
+//			logstring.append(" " + element);
+//			String value = elementName.substring(elementName.indexOf("=") + 1,
+//					elementName.lastIndexOf("}"));
+//			writer.write(value + ",");
+//			logstring.append(" " + value);
+//			writer.write(String.valueOf(frequency));
+//			logstring.append(" " + frequency);
+//			writer.newLine();
+//
+//			logger.info(logstring.toString());
+//			logstring.delete(0, logstring.capacity());
+//			// System.out.println("\tAttribute value:" + key + ", Frequency:"
+//			// + frequency);
+//
+//		}
+//
+//	}
 }

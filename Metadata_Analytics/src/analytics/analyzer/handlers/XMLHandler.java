@@ -103,10 +103,15 @@ public class XMLHandler extends DefaultHandler {
 		xPaths.push(branche);
 		HashMap<String, String> elmt = new HashMap<>();
 
+		System.out.println("==================================");
+		
 		for (int i = 0; i < attributes.getLength(); i++) {
 
 			String name = attributes.getLocalName(i);
+
+			// System.out.println("Element:"+branche+",Att name:" + name);
 			String value = attributes.getValue(i);
+
 			if (!name.contains("xsi:schemaLocation") && !name.contains("xmlns")) {
 				// System.out.println("Name:" + attributes.getLocalName(i)
 				// + " Value:" + attributes.getValue(i));
@@ -118,9 +123,10 @@ public class XMLHandler extends DefaultHandler {
 						elmt.clear();
 
 						elmt.put(branche, value);
+						
+						System.out.println("Attribute:" + name + ", Info:" + elmt);
 
-						repositoryHandler.addAttributes(attributes.getQName(i),
-								elmt);
+						repositoryHandler.addAttributes(name, elmt);
 					}
 				} else {
 
@@ -128,8 +134,8 @@ public class XMLHandler extends DefaultHandler {
 					elmt.clear();
 					elmt.put(branche, value);
 
-					repositoryHandler.addAttributes(attributes.getQName(i),
-							elmt);
+					System.out.println("Attribute:" + name + ", Info:" + elmt);
+					repositoryHandler.addAttributes(name, elmt);
 				}
 			} else if (name.contains("xmlns")) {
 				repositoryHandler.setSchema(value);
@@ -172,7 +178,6 @@ public class XMLHandler extends DefaultHandler {
 				try {
 
 					// repositoryHandler.addEvalue2File(elmt, tmpValue);
-					
 
 					if (!tmpValue.toString().equals(""))
 						repositoryHandler.addVoc(elmt, tmpValue);
@@ -181,7 +186,7 @@ public class XMLHandler extends DefaultHandler {
 
 				} catch (NullPointerException e) {
 					// TODO: handle exception
-					
+
 					// repositoryHandler.addEvalue2File(elmt, "");
 					repositoryHandler.addVoc(elmt, "empty");
 				}

@@ -28,8 +28,6 @@ import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.collections.MultiHashMap;
-import org.apache.commons.collections.MultiMap;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
@@ -125,8 +123,8 @@ public class FSInitializer extends InitializeProcess {
 		for (int i = 0; i < dataProviders.size(); i++) {
 
 			String[] extensions = { "xml" };
-			FileUtils utils = new FileUtils();
-			Collection<File> xmls = utils.listFiles(
+			//FileUtils utils = new FileUtils();
+			Collection<File> xmls = FileUtils.listFiles(
 					(File) dataProviders.get(i), extensions, true);
 			String filterXMLs = props
 					.getProperty(AnalyticsConstants.filteringEnabled);
@@ -189,6 +187,9 @@ public class FSInitializer extends InitializeProcess {
 
 					federation.appendEntropyElements(
 							repo.computeElementEntropy(), dataProviders.size());
+					
+					this.logElementAnalysis(loggerEl, repo.getRepoName(),
+							resultsPath);
 
 					repo.computeElementValueFreq(elementVocs, logger);
 
@@ -205,8 +206,7 @@ public class FSInitializer extends InitializeProcess {
 					federation.appendSchemas(repo.getSchema(false));
 					federation.appendRequirements(repo.getRequirements());
 
-					this.logElementAnalysis(loggerEl, repo.getRepoName(),
-							resultsPath);
+					
 
 					System.out.println("Repository:" + repo.getRepoName()
 							+ " analysis completed.");
@@ -227,6 +227,8 @@ public class FSInitializer extends InitializeProcess {
 
 					repo.computeElementEntropy();
 
+					this.logElementAnalysis(loggerEl, repo.getRepoName(),
+							resultsPath);
 					// System.out.println(repo.getVocabularies());
 
 					repo.computeElementValueFreq(elementVocs, logger);
@@ -237,8 +239,7 @@ public class FSInitializer extends InitializeProcess {
 
 					repo.getAttributeFrequency(loggerAtt);
 
-					this.logElementAnalysis(loggerEl, repo.getRepoName(),
-							resultsPath);
+				
 					System.out
 							.println("======================================");
 					System.out.println("Repository:" + repo.getRepoName()

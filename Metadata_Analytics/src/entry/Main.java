@@ -20,7 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
-import java.util.Scanner;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -76,7 +75,7 @@ public class Main {
 			String dataInputClass = props
 					.getProperty(AnalyticsConstants.inputClass);
 			ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
-			Class myClass = myClassLoader.loadClass(dataInputClass);
+			Class<?> myClass = myClassLoader.loadClass(dataInputClass);
 			Object whatInstance = myClass.newInstance();
 			Input in = (Input) whatInstance;
 

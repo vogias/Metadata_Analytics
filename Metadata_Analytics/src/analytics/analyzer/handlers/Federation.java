@@ -21,8 +21,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
@@ -274,7 +272,6 @@ public class Federation {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	public HashMap<String, Double> getElementsSFrequency()
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
@@ -295,7 +292,7 @@ public class Federation {
 		return avg;
 	}
 
-	@SuppressWarnings("deprecation")
+	
 	public HashMap<String, Double> getElementsMCompletness()
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
@@ -336,7 +333,7 @@ public class Federation {
 		return elementImportance;
 	}
 
-	@SuppressWarnings("deprecation")
+	
 	public HashMap<String, Double> getElementsMaxDimensionality()
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
@@ -365,7 +362,7 @@ public class Federation {
 		return elementDim;
 	}
 
-	@SuppressWarnings("deprecation")
+	
 	public HashMap<String, Double> getElementsMEntropy()
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
@@ -706,12 +703,12 @@ public class Federation {
 	private Storage getStorageClass() throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
 
-		AnalyticsConstants constants = new AnalyticsConstants();
-		String storageClass = props.getProperty(constants.storageClass);
+//		AnalyticsConstants constants = new AnalyticsConstants();
+		String storageClass = props.getProperty(AnalyticsConstants.storageClass);
 
 		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
 
-		Class myClass = myClassLoader.loadClass(storageClass);
+		Class<?> myClass = myClassLoader.loadClass(storageClass);
 
 		Object whatInstance = myClass.newInstance();
 		Storage storage = (Storage) whatInstance;
@@ -719,21 +716,21 @@ public class Federation {
 		return storage;
 	}
 
-	private Double getMaxDimensionality(ArrayList<Double> data) {
+//	private Double getMaxDimensionality(ArrayList<Double> data) {
+//
+//		return Collections.max(data);
+//	}
 
-		return Collections.max(data);
-	}
-
-	private Double getAvg(ArrayList<Double> data) {
-
-		Double avg = 0.0;
-		for (int i = 0; i < data.size(); i++) {
-
-			avg += data.get(i);
-		}
-		avg = avg / this.numberOfRepos;
-		return avg;
-	}
+//	private Double getAvg(ArrayList<Double> data) {
+//
+//		Double avg = 0.0;
+//		for (int i = 0; i < data.size(); i++) {
+//
+//			avg += data.get(i);
+//		}
+//		avg = avg / this.numberOfRepos;
+//		return avg;
+//	}
 
 	public void addRepoName(String repoName) {
 		repoNames.addElement(repoName);

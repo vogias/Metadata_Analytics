@@ -66,10 +66,10 @@ public class FSInput extends Input {
 	public Collection<File> getXMLs(File dataProviderDir) {
 
 		String[] extensions = { "xml" };
-		FileUtils utils = new FileUtils();
+		// FileUtils utils = new FileUtils();
 
-		Collection<File> files = utils.listFiles(dataProviderDir, extensions,
-				true);
+		Collection<File> files = FileUtils.listFiles(dataProviderDir,
+				extensions, true);
 
 		return files;
 

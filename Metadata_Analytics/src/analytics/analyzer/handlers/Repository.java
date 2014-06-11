@@ -13,27 +13,20 @@
  */
 package analytics.analyzer.handlers;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MultiHashMap;
-import org.apache.commons.collections.MultiMap;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -58,6 +51,8 @@ public class Repository {
 	Vector<String> xmlElementsDistinct;
 	// MultiHashMap attributes, distinctAtts;
 
+	//HashMap<String, HashMap<HashMap<String, String>, Integer>> attributes;
+	
 	HashMap<String, HashMap<HashMap<String, String>, Integer>> attributes;
 
 	HashMap<String, Integer> elementDims;
@@ -237,7 +232,7 @@ public class Repository {
 
 		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
 
-		Class myClass = myClassLoader.loadClass(storageClass);
+		Class<?> myClass = myClassLoader.loadClass(storageClass);
 
 		Object whatInstance = myClass.newInstance();
 		Storage storage = (Storage) whatInstance;
@@ -253,7 +248,7 @@ public class Repository {
 
 		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
 
-		Class myClass = myClassLoader.loadClass(xmlInputClass);
+		Class<?> myClass = myClassLoader.loadClass(xmlInputClass);
 
 		Object whatInstance = myClass.newInstance();
 
@@ -390,49 +385,49 @@ public class Repository {
 		return entropyData;
 	}
 
-	private Vector<String> getVectorFromFile(String filename) {
-
-		if (filename.contains(":"))
-			filename = filename.replace(":", "_");
-
-		File f = new File("buffer/" + filename + ".txt");
-
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(f));
-			String line = br.readLine();
-			Vector<String> data = new Vector<>();
-
-			while (line != null) {
-				data.add(line);
-				line = br.readLine();
-			}
-
-			br.close();
-
-			return data;
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-
-			Vector<String> data = new Vector<>();
-			data.addElement("Element not found");
-			return data;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-
-			Vector<String> data = new Vector<>();
-			data.addElement("Element not found");
-			return data;
-		} finally {
-			try {
-				if (br != null)
-					br.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
-
-	}
+	// private Vector<String> getVectorFromFile(String filename) {
+	//
+	// if (filename.contains(":"))
+	// filename = filename.replace(":", "_");
+	//
+	// File f = new File("buffer/" + filename + ".txt");
+	//
+	// BufferedReader br = null;
+	// try {
+	// br = new BufferedReader(new FileReader(f));
+	// String line = br.readLine();
+	// Vector<String> data = new Vector<>();
+	//
+	// while (line != null) {
+	// data.add(line);
+	// line = br.readLine();
+	// }
+	//
+	// br.close();
+	//
+	// return data;
+	// } catch (FileNotFoundException e) {
+	// // TODO Auto-generated catch block
+	//
+	// Vector<String> data = new Vector<>();
+	// data.addElement("Element not found");
+	// return data;
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	//
+	// Vector<String> data = new Vector<>();
+	// data.addElement("Element not found");
+	// return data;
+	// } finally {
+	// try {
+	// if (br != null)
+	// br.close();
+	// } catch (IOException ex) {
+	// ex.printStackTrace();
+	// }
+	// }
+	//
+	// }
 
 	public HashMap<String, Double> computeElementEntropy() throws IOException,
 			InstantiationException, IllegalAccessException,
@@ -534,7 +529,6 @@ public class Repository {
 						this.getRepoName(), "_" + elementName[i]
 								+ "_ElementValue_Analysis", "Element Value",
 						elementName[i], logger, time);
-				
 
 			}
 		}
@@ -719,9 +713,9 @@ public class Repository {
 	 * @param attributes
 	 *            the attributes to set
 	 */
-	public void setAttributes(MultiHashMap attributes) {
-		this.attributes = attributes;
-	}
+	// public void setAttributes(MultiHashMap attributes) {
+	// this.attributes = attributes;
+	// }
 
 	public void addxmlElements(String elementName) {
 
@@ -743,28 +737,50 @@ public class Repository {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void addAttributes(String name, HashMap<String, String> value) {
 
 		if (!attributes.containsKey(name)) {
 
+			System.out.println("Attributes matrix dont contain:" + name);
+			System.out.println("Value:"+value);
 			HashMap<HashMap<String, String>, Integer> data = new HashMap<>();
 
 			data.put(value, 1);
 
+			System.out.println("Adding:" + name + " putting:" + data);
+
 			attributes.put(name, data);
+		
+			
+			System.out.println("Attributes matrix:" + attributes);
+			
+			
 
 		} else {
 
+			System.out.println("Attributes matrix contain:" + name);
+
 			HashMap<HashMap<String, String>, Integer> hashMap = attributes
 					.get(name);
+
+			System.out.println("HashMap with key:" + name + "=" + hashMap);
+
 			if (hashMap.containsKey(value)) {
-				hashMap.put(value, hashMap.get(value) + 1);
+
+				int newdata = hashMap.get(value) + 1;
+				System.out
+						.println("adding:" + value + " with value:" + newdata);
+
+				hashMap.put(value, newdata);
 				attributes.put(name, hashMap);
+				System.out.println("Attributes matrix:" + attributes);
 			} else {
 
+				System.out.println("adding:" + value + " with value:" + 1);
 				hashMap.put(value, 1);
 				attributes.put(name, hashMap);
+
+				System.out.println("Attributes matrix:" + attributes);
 			}
 		}
 
