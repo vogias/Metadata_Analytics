@@ -849,10 +849,7 @@ public class Repository {
 	public void getAttributeFrequency(Logger logger) {
 
 		System.out.println("Computing attributes' frequency.");
-		// MultiHashMap atts = getDistinctAtts();
-
-		// System.out.println("Distinct atts:"+atts);
-	//	System.out.println("All atts:" + attributes);
+		
 		
 		if (attributes.size() > 0) {
 

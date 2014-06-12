@@ -118,7 +118,7 @@ public class ElementFrequency extends Metric {
 			while (iterator.hasNext()) {
 				String attName = (String) iterator.next();
 
-				String[] info = attName.split("--");
+				String[] info = attName.split("_");
 				
 
 				// HashMap<HashMap<String, String>, Integer> hashMap = data
