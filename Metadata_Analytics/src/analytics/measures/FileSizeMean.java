@@ -27,6 +27,7 @@ public class FileSizeMean extends Metric {
 	float fileSizeM;
 
 	@Override
+	
 	public HashMap<String, Double> compute(Collection<?> data) {
 		// TODO Auto-generated method stub
 		Iterator<File> iterator = (Iterator<File>) data.iterator();

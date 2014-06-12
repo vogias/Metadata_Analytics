@@ -26,11 +26,9 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.collections.MultiHashMap;
 import org.slf4j.Logger;
 
 import analytics.constants.AnalyticsConstants;
-import analytics.logging.ConfigureLogger;
 
 /**
  * @author vogias
@@ -163,50 +161,50 @@ public class ElementFrequency extends Metric {
 		}
 	}
 
-	private void writeAtts2file(BufferedWriter writer, String name,
-			HashMap<HashMap<String, String>, Integer> hashMap, Logger logger,
-			String provider) {
-
-		try {
-
-			Set<HashMap<String, String>> keySet = hashMap.keySet();
-			Iterator<HashMap<String, String>> iterator = keySet.iterator();
-
-			StringBuffer logstring = new StringBuffer();
-			while (iterator.hasNext()) {
-
-				writer.write(name + ",");
-				logstring.append(provider);
-				logstring.append(" " + name);
-
-				HashMap<String, String> next = iterator.next();
-
-				Set<String> keySet2 = next.keySet();
-				String next2 = keySet2.iterator().next();
-
-				writer.write(next2 + ",");
-				logstring.append(" " + next2);
-
-				writer.write(next.get(next2) + ",");
-				logstring.append(" " + next.get(next2));
-
-				Integer integer = hashMap.get(next);
-
-				writer.write(integer.toString());
-				logstring.append(" " + integer);
-
-				writer.newLine();
-				logger.info(logstring.toString());
-				logstring.delete(0, logstring.capacity());
-
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
+	// private void writeAtts2file(BufferedWriter writer, String name,
+	// HashMap<HashMap<String, String>, Integer> hashMap, Logger logger,
+	// String provider) {
+	//
+	// try {
+	//
+	// Set<HashMap<String, String>> keySet = hashMap.keySet();
+	// Iterator<HashMap<String, String>> iterator = keySet.iterator();
+	//
+	// StringBuffer logstring = new StringBuffer();
+	// while (iterator.hasNext()) {
+	//
+	// writer.write(name + ",");
+	// logstring.append(provider);
+	// logstring.append(" " + name);
+	//
+	// HashMap<String, String> next = iterator.next();
+	//
+	// Set<String> keySet2 = next.keySet();
+	// String next2 = keySet2.iterator().next();
+	//
+	// writer.write(next2 + ",");
+	// logstring.append(" " + next2);
+	//
+	// writer.write(next.get(next2) + ",");
+	// logstring.append(" " + next.get(next2));
+	//
+	// Integer integer = hashMap.get(next);
+	//
+	// writer.write(integer.toString());
+	// logstring.append(" " + integer);
+	//
+	// writer.newLine();
+	// logger.info(logstring.toString());
+	// logstring.delete(0, logstring.capacity());
+	//
+	// }
+	//
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// }
 
 	// private void computeDominantAttValue(Collection attValues,
 	// Collection distinctAV, BufferedWriter writer, String attName,
