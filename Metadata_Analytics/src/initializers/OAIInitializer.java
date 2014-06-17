@@ -20,21 +20,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
 import analytics.analyzer.handlers.Federation;
 import analytics.analyzer.handlers.Repository;
 import analytics.constants.AnalyticsConstants;
-import analytics.filtering.Filtering;
 import analytics.input.Input;
 import analytics.input.OAITargetInput;
 import analytics.logging.ConfigureLogger;
@@ -183,7 +180,7 @@ public class OAIInitializer extends InitializeProcess {
 				System.exit(-1);
 			}
 
-			System.out.println("Harvesting finished.");
+		
 			try {
 				// Repository repo = new Repository(xmls,elements2Analyze);
 
