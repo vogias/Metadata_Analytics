@@ -59,8 +59,9 @@ public class OAITargetInput extends Input {
 		Vector<String> data = new Vector<>();
 		try {
 			repos.setBaseURL(path);
+
+			System.out.println("Harvesting repository:" + repos.getRepositoryName());
 			records = repos.listRecords(repoSelection);
-		
 
 			while (records.moreItems()) {
 				OAIRecord item = records.getCurrentItem();
@@ -77,6 +78,7 @@ public class OAITargetInput extends Input {
 				}
 				records.moveNext();
 			}
+			System.out.println("Harvesting repository:" + repos.getRepositoryName()+" finished.");
 
 		} catch (uiuc.oai.OAIException e2) {
 			// TODO Auto-generated catch block

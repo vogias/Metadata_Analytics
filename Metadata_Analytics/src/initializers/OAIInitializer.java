@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
@@ -33,6 +34,7 @@ import org.xml.sax.SAXException;
 import analytics.analyzer.handlers.Federation;
 import analytics.analyzer.handlers.Repository;
 import analytics.constants.AnalyticsConstants;
+import analytics.filtering.Filtering;
 import analytics.input.Input;
 import analytics.input.OAITargetInput;
 import analytics.logging.ConfigureLogger;
@@ -164,6 +166,7 @@ public class OAIInitializer extends InitializeProcess {
 
 			OAITargetInput input = new OAITargetInput();
 
+			
 			Collection<String> xmls;
 			if (flag) {
 
@@ -180,6 +183,7 @@ public class OAIInitializer extends InitializeProcess {
 				System.exit(-1);
 			}
 
+			System.out.println("Harvesting finished.");
 			try {
 				// Repository repo = new Repository(xmls,elements2Analyze);
 
@@ -219,7 +223,7 @@ public class OAIInitializer extends InitializeProcess {
 
 					repo.computeElementValueFreq(elementVocs, logger);
 
-					FileUtils.deleteDirectory(new File("buffer"));
+					// FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency(loggerAtt);
 
@@ -254,7 +258,7 @@ public class OAIInitializer extends InitializeProcess {
 
 					// repo.storeRepoGeneralInfo();
 
-					FileUtils.deleteDirectory(new File("buffer"));
+					// FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency(loggerAtt);
 
