@@ -121,6 +121,9 @@ public class XMLHandler extends DefaultHandler {
 					//	elmt.clear();
 
 					//	elmt.put(branche, value);
+						if(value.equals(""))
+							value="empty";
+						
 						elmt=name+"#"+branche+"#"+value;
 
 						//repositoryHandler.addAttributes(name, elmt);
@@ -133,6 +136,8 @@ public class XMLHandler extends DefaultHandler {
 					//elmt.put(branche, value);
 
 				//	System.out.println("Attribute:" + name + ", Info:" + elmt);
+					if(value.equals(""))
+						value="empty";
 					elmt=name+"#"+branche+"#"+value;
 					//repositoryHandler.addAttributes(name, elmt);
 					repositoryHandler.addAttributes(elmt);

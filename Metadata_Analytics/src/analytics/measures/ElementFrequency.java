@@ -119,7 +119,6 @@ public class ElementFrequency extends Metric {
 				String attName = (String) iterator.next();
 
 				String[] info = attName.split("#");
-				
 
 				// HashMap<HashMap<String, String>, Integer> hashMap = data
 				// .get(attName);
@@ -132,6 +131,8 @@ public class ElementFrequency extends Metric {
 				// computeDominantAttValue(attValues, distinctAttsValues,
 				// writer,
 				// attName, provider, logger);
+
+				provider = provider.replace(" ", "");
 
 				writer.write(info[0] + ",");
 				logstring.append(provider);
