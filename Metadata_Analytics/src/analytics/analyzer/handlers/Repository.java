@@ -499,7 +499,8 @@ public class Repository {
 			HashMap<String, Integer> vocs = this.getVocabularies().get(
 					elementName[i]);
 
-			System.out.println(vocs);
+
+		//	System.out.println(vocs);
 			// !vectorFromFile.contains("Element not found")
 
 			if (vocs != null) {
