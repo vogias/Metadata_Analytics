@@ -67,6 +67,7 @@ public class Repository {
 	String schema;
 	Storage storage;
 	Collection<?> xmls;
+	File currentXmlFile;
 	float fileSizeM;
 	float requirements;
 	HashMap<String, Double> completenessMap;
@@ -124,6 +125,20 @@ public class Repository {
 		// handlerInput.getInputData(this, elements2Analyze, elementsVocs);
 		this.storage = this.createStorageClass();
 
+	}
+
+	/**
+	 * @return the currentXmlFile
+	 */
+	public File getCurrentXmlFile() {
+		return currentXmlFile;
+	}
+
+	/**
+	 * @param currentXmlFile the currentXmlFile to set
+	 */
+	public void setCurrentXmlFile(File currentXmlFile) {
+		this.currentXmlFile = currentXmlFile;
 	}
 
 	/**

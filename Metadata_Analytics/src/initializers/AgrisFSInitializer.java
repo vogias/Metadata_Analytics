@@ -1,16 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2014 Kostas Vogias.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Public License v3.0
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/gpl.html
- * 
- * Contributors:
- *     Kostas Vogias - initial API and implementation
- ******************************************************************************/
-/**
- * 
- */
 package initializers;
 
 import java.io.BufferedReader;
@@ -39,12 +26,7 @@ import analytics.filtering.Filtering;
 import analytics.input.Input;
 import analytics.logging.ConfigureLogger;
 
-/**
- * @author vogias
- * 
- */
-public class FSInitializer extends InitializeProcess {
-
+public class AgrisFSInitializer extends InitializeProcess {
 	@Override
 	public boolean pathCheck(Input in, Properties props) {
 		// TODO Auto-generated method stub
@@ -123,8 +105,11 @@ public class FSInitializer extends InitializeProcess {
 
 		for (int i = 0; i < dataProviders.size(); i++) {
 
+			
+			FileWalker fileWalker;
+			
 			String[] extensions = { "xml" };
-			// FileUtils utils = new FileUtils();
+
 			Collection<File> xmls = FileUtils.listFiles(
 					(File) dataProviders.get(i), extensions, true);
 
@@ -346,5 +331,4 @@ public class FSInitializer extends InitializeProcess {
 		}
 
 	}
-
 }
