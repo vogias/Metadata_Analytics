@@ -126,6 +126,8 @@ public class FSInitializer extends InitializeProcess {
 			//FileUtils utils = new FileUtils();
 			Collection<File> xmls = FileUtils.listFiles(
 					(File) dataProviders.get(i), extensions, true);
+			
+			
 			String filterXMLs = props
 					.getProperty(AnalyticsConstants.filteringEnabled);
 

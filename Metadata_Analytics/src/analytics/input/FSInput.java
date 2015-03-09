@@ -63,17 +63,17 @@ public class FSInput extends Input {
 
 	}
 
-	public Collection<File> getXMLs(File dataProviderDir) {
-
-		String[] extensions = { "xml" };
-		// FileUtils utils = new FileUtils();
-
-		Collection<File> files = FileUtils.listFiles(dataProviderDir,
-				extensions, true);
-
-		return files;
-
-	}
+//	public Collection<File> getXMLs(File dataProviderDir) {
+//
+//		String[] extensions = { "xml" };
+//		// FileUtils utils = new FileUtils();
+//
+//		Collection<File> files = FileUtils.listFiles(dataProviderDir,
+//				extensions, true);
+//
+//		return files;
+//
+//	}
 
 	@Override
 	public List<String> getRepoNames(String path) {
