@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
@@ -34,7 +33,6 @@ import xmlHandling.XmlHandlerInput;
 import analytics.constants.AnalyticsConstants;
 import analytics.measures.ElementCompleteness;
 import analytics.measures.ElementFrequency;
-import analytics.measures.FileSizeMean;
 import analytics.measures.RelativeEntropy;
 import analytics.storage.Storage;
 
@@ -44,13 +42,9 @@ import analytics.storage.Storage;
  */
 public class Repository {
 
-	// Vector<String> xmlElements;
-
 	HashMap<String, Double> xmlElements;
 
 	Vector<String> xmlElementsDistinct;
-
-	// HashMap<String, HashMap<HashMap<String, String>, Integer>> attributes;
 
 	HashMap<String, Integer> attributes;
 
@@ -61,18 +55,23 @@ public class Repository {
 	Vector<String> elementEntropy;
 	HashMap<String, HashMap<String, Integer>> vocabularies;
 	float avgRepoInformativeness;
-	int recordsNum;
+
 	String repoName;
 	Properties props;
 	String schema;
 	Storage storage;
-	Collection<?> xmls;
+
 	File currentXmlFile;
+
 	float fileSizeM;
+
 	float requirements;
 	HashMap<String, Double> completenessMap;
+	XmlHandlerInput handlerInput;
+	int numberOfFiles;
+	long fileSize;
 
-	public Repository(Collection<?> xmls, HashMap<String, Integer> attributes,
+	public Repository(HashMap<String, Integer> attributes,
 			HashMap<String, Double> xmlElements,
 			Vector<String> xmlElementsDistinct,
 			HashMap<String, Integer> elementDims,
@@ -85,46 +84,69 @@ public class Repository {
 
 		// TODO Auto-generated constructor stub
 
-		// xmlElements = new Vector<>();
 		this.xmlElements = xmlElements;
 		avgRepoInformativeness = 0;
 		fileSizeM = 0;
 		requirements = 0;
 		entropyData = new HashMap<>();
-		this.xmls = xmls;
-		// attributes = new MultiHashMap();
+
 		this.attributes = attributes;
-		// distinctAtts = new MultiHashMap();
-		// this.distinctAtts = distinctAtts;
 
 		this.elementImportance = elementImportance;
-		// elementCompletness = new HashMap<>();
+
 		this.elementCompletness = elementCompletness;
 
-		// xmlElementsDistinct = new Vector<>();
 		this.xmlElementsDistinct = xmlElementsDistinct;
 
-		// completenessMap = new HashMap<>();
-
-		// elementDims = new HashMap<>();
 		this.elementDims = elementDims;
 
-		recordsNum = 0;
-		// elementEntropy = new Vector<>();
+		numberOfFiles = 0;
+		fileSize = 0;
 		this.elementEntropy = elementEntropy;
 
-		// props = new Properties();
 		this.props = props;
 
 		vocabularies = new HashMap<>();
-		// props.load(new FileInputStream("configure.properties"));
-		//
-		// XmlHandlerInput handlerInput = (XmlHandlerInput) this
-		// .createXMLHandlerInputClass();
-		//
-		// handlerInput.getInputData(this, elements2Analyze, elementsVocs);
+		handlerInput = (XmlHandlerInput) this.createXMLHandlerInputClass();
 		this.storage = this.createStorageClass();
 
+	}
+
+	/**
+	 * @return the handlerInput
+	 */
+	public XmlHandlerInput getHandlerInput() {
+		return handlerInput;
+	}
+
+	/**
+	 * @return the fileSize
+	 */
+	public long getFileSize() {
+		return fileSize;
+	}
+
+	/**
+	 * @param fileSize
+	 *            the fileSize to set
+	 */
+	public void raiseFileSize(long fileSize) {
+		this.fileSize += fileSize;
+	}
+
+	/**
+	 * @return the numberOfFiles
+	 */
+	public int getNumberOfFiles() {
+		return numberOfFiles;
+	}
+
+	/**
+	 * @param numberOfFiles
+	 *            the numberOfFiles to set
+	 */
+	public void raiseNumberOfFiles() {
+		this.numberOfFiles += 1;
 	}
 
 	/**
@@ -135,7 +157,8 @@ public class Repository {
 	}
 
 	/**
-	 * @param currentXmlFile the currentXmlFile to set
+	 * @param currentXmlFile
+	 *            the currentXmlFile to set
 	 */
 	public void setCurrentXmlFile(File currentXmlFile) {
 		this.currentXmlFile = currentXmlFile;
@@ -170,11 +193,9 @@ public class Repository {
 		return completenessMap;
 	}
 
-	public void parseXMLs(String[] elements2Analyze, String[] elementsVocs)
+	public void parseXML(String[] elements2Analyze, String[] elementsVocs)
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, SAXException, ParserConfigurationException {
-		XmlHandlerInput handlerInput = (XmlHandlerInput) this
-				.createXMLHandlerInputClass();
 
 		handlerInput.getInputData(this, elements2Analyze, elementsVocs);
 
@@ -213,20 +234,6 @@ public class Repository {
 		this.schema = schema;
 	}
 
-	/**
-	 * @return the xmls
-	 */
-	public Collection<?> getXmls() {
-		return xmls;
-	}
-
-	/**
-	 * @param xmls
-	 *            the xmls to set
-	 */
-	public void setXmls(Collection<File> xmls) {
-		this.xmls = xmls;
-	}
 
 	private Storage createStorageClass() throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
@@ -302,10 +309,9 @@ public class Repository {
 			}
 
 			getVocabularies().put(element, data);
-			// data.clear();
+			
 		}
-		// data.clear();
-
+		
 	}
 
 	public void addEvalue2File(String name, String value) {
@@ -389,49 +395,7 @@ public class Repository {
 		return entropyData;
 	}
 
-	// private Vector<String> getVectorFromFile(String filename) {
-	//
-	// if (filename.contains(":"))
-	// filename = filename.replace(":", "_");
-	//
-	// File f = new File("buffer/" + filename + ".txt");
-	//
-	// BufferedReader br = null;
-	// try {
-	// br = new BufferedReader(new FileReader(f));
-	// String line = br.readLine();
-	// Vector<String> data = new Vector<>();
-	//
-	// while (line != null) {
-	// data.add(line);
-	// line = br.readLine();
-	// }
-	//
-	// br.close();
-	//
-	// return data;
-	// } catch (FileNotFoundException e) {
-	// // TODO Auto-generated catch block
-	//
-	// Vector<String> data = new Vector<>();
-	// data.addElement("Element not found");
-	// return data;
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	//
-	// Vector<String> data = new Vector<>();
-	// data.addElement("Element not found");
-	// return data;
-	// } finally {
-	// try {
-	// if (br != null)
-	// br.close();
-	// } catch (IOException ex) {
-	// ex.printStackTrace();
-	// }
-	// }
-	//
-	// }
+
 
 	public HashMap<String, Double> computeElementEntropy() throws IOException,
 			InstantiationException, IllegalAccessException,
@@ -444,20 +408,14 @@ public class Repository {
 		StringBuffer element = new StringBuffer();
 
 		for (int i = 0; i < elementsDistinct.size(); i++) {
-			// String element = elementsDistinct.elementAt(i);
-			element.append(elementsDistinct.elementAt(i));
-			// System.out.println("Element:" + element);
 
-			// Vector<String> vectorFromFile = getVectorFromFile(element
-			// .toString());
+			element.append(elementsDistinct.elementAt(i));
 
 			HashMap<String, Integer> vocs = this.getVocabularies().get(
 					element.toString());
 
 			RelativeEntropy entropy = new RelativeEntropy();
-			// data.put(element, entropy.compute(vectorFromFile));
-			// getEntropyData().put(element.toString(),
-			// entropy.compute(vectorFromFile));
+
 			getEntropyData().put(element.toString(), entropy.compute(vocs));
 
 			element.delete(0, element.length());
@@ -500,35 +458,21 @@ public class Repository {
 			throws IOException, InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
-		// String[] strings = elementName.split(",");
-
 		int time = 0;
 		for (int i = 0; i < elementName.length; i++) {
-			// HashMap<String, Double> data = new HashMap<>();
 
 			System.out.println("Element:" + elementName[i]
 					+ " vocabulary statistical analysis");
 
-			// Vector<String> vectorFromFile =
-			// getVectorFromFile(elementName[i]);
 			HashMap<String, Integer> vocs = this.getVocabularies().get(
 					elementName[i]);
 
-
-		//	System.out.println(vocs);
-			// !vectorFromFile.contains("Element not found")
-
 			if (vocs != null) {
-
-				// Map cardinalityMap = CollectionUtils
-				// .getCardinalityMap(vectorFromFile);
 
 				if (elementName[i].contains(":"))
 					elementName[i] = elementName[i].replace(":", "_");
 
 				Storage storageClass = getStorageClass();
-
-				// (HashMap<String, Integer>) cardinalityMap
 
 				storageClass.storeElementValueData(vocs, "Frequency",
 						this.getRepoName(), "_" + elementName[i]
@@ -540,21 +484,6 @@ public class Repository {
 
 	}
 
-	/**
-	 * @return the recordsNum
-	 */
-	public int getRecordsNum() {
-		return recordsNum;
-	}
-
-	/**
-	 * @param recordsNum
-	 *            the recordsNum to set
-	 */
-	public void setRecordsNum(int recordsNum) {
-		this.recordsNum = recordsNum;
-	}
-
 	public void addCompletenessElement(String key) {
 
 		if (!elementCompletness.containsKey(key))
@@ -564,12 +493,6 @@ public class Repository {
 			Integer inValue = elementCompletness.get(key);
 			elementCompletness.put(key, inValue + 1);
 		}
-
-		/*
-		 * if (key.equals("chor_dc:dc.dcterms:accessRights")) {
-		 * System.out.println("Key:" + key + " value:" +
-		 * elementCompletness.get(key)); }
-		 */
 
 	}
 
@@ -597,10 +520,8 @@ public class Repository {
 		HashMap<String, Double> data = new HashMap<>();
 		StringBuffer key = new StringBuffer();
 		while (iterator.hasNext()) {
-			// String key = iterator.next();
+			
 			key.append(iterator.next());
-			// System.out.println("Element:" + key + ", Dimensions:"
-			// + elementDims.get(key));
 			data.put(key.toString(), (double) elementDims.get(key.toString()));
 			key.delete(0, key.length());
 		}
@@ -628,28 +549,13 @@ public class Repository {
 		this.elementDims = elementDims;
 	}
 
-	/**
-	 * @return the distinctAtts
-	 */
-	// public MultiHashMap getDistinctAtts() {
-	// return distinctAtts;
-	// }
-
-	/**
-	 * @param distinctAtts
-	 *            the distinctAtts to set //
-	 */
-	// public void setDistinctAtts(MultiHashMap distinctAtts) {
-	// this.distinctAtts = distinctAtts;
-	// }
-
 	public float getFileSizeDistribution() {
-		FileSizeMean fileSizeMean = new FileSizeMean();
-		fileSizeMean.compute(xmls);
-		fileSizeM = fileSizeMean.getFileSizeM();
 
-		System.out.println("File size mean:" + fileSizeM + " bytes");
-		return fileSizeM;
+		float fz = getFileSize() / getNumberOfFiles();
+		setFileSizeM(fz);
+
+		System.out.println("File size mean:" + fz + " bytes");
+		return fz;
 	}
 
 	/**
@@ -700,31 +606,11 @@ public class Repository {
 	/**
 	 * @return the attributes
 	 */
-	// public MultiHashMap getAttributes() {
-	// return attributes;
-	// }
-	//
-	// public void showAttributes() {
-	//
-	// System.out.println(distinctAtts.toString());
-	// }
-
-	// public void showAttributes() {
-	//
-	// System.out.println(distinctAtts.toString());
-	// }
-
-	/**
-	 * @param attributes
-	 *            the attributes to set
-	 */
-	// public void setAttributes(MultiHashMap attributes) {
-	// this.attributes = attributes;
-	// }
+	
 
 	public void addxmlElements(String elementName) {
 
-		// xmlElements.addElement(elementName);
+		
 
 		if (!xmlElements.containsKey(elementName)) {
 			xmlElements.put(elementName, (double) 1);
@@ -742,7 +628,6 @@ public class Repository {
 		}
 	}
 
-	// String name, HashMap<String, String> value
 	public void addAttributes(String name) {
 
 		if (!attributes.containsKey(name)) {
@@ -752,53 +637,7 @@ public class Repository {
 			attributes.put(name, attributes.get(name) + 1);
 		}
 
-		// if (!attributes.containsKey(name)) {
-		//
-		// System.out.println("Attributes matrix dont contain:" + name);
-		// System.out.println("Value:" + value);
-		// HashMap<HashMap<String, String>, Integer> data = new HashMap<>();
-		//
-		// data.put(value, 1);
-		//
-		// System.out.println("Adding:" + name + " putting:" + data);
-		//
-		// attributes.put(name, data);
-		//
-		// System.out.println("Attributes matrix:" + attributes);
-		//
-		// } else {
-		//
-		// System.out.println("Attributes matrix contain:" + name);
-		//
-		// HashMap<HashMap<String, String>, Integer> hashMap = attributes
-		// .get(name);
-		//
-		// System.out.println("HashMap with key:" + name + "=" + hashMap);
-		//
-		// if (hashMap.containsKey(value)) {
-		//
-		// int newdata = hashMap.get(value) + 1;
-		// System.out
-		// .println("adding:" + value + " with value:" + newdata);
-		//
-		// hashMap.put(value, newdata);
-		// attributes.put(name, hashMap);
-		// System.out.println("Attributes matrix:" + attributes);
-		// } else {
-		//
-		// System.out.println("adding:" + value + " with value:" + 1);
-		// hashMap.put(value, 1);
-		// attributes.put(name, hashMap);
-		//
-		// System.out.println("Attributes matrix:" + attributes);
-		// }
-		// }
-
-		// // attributes.put(name, value);
-		// //
-		// // if (!distinctAtts.containsValue(value))
-		// // distinctAtts.put(name, value);
-		//
+		
 	}
 
 	/**
@@ -846,12 +685,7 @@ public class Repository {
 			ClassNotFoundException {
 
 		System.out.println("Computing elements' Frequency...");
-		// ElementFrequency elFrequency = new ElementFrequency(
-		// getXmlElementsDistinct());
-
-		// System.out.println(getXmlElementsDistinct());
-		// HashMap<String, Double> data = elFrequency.compute(xmlElements);
-
+	
 		HashMap<String, Double> data = this.getXmlElements();
 
 		Storage storageClass = getStorageClass();
@@ -865,8 +699,7 @@ public class Repository {
 	public void getAttributeFrequency(Logger logger) {
 
 		System.out.println("Computing attributes' frequency.");
-		
-		
+
 		if (attributes.size() > 0) {
 
 			ElementFrequency atFrequency = new ElementFrequency(attributes);
@@ -883,10 +716,9 @@ public class Repository {
 
 		System.out.println("Computing elements' completeness...");
 		ElementCompleteness completeness = new ElementCompleteness(
-				getRecordsNum());
+				getNumberOfFiles());
 
-		// HashMap<String, Double> map = completeness
-		// .compute(getElementCompletnessMatrix());
+	
 		completenessMap = completeness.compute(getElementCompletnessMatrix());
 
 		Storage storageClass = getStorageClass();
@@ -899,7 +731,7 @@ public class Repository {
 
 	public float getApproStorageRequirements() {
 
-		requirements = xmls.size() * getFileSizeM();
+		requirements = getFileSize();
 
 		System.out.println(this.getRepoName()
 				+ " Approximate Storage Requirements:" + requirements
@@ -912,11 +744,11 @@ public class Repository {
 		this.computeAVGRepoInformativeness();
 
 		if (fed == false)
-			storageClass.storeRepositoryData(repoName, xmls.size(),
+			storageClass.storeRepositoryData(repoName, getNumberOfFiles(),
 					getFileSizeDistribution(), getApproStorageRequirements(),
 					getAvgRepoInformativeness(), getSchema(true));
 		else
-			storageClass.storeRepositoryData(repoName, xmls.size(),
+			storageClass.storeRepositoryData(repoName, getNumberOfFiles(),
 					getFileSizeM(), getApproStorageRequirements(),
 					getAvgRepoInformativeness(), getSchema(true));
 	}

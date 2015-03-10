@@ -1,6 +1,3 @@
-/**
- * 
- */
 package initializers;
 
 import java.io.File;
@@ -17,12 +14,7 @@ import org.xml.sax.SAXException;
 import analytics.analyzer.handlers.Repository;
 import analytics.filtering.Filtering;
 
-/**
- * @author vogias
- * 
- */
-public class FileWalker extends SimpleFileVisitor<Path> {
-
+public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 	String fileType = "";
 	Repository repo;
 	boolean filterFile = false;
@@ -31,7 +23,7 @@ public class FileWalker extends SimpleFileVisitor<Path> {
 	String[] elements2Analyze;
 	String[] elmtVoc;
 
-	public FileWalker(String fileType, boolean filterFile,
+	public AgrisFileWalker(String fileType, boolean filterFile,
 			String filterExpression, Filtering filterObject, Repository repo,
 			String[] elements2Analyze, String[] elementVocs) {
 		// TODO Auto-generated constructor stub

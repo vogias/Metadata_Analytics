@@ -18,7 +18,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -37,67 +36,54 @@ public class FS2XMLInput extends XmlHandlerInput {
 	public void getInputData(Repository repo, String[] elements2Analyze,
 			String[] elementsVocs) throws ParserConfigurationException {
 		// TODO Auto-generated method stub
-		Iterator<File> iterator = (Iterator<File>) repo.getXmls().iterator();
-		// int j = 0;
-		File xml = null;
-		// try {
-		int size = repo.getXmls().size();
-		int count = 1;
 
-		long startExp = System.currentTimeMillis();
-		while (iterator.hasNext()) {
-			xml = iterator.next();
+		File xml = repo.getCurrentXmlFile();
 
-			XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze,
-					elementsVocs);
 
-			InputStream inS = null;
-			try {
-				inS = new FileInputStream(xml);
+		XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze,
+				elementsVocs);
 
-				System.out.print("Parsing file:" + count + " of " + size
-						+ " Filename:" + xml.getName());
-				count++;
+		InputStream inS = null;
+		try {
+			inS = new FileInputStream(xml);
 
-				long start = System.currentTimeMillis();
+			System.out.print("Parsing file:" + getCount() + " Filename:"
+					+ xml.getName());
 
-				xmlHandler.parseDocument(inS);
-				long end = System.currentTimeMillis();
-				long diff = end - start;
-				System.out.print(",Parsing time(ms):" + diff + "\n");
+			long start = System.currentTimeMillis();
 
-			} catch (SAXException e) {
-				// TODO Auto-generated catch block
+			xmlHandler.parseDocument(inS);
+			long end = System.currentTimeMillis();
+			long diff = end - start;
+			System.out.print(",Parsing time(ms):" + diff + "\n");
 
-				System.err.println("Bad formed xml file:" + xml.getPath());
+			raiseCount();
 
-				continue;
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				continue;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				continue;
-			} finally {
-				if (inS != null) {
-					try {
-						inS.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+
+			System.err.println("Bad formed xml file:" + xml.getPath());
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} finally {
+			if (inS != null) {
+				try {
+					inS.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
-
 		}
-		long endExp = System.currentTimeMillis();
-		long res = (endExp - startExp) / 1000;
-		System.out.println("Repository parsing duration(s):" + res + "\n");
-		// } catch (IOException ex) {
-		// ex.printStackTrace();
-		//
-		// }
+
+		
+
 	}
 }

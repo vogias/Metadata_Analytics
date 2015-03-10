@@ -19,11 +19,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -123,53 +127,52 @@ public class FSInitializer extends InitializeProcess {
 
 		for (int i = 0; i < dataProviders.size(); i++) {
 
-			String[] extensions = { "xml" };
-			// FileUtils utils = new FileUtils();
-			Collection<File> xmls = FileUtils.listFiles(
-					(File) dataProviders.get(i), extensions, true);
-
-			String filterXMLs = props
-					.getProperty(AnalyticsConstants.filteringEnabled);
-
-			if (filterXMLs.equalsIgnoreCase("true")) {
-				Filtering filtering = new Filtering();
-				String expression = props
-						.getProperty(AnalyticsConstants.xpathExpression);
-				System.out.println("Filtering is enabled.");
-				Iterator<File> iterator = xmls.iterator();
-				while (iterator.hasNext()) {
-					File next = iterator.next();
-					if (!filtering.filterXML(next, expression)) {
-						System.out.println("File:" + next.getName()
-								+ " is filtered out.");
-						iterator.remove();
-					} else
-						System.out.println("File:" + next.getName()
-								+ " is kept in xmls' collection.");
-
-				}
-			}
+			FileWalker fileWalker;
 
 			try {
 
-				Repository repo = new Repository(xmls, attributes, xmlElements,
+				Repository repo = new Repository(attributes, xmlElements,
 						xmlElementsDistinct, elementDims, elementCompletness,
 						elementEntropy, elementImportance, props);
+				File dataProv = (File) dataProviders.get(i);
+				repo.setRepoName(dataProv.getName());
 
-				repo.setRepoName(((File) dataProviders.get(i)).getName());
-				repo.setRecordsNum(xmls.size());
+				String filterXMLs = props
+						.getProperty(AnalyticsConstants.filteringEnabled);
+
+				if (filterXMLs.equalsIgnoreCase("true")) {
+					Filtering filtering = new Filtering();
+					String expression = props
+							.getProperty(AnalyticsConstants.xpathExpression);
+					System.out.println("Filtering is enabled.");
+
+					fileWalker = new FileWalker("xml", true, expression,
+							filtering, repo, elements2Analyze, elementVocs);
+				} else
+					fileWalker = new FileWalker("xml", false, null, null, repo,
+							elements2Analyze, elementVocs);
 
 				if (fedFlag) {
-
-					federation.addRepoName(((File) dataProviders.get(i))
-							.getName());
 
 					System.out
 							.println("######################################");
 					System.out.println("Analysing repository:"
 							+ repo.getRepoName());
-					System.out.println("Number of records:" + xmls.size());
-					repo.parseXMLs(elements2Analyze, elementVocs);
+
+					Set<FileVisitOption> opts = Collections.emptySet();
+					Files.walkFileTree(dataProv.toPath(), opts,
+							Integer.MAX_VALUE, fileWalker);
+
+					long endExp = System.currentTimeMillis();
+					long res = (endExp - repo.getHandlerInput().getStartExp()) / 1000;
+					System.out.println("Repository parsing duration(seconds):"
+							+ res + "\n");
+
+					federation.addRepoName(((File) dataProviders.get(i))
+							.getName());
+
+					System.out.println("Number of records:"
+							+ repo.getNumberOfFiles());
 
 					federation.appendFreqElements(repo.getElementFrequency());
 
@@ -191,13 +194,11 @@ public class FSInitializer extends InitializeProcess {
 
 					repo.computeElementValueFreq(elementVocs, logger);
 
-					// FileUtils.deleteDirectory(new File("buffer"));
-
 					repo.getAttributeFrequency(loggerAtt);
 
 					federation.appendFileSize(repo.getFileSizeDistribution());
 
-					federation.appendNoRecords(repo.getXmls().size());
+					federation.appendNoRecords(repo.getNumberOfFiles());
 					repo.storeRepoGeneralInfo(true);
 					federation.appendInformativeness(repo
 							.getAvgRepoInformativeness());
@@ -213,25 +214,29 @@ public class FSInitializer extends InitializeProcess {
 							.println("######################################");
 					System.out.println("Analysing repository:"
 							+ repo.getRepoName());
+					Set<FileVisitOption> opts = Collections.emptySet();
+					Files.walkFileTree(dataProv.toPath(), opts,
+							Integer.MAX_VALUE, fileWalker);
+
+					long endExp = System.currentTimeMillis();
+					long res = (endExp - repo.getHandlerInput().getStartExp()) / 1000;
+					System.out.println("Repository parsing duration(s):" + res
+							+ "\n");
+
 					System.out.println("Number of records:"
-							+ repo.getXmls().size());
-					repo.parseXMLs(elements2Analyze, elementVocs);
+							+ repo.getNumberOfFiles());
 					repo.getElementFrequency();
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
 					repo.getElementImportance();
-
 					repo.computeElementEntropy();
 
 					this.logElementAnalysis(loggerEl, repo.getRepoName(),
 							resultsPath);
-					// System.out.println(repo.getVocabularies());
 
 					repo.computeElementValueFreq(elementVocs, logger);
 
 					repo.storeRepoGeneralInfo(false);
-
-					// FileUtils.deleteDirectory(new File("buffer"));
 
 					repo.getAttributeFrequency(loggerAtt);
 
@@ -250,7 +255,6 @@ public class FSInitializer extends InitializeProcess {
 			xmlElements.clear();
 			xmlElementsDistinct.clear();
 			attributes.clear();
-			// distinctAtts.clear();
 			elementDims.clear();
 			elementCompletness.clear();
 
@@ -346,5 +350,4 @@ public class FSInitializer extends InitializeProcess {
 		}
 
 	}
-
 }
