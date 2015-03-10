@@ -1,6 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Kostas Vogias.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Public License v3.0
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/gpl.html
+ * 
+ * Contributors:
+ *     Kostas Vogias - initial API and implementation
+ ******************************************************************************/
 package initializers;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -34,6 +48,7 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 		this.filterObject = filterObject;
 		this.elements2Analyze = elements2Analyze;
 		this.elmtVoc = elementVocs;
+
 	}
 
 	@Override
@@ -47,76 +62,146 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
 			throws IOException {
 		// TODO Auto-generated method stub
-		File f = file.toFile();
-		String fileName = f.getName();
+		File bigAgrisFile = file.toFile();
+		String fileName = bigAgrisFile.getName();
 		String suffix = fileName.substring(fileName.lastIndexOf(".") + 1,
 				fileName.length());
 
 		if (suffix.equals(this.fileType)) {
 
-			if (filterFile) {
-				boolean keep = true;
-				if (!this.filterObject.filterXML(f, this.filterExpresison)) {
-					System.out.println("File:" + f.getName()
-							+ " is filtered out.");
-					keep = false;
-				} else {
-					System.out.println("File:" + f.getName()
-							+ " is kept in xmls' collection.");
+			BufferedReader reader = null;
+			try {
 
-					keep = true;
-				}
-				if (keep) {
-					repo.setCurrentXmlFile(f);
-					repo.raiseNumberOfFiles();
-					repo.raiseFileSize(f.length());
-					try {
-						repo.parseXML(this.elements2Analyze, this.elmtVoc);
-					} catch (InstantiationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (SAXException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ParserConfigurationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+				String sCurrentLine;
+
+				reader = new BufferedReader(new FileReader(bigAgrisFile));
+				boolean resourceFound = false;
+
+				File f = null;
+				BufferedWriter writer = null;
+				while ((sCurrentLine = reader.readLine()) != null) {
+
+					if (sCurrentLine.contains("<ags:resource ")) {
+						// System.out.println(sCurrentLine);
+						resourceFound = true;
+						f = new File(sCurrentLine.substring(
+								sCurrentLine.lastIndexOf("=") + 2,
+								sCurrentLine.lastIndexOf(">") - 1)
+								+ ".xml");
+						// System.out.println(f.getName());
+						writer = new BufferedWriter(new FileWriter(f));
+						writer.append(sCurrentLine);
+
+					} else if (sCurrentLine.contains("</ags:resource>")) {
+
+						if (resourceFound) {
+
+							writer.append(sCurrentLine);
+							writer.close();
+
+							// System.out.println("Printing file:" +
+							// f.getName());
+							// BufferedReader reader2 = new BufferedReader(
+							// new FileReader(f));
+							// String s;
+							// while ((s = reader2.readLine()) != null) {
+							// System.out.println(s);
+							// }
+							//
+							// reader2.close();
+							// System.out.println("Done");
+
+							if (filterFile) {
+								boolean keep = true;
+								if (!this.filterObject.filterXML(f,
+										this.filterExpresison)) {
+									System.out.println("File:" + f.getName()
+											+ " is filtered out.");
+									keep = false;
+								} else {
+									System.out.println("File:" + f.getName()
+											+ " is kept in xmls' collection.");
+
+									keep = true;
+								}
+								if (keep) {
+									repo.setCurrentXmlFile(f);
+									repo.raiseNumberOfFiles();
+									repo.raiseFileSize(f.length());
+									try {
+										repo.parseXML(this.elements2Analyze,
+												this.elmtVoc);
+									} catch (InstantiationException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (IllegalAccessException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (ClassNotFoundException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (SAXException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (ParserConfigurationException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+
+								}
+							} else {
+								repo.setCurrentXmlFile(f);
+								try {
+									repo.parseXML(this.elements2Analyze,
+											this.elmtVoc);
+									repo.raiseNumberOfFiles();
+									repo.raiseFileSize(f.length());
+								} catch (InstantiationException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (IllegalAccessException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (ClassNotFoundException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (SAXException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (ParserConfigurationException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+
+							resourceFound = false;
+							f.delete();
+						}
+
+					} else {
+
+						if (resourceFound)
+							writer.append(sCurrentLine);
+						else
+							continue;
 					}
 
 				}
-			} else {
-				repo.setCurrentXmlFile(f);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
 				try {
-					repo.parseXML(this.elements2Analyze, this.elmtVoc);
-					repo.raiseNumberOfFiles();
-					repo.raiseFileSize(f.length());
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ParserConfigurationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					if (reader != null)
+						reader.close();
+				} catch (IOException ex) {
+					ex.printStackTrace();
 				}
 			}
 
 		} else {
-			System.err.println("\n" + f.getName() + " is not a " + fileType
-					+ " type of file.\n");
+			System.err.println("\n" + bigAgrisFile.getName() + " is not a "
+					+ fileType + " type of file.\n");
 
 		}
 		return FileVisitResult.CONTINUE;
@@ -126,15 +211,8 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 	public FileVisitResult visitFileFailed(Path file, IOException exc)
 			throws IOException {
 		// TODO Auto-generated method stub
-		System.err.println(file + " could not be processed.");
+		System.err.println(file.getFileName() + " could not be processed.\n");
 		return FileVisitResult.CONTINUE;
 	}
-
-	// @Override
-	// public FileVisitResult postVisitDirectory(Path dir, IOException exc)
-	// throws IOException {
-	// // TODO Auto-generated method stub
-	// return null;
-	// }
 
 }

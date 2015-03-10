@@ -36,7 +36,6 @@ public class OAI2XMLInput extends XmlHandlerInput {
 			String[] elementsVocs) throws ParserConfigurationException {
 		Iterator<String> iterator = (Iterator<String>) repo.getXmls()
 				.iterator();
-		// int j = 0;
 
 		int size = repo.getXmls().size();
 		int count = 1;
