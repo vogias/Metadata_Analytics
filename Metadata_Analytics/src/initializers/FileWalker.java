@@ -138,11 +138,4 @@ public class FileWalker extends SimpleFileVisitor<Path> {
 		return FileVisitResult.CONTINUE;
 	}
 
-	// @Override
-	// public FileVisitResult postVisitDirectory(Path dir, IOException exc)
-	// throws IOException {
-	// // TODO Auto-generated method stub
-	// return null;
-	// }
-
 }
