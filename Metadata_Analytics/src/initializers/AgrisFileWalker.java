@@ -82,13 +82,13 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 				while ((sCurrentLine = reader.readLine()) != null) {
 
 					if (sCurrentLine.contains("<ags:resource ")) {
-						// System.out.println(sCurrentLine);
+
 						resourceFound = true;
 						f = new File(sCurrentLine.substring(
 								sCurrentLine.lastIndexOf("=") + 2,
 								sCurrentLine.lastIndexOf(">") - 1)
 								+ ".xml");
-						// System.out.println(f.getName());
+
 						writer = new BufferedWriter(new FileWriter(f));
 						writer.append(sCurrentLine);
 
@@ -98,18 +98,6 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 
 							writer.append(sCurrentLine);
 							writer.close();
-
-							// System.out.println("Printing file:" +
-							// f.getName());
-							// BufferedReader reader2 = new BufferedReader(
-							// new FileReader(f));
-							// String s;
-							// while ((s = reader2.readLine()) != null) {
-							// System.out.println(s);
-							// }
-							//
-							// reader2.close();
-							// System.out.println("Done");
 
 							if (filterFile) {
 								boolean keep = true;
