@@ -47,19 +47,10 @@ public class ElementCompleteness extends Metric {
 		while (iterator.hasNext()) {
 
 			key.append(iterator.next());
-			// String key = iterator.next();
 			Integer value = data.get(key.toString());
 
 			float percentage = ((float) value / records) * 100;
 
-			/*
-			 * if (key.equals("chor_dc:dc.dcterms:accessRights")) {
-			 * System.out.println("Value:" + value + " number of records:" +
-			 * records + " percentage:" + percentage); }
-			 */
-
-			// System.out.println("Element:" + key + ", Completeness:"
-			// + percentage + "%");
 			output.put(key.toString(), (double) percentage);
 			key.delete(0, key.length());
 		}

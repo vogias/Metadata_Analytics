@@ -58,8 +58,7 @@ public class AgrisFSInitializer extends InitializeProcess {
 
 		if (dataProviders.isEmpty()) {
 
-			// System.out.println("Wrong data providers file names.");
-			// System.out.println("Exiting...");
+			
 
 			return false;
 		} else
@@ -73,14 +72,9 @@ public class AgrisFSInitializer extends InitializeProcess {
 			ClassNotFoundException, SAXException, ParserConfigurationException {
 		// TODO Auto-generated method stub
 
-		// Vector<String> xmlElements = new Vector<>();
 		HashMap<String, Double> xmlElements = new HashMap<>();
 		Vector<String> xmlElementsDistinct = new Vector<>();
-
-		// HashMap<String,HashMap<HashMap<String, String>, Integer>> attributes
-		// = new HashMap<>();
 		HashMap<String, Integer> attributes = new HashMap<>();
-
 		HashMap<String, Integer> elementDims = new HashMap<>();
 		HashMap<String, Integer> elementCompletness = new HashMap<>();
 		Vector<String> elementEntropy = new Vector<>();

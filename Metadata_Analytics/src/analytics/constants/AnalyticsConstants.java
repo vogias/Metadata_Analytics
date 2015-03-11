@@ -40,6 +40,5 @@ public class AnalyticsConstants {
 	public static String filteringEnabled="analytics.filtering";
 	public static String xpathExpression="analytics.filtering.xpath.expression";
 
-	// public static String temporalMode = "temporal.analysis.mode";
 
 }

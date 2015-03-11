@@ -24,7 +24,6 @@ import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -32,7 +31,6 @@ import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -68,8 +66,7 @@ public class FSInitializer extends InitializeProcess {
 
 		if (dataProviders.isEmpty()) {
 
-			// System.out.println("Wrong data providers file names.");
-			// System.out.println("Exiting...");
+		
 
 			return false;
 		} else
@@ -82,15 +79,9 @@ public class FSInitializer extends InitializeProcess {
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, SAXException, ParserConfigurationException {
 		// TODO Auto-generated method stub
-
-		// Vector<String> xmlElements = new Vector<>();
 		HashMap<String, Double> xmlElements = new HashMap<>();
 		Vector<String> xmlElementsDistinct = new Vector<>();
-
-		// HashMap<String,HashMap<HashMap<String, String>, Integer>> attributes
-		// = new HashMap<>();
 		HashMap<String, Integer> attributes = new HashMap<>();
-
 		HashMap<String, Integer> elementDims = new HashMap<>();
 		HashMap<String, Integer> elementCompletness = new HashMap<>();
 		Vector<String> elementEntropy = new Vector<>();

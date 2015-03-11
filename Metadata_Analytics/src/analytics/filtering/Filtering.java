@@ -74,7 +74,6 @@ public class Filtering {
 	public boolean filterXML(File file, String expression) {
 		Document doc = parseDocument(file);
 
-		// xpath.setNamespaceContext(new PersonalNamespaceContext());
 		try {
 
 			
@@ -114,8 +113,7 @@ public class Filtering {
 				else {
 
 					return false;
-					// throw new XPathFunctionException(
-					// "Could not convert argument type");
+					
 				}
 			}
 

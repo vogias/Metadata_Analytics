@@ -27,25 +27,7 @@ public class RelativeEntropy extends Metric {
 	@Override
 	public HashMap<String, Double> compute(Collection<?> data) {
 		// TODO Auto-generated method stub
-		/*
-		 * Map cardinalityMap = CollectionUtils.getCardinalityMap(data);
-		 * 
-		 * Set keySet = cardinalityMap.keySet(); int size = data.size();
-		 * Iterator iterator = keySet.iterator();
-		 * 
-		 * double result = 0.0;
-		 * 
-		 * while (iterator.hasNext()) { String key = (String) iterator.next();
-		 * 
-		 * int value = (int) cardinalityMap.get(key);
-		 * 
-		 * double frequency = (double) value / size;
-		 * 
-		 * result -= frequency * (Math.log(frequency) / Math.log(2)); }
-		 * 
-		 * System.out.println("Relative Entropy:" + result +
-		 * "(number of observations:" + size + ")");
-		 */
+		
 		return null;
 
 	}
@@ -53,9 +35,7 @@ public class RelativeEntropy extends Metric {
 	// Vector<String> data
 	public double compute(HashMap<String, Integer> data) {
 		// TODO Auto-generated method stub
-		// Map cardinalityMap = CollectionUtils.getCardinalityMap(data);
-
-		// Set keySet = cardinalityMap.keySet();
+		
 
 		Set<String> keySet = data.keySet();
 
@@ -76,7 +56,6 @@ public class RelativeEntropy extends Metric {
 		while (iterator.hasNext()) {
 			String key = iterator.next();
 
-			// int value = (int) cardinalityMap.get(key);
 
 			Integer value = data.get(key);
 
@@ -86,8 +65,7 @@ public class RelativeEntropy extends Metric {
 
 		}
 
-		// System.out.println("Relative Entropy:" + result
-		// + "(number of observations:" + size + ")");
+		
 		return result;
 
 	}

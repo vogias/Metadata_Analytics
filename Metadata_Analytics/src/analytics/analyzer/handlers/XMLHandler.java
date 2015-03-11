@@ -101,7 +101,6 @@ public class XMLHandler extends DefaultHandler {
 
 		branche += qName.toLowerCase();
 		xPaths.push(branche);
-		// HashMap<String, String> elmt = new HashMap<>();
 
 		String elmt = "";
 		
@@ -117,29 +116,20 @@ public class XMLHandler extends DefaultHandler {
 				if (all == false) {
 					if (contains(elements2Analyze, branche)) {
 
-						// HashMap<String, String> elmt = new HashMap<>();
-					//	elmt.clear();
-
-					//	elmt.put(branche, value);
+						
 						if(value.equals(""))
 							value="empty";
 						
 						elmt=name+"#"+branche+"#"+value;
 
-						//repositoryHandler.addAttributes(name, elmt);
 						repositoryHandler.addAttributes(elmt);
 					}
 				} else {
 
-					// HashMap<String, String> elmt = new HashMap<>();
-				//	elmt.clear();
-					//elmt.put(branche, value);
-
-				//	System.out.println("Attribute:" + name + ", Info:" + elmt);
+					
 					if(value.equals(""))
 						value="empty";
 					elmt=name+"#"+branche+"#"+value;
-					//repositoryHandler.addAttributes(name, elmt);
 					repositoryHandler.addAttributes(elmt);
 				}
 			} else if (name.contains("xmlns")) {
@@ -165,11 +155,9 @@ public class XMLHandler extends DefaultHandler {
 		if (branche.endsWith(qName + "" + ".")) {
 			branche = branche.substring(0, branche.length() - qName.length()
 					- 1);
-			// branche = branche.toLowerCase();
 			elmt = xPaths.elementAt(xPaths.size() - 1);
 			xPaths.removeElementAt(xPaths.size() - 1);
-			// System.out.println("--------End element-----");
-			// System.out.println(elmt);
+			
 		}
 
 		boolean controlFlag = false;
@@ -182,7 +170,6 @@ public class XMLHandler extends DefaultHandler {
 			if (contains(elementsVocs, elmt) && controlFlag == false) {
 				try {
 
-					// repositoryHandler.addEvalue2File(elmt, tmpValue);
 
 					if (!tmpValue.toString().equals(""))
 						repositoryHandler.addVoc(elmt, tmpValue);
@@ -192,7 +179,6 @@ public class XMLHandler extends DefaultHandler {
 				} catch (NullPointerException e) {
 					// TODO: handle exception
 
-					// repositoryHandler.addEvalue2File(elmt, "");
 					repositoryHandler.addVoc(elmt, "empty");
 				}
 			}
@@ -225,7 +211,6 @@ public class XMLHandler extends DefaultHandler {
 		// entropy calculation
 		try {
 
-			// repositoryHandler.addEvalue2File(elmt, tmpValue);
 
 			if (!tmpValue.toString().equals(""))
 				repositoryHandler.addVoc(elmt, tmpValue);
@@ -234,7 +219,6 @@ public class XMLHandler extends DefaultHandler {
 		} catch (NullPointerException e) {
 			// TODO: handle exception
 
-			// repositoryHandler.addEvalue2File(elmt, "");
 
 			repositoryHandler.addVoc(elmt, "empty");
 
@@ -273,7 +257,6 @@ public class XMLHandler extends DefaultHandler {
 		// TODO Auto-generated method stub
 
 		SAXParserFactory spf = SAXParserFactory.newInstance();
-		// spf.setNamespaceAware(false);
 
 		Reader reader = new InputStreamReader(is, "UTF-8");
 

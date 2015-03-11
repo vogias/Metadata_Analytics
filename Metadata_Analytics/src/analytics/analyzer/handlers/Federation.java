@@ -38,9 +38,8 @@ import analytics.storage.Storage;
  */
 public class Federation {
 
-	// MultiHashMap elementFreq;
+	
 	HashMap<String, Double> elementFreq;
-	// MultiHashMap elementComp;
 	HashMap<String, Double> elementComp;
 	HashMap<String, Double> elementDim;
 	HashMap<String, Double> elementEntropy;
@@ -61,7 +60,7 @@ public class Federation {
 	public Federation(int repoNum)// , boolean temporal
 			throws FileNotFoundException, IOException {
 		// TODO Auto-generated constructor stub
-		// elementFreq = new MultiHashMap();
+		
 		elementFreq = new HashMap<>();
 		elementComp = new HashMap<>();
 		elementImportance = new HashMap<>();
@@ -79,7 +78,7 @@ public class Federation {
 		props.load(new FileInputStream("configure.properties"));
 
 		resultsPath = props.getProperty(AnalyticsConstants.resultsPath);
-		// temporalAnalysis = temporal;
+
 	}
 
 	public void appendFreqElements(HashMap<String, Double> elements) {
@@ -88,7 +87,7 @@ public class Federation {
 		Iterator<String> iterator = keySet.iterator();
 		StringBuffer elName = new StringBuffer();
 		while (iterator.hasNext()) {
-			// String elName = iterator.next();
+			
 			elName.append(iterator.next());
 			Double value = elements.get(elName.toString());
 
@@ -210,7 +209,7 @@ public class Federation {
 		Iterator<String> iterator = keySet.iterator();
 		StringBuffer elName = new StringBuffer();
 		while (iterator.hasNext()) {
-			// String elName = iterator.next();
+			
 			elName.append(iterator.next());
 			Double value = elements.get(elName.toString());
 
@@ -233,7 +232,7 @@ public class Federation {
 		Iterator<String> iterator = keySet.iterator();
 		StringBuffer elName = new StringBuffer();
 		while (iterator.hasNext()) {
-			// String elName = iterator.next();
+			
 			elName.append(iterator.next());
 			Double value = elements.get(elName.toString());
 
@@ -256,7 +255,7 @@ public class Federation {
 		Iterator<String> iterator = keySet.iterator();
 		StringBuffer elName = new StringBuffer();
 		while (iterator.hasNext()) {
-			// String elName = iterator.next();
+			
 			elName.append(iterator.next());
 			Double value = elements.get(elName.toString());
 
@@ -297,22 +296,7 @@ public class Federation {
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
-		// Set keySet = elementComp.keySet();
-		//
-		// HashMap<String, Double> data = new HashMap<>();
-		//
-		// Iterator iterator = keySet.iterator();
-		//
-		// while (iterator.hasNext()) {
-		// String nextElement = (String) iterator.next();
-		//
-		// if (!data.containsKey(nextElement)) {
-		// ArrayList<Double> collection = (ArrayList<Double>) elementComp
-		// .getCollection(nextElement);
-		// data.put(nextElement, getAvg(collection));
-		// }
-		//
-		// }
+		
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(elementComp, "Average Completeness(%)",
@@ -338,22 +322,7 @@ public class Federation {
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
-		// Set keySet = elementDim.keySet();
-		//
-		// HashMap<String, Double> data = new HashMap<>();
-		//
-		// Iterator iterator = keySet.iterator();
-		//
-		// while (iterator.hasNext()) {
-		// String nextElement = (String) iterator.next();
-		//
-		// if (!data.containsKey(nextElement)) {
-		// ArrayList<Double> collection = (ArrayList<Double>) elementDim
-		// .getCollection(nextElement);
-		// data.put(nextElement, getMaxDimensionality(collection));
-		// }
-		//
-		// }
+		
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(elementDim, "Max Dimensionality",
@@ -367,22 +336,7 @@ public class Federation {
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException {
 
-		// Set keySet = elementEntropy.keySet();
-		//
-		// HashMap<String, Double> data = new HashMap<>();
-		//
-		// Iterator iterator = keySet.iterator();
-		//
-		// while (iterator.hasNext()) {
-		// String nextElement = (String) iterator.next();
-		//
-		// if (!data.containsKey(nextElement)) {
-		// ArrayList<Double> collection = (ArrayList<Double>) elementEntropy
-		// .getCollection(nextElement);
-		// data.put(nextElement, getAvg(collection));
-		// }
-		//
-		// }
+		
 		Storage storageClass = getStorageClass();
 
 		storageClass.storeElementData(elementEntropy, "Average Entropy",
@@ -419,7 +373,7 @@ public class Federation {
 				}
 			}
 		}
-		// System.out.println(data);
+		
 		saveAttFreqSums2File(data, logger);
 
 	}
@@ -519,14 +473,7 @@ public class Federation {
 				} catch (ArrayIndexOutOfBoundsException ex) {
 					continue;
 				}
-				/*
-				 * if (sCurrentLine.contains("Attribute_Name")) {
-				 * 
-				 * attName = sCurrentLine.substring( sCurrentLine.indexOf(":") +
-				 * 1, sCurrentLine.indexOf(","));
-				 * 
-				 * }
-				 */
+				
 
 			}
 
@@ -703,7 +650,6 @@ public class Federation {
 	private Storage getStorageClass() throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
 
-//		AnalyticsConstants constants = new AnalyticsConstants();
 		String storageClass = props.getProperty(AnalyticsConstants.storageClass);
 
 		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
@@ -716,21 +662,6 @@ public class Federation {
 		return storage;
 	}
 
-//	private Double getMaxDimensionality(ArrayList<Double> data) {
-//
-//		return Collections.max(data);
-//	}
-
-//	private Double getAvg(ArrayList<Double> data) {
-//
-//		Double avg = 0.0;
-//		for (int i = 0; i < data.size(); i++) {
-//
-//			avg += data.get(i);
-//		}
-//		avg = avg / this.numberOfRepos;
-//		return avg;
-//	}
 
 	public void addRepoName(String repoName) {
 		repoNames.addElement(repoName);

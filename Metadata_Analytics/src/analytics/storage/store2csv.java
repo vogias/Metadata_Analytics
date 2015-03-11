@@ -105,44 +105,8 @@ public class store2csv extends Storage {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// finally {
-		// try {
-		// if (writer != null)
-		// writer.close();
-		// } catch (IOException ex) {
-		// ex.printStackTrace();
-		// }
-		// }
 
 	}
-
-	// private void createHeadersVoc(BufferedWriter writer, String metricName,
-	// String vocValue) {
-	//
-	// try {
-	//
-	// writer.append("Element");
-	// writer.append(',');
-	// writer.append(vocValue);
-	// writer.append(',');
-	// writer.append(metricName);
-	// writer.newLine();
-	// // writer.close();
-	//
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// // finally {
-	// // try {
-	// // if (writer != null)
-	// // writer.close();
-	// // } catch (IOException ex) {
-	// // ex.printStackTrace();
-	// // }
-	// // }
-	//
-	// }
 
 	@Override
 	public void storeElementData(HashMap<String, Double> data,
@@ -202,9 +166,7 @@ public class store2csv extends Storage {
 
 				StringBuffer key = new StringBuffer();
 				while (iterator.hasNext()) {
-					// String key = iterator.next();
 					key.append(iterator.next());
-					// System.out.println(key);
 					bw.append(key.toString());
 					bw.append(',');
 					Double value = data.get(key.toString());
@@ -226,16 +188,11 @@ public class store2csv extends Storage {
 
 				String line;
 				int counter = 0;
-
-				// Set<String> keySet = data.keySet();
-				// Iterator<String> iterator = keySet.iterator();
-
 				StringBuffer key = new StringBuffer();
 				while ((line = reader.readLine()) != null) {
 
 					String[] split = line.split(",");
 
-					// String key = split[0];
 					key.append(split[0]);
 
 					if (counter == 0) {
@@ -246,11 +203,8 @@ public class store2csv extends Storage {
 					} else {
 
 						Double value = data.get(key.toString());
-						// System.out.println("Appending key:" + key +
-						// " value:"
-						// + value);
+						
 						line = line + "," + value;
-						// /System.out.println("Appending line:" + line);
 						bw.append(line);
 						bw.newLine();
 					}
@@ -313,10 +267,7 @@ public class store2csv extends Storage {
 			anls.mkdir();
 
 		else {
-			// if (temporal == false) {
-			// FileUtils.deleteQuietly(anls);
-			// anls.mkdir();
-			// }
+			
 		}
 
 		File dir = new File(anls, dataProvider);
@@ -332,7 +283,6 @@ public class store2csv extends Storage {
 			if (file.exists() && time == 0)
 				file.delete();
 
-			// if (!file.exists() && time == 0) {
 			writer = new FileWriter(file);
 			bw = new BufferedWriter(writer);
 			createHeaders(bw, metricName, headerColumn);
@@ -344,7 +294,6 @@ public class store2csv extends Storage {
 			StringBuffer key = new StringBuffer();
 
 			while (iterator.hasNext()) {
-				// String key = iterator.next();
 				key.append(iterator.next());
 
 				Integer value = data.get(key.toString());
@@ -352,15 +301,11 @@ public class store2csv extends Storage {
 				if (key.toString().contains(","))
 					key.replace(0, key.length(),
 							key.toString().replace(",", "/"));
-				// key = key.toString().replace(",", "/");
-
-				// bw.append(element);
-				// bw.append(',');
+				
 				bw.append(key);
 				logString.append(dataProvider);
 				logString.append(" " + element);
 				logString.append(" " + key.toString().replace(" ", "_"));
-				// logString.append(" " + key.replace(" ", "_"));
 				bw.append(',');
 				bw.append(String.valueOf(value));
 				logString.append(" " + String.valueOf(value));
@@ -372,109 +317,7 @@ public class store2csv extends Storage {
 			}
 			bw.close();
 
-			// } else if (file.exists() && time == 0) {
-			// file.delete();
-			// writer = new FileWriter(file);
-			// bw = new BufferedWriter(writer);
-			// createHeaders(bw, metricName, headerColumn);
-			//
-			// Set<String> keySet = data.keySet();
-			// Iterator<String> iterator = keySet.iterator();
-			// StringBuffer logString = new StringBuffer();
-			//
-			// StringBuffer key = new StringBuffer();
-			//
-			// while (iterator.hasNext()) {
-			// // String key = iterator.next();
-			// key.append(iterator.next());
-			//
-			// Integer value = data.get(key.toString());
-			//
-			// if (key.toString().contains(","))
-			// key.replace(0, key.length(),
-			// key.toString().replace(",", "/"));
-			// // key = key.toString().replace(",", "/");
-			//
-			// // bw.append(element);
-			// // bw.append(',');
-			// bw.append(key);
-			// logString.append(dataProvider);
-			// logString.append(" " + element);
-			// logString.append(" " + key.toString().replace(" ", "_"));
-			// // logString.append(" " + key.replace(" ", "_"));
-			// bw.append(',');
-			// bw.append(String.valueOf(value));
-			// logString.append(" " + String.valueOf(value));
-			// bw.newLine();
-			//
-			// logger.info(logString.toString());
-			// logString.delete(0, logString.capacity());
-			// key.delete(0, key.length());
-			// }
-			// bw.close();
-
-			// } else if (file.exists() && time > 0) {
-			//
-			// reader = new BufferedReader(new FileReader(file));
-			//
-			// File temp = new File(dir, "temp.csv");
-			//
-			// writer = new FileWriter(temp);
-			// bw = new BufferedWriter(writer);
-			//
-			// String line;
-			// int counter = 0;
-			//
-			// // Set<String> keySet = data.keySet();
-			// // Iterator<String> iterator = keySet.iterator();
-			// StringBuffer logString = new StringBuffer();
-			// StringBuffer key = new StringBuffer();
-			// while ((line = reader.readLine()) != null) {
-			// String[] split = line.split(",");
-			// // System.out.println(line);
-			//
-			// if (counter == 0) {
-			// line = line + "," + metricName;
-			// bw.append(line);
-			// bw.newLine();
-			//
-			// } else {
-			// // String key = iterator.next();
-			// // String key = split[0];
-			// key.append(split[0]);
-			// Integer value = data.get(key);
-			//
-			// // if (key.contains(","))
-			// // key = key.replace(",", "/");
-			// if (key.toString().contains(","))
-			// key.replace(0, key.length(), key.toString()
-			// .replace(",", "/"));
-			//
-			// line = line + "," + value;
-			// bw.append(line);
-			// logString.append(dataProvider);
-			// logString.append(" " + element);
-			// logString
-			// .append(" " + key.toString().replace(" ", "_"));
-			// logString.append(" " + value);
-			//
-			// bw.newLine();
-			//
-			// logger.info(logString.toString());
-			// logString.delete(0, logString.capacity());
-			// key.delete(0, key.length());
-			// }
-			//
-			// counter += 1;
-			//
-			// }
-			// bw.close();
-			// FileUtils.copyFile(temp, file);
-			// temp.delete();
-			// reader.close();
-			//
-			// }
-
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

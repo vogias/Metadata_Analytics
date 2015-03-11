@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-
 /**
  * @author vogias
  * 
@@ -63,17 +61,7 @@ public class FSInput extends Input {
 
 	}
 
-//	public Collection<File> getXMLs(File dataProviderDir) {
-//
-//		String[] extensions = { "xml" };
-//		// FileUtils utils = new FileUtils();
-//
-//		Collection<File> files = FileUtils.listFiles(dataProviderDir,
-//				extensions, true);
-//
-//		return files;
-//
-//	}
+
 
 	@Override
 	public List<String> getRepoNames(String path) {
