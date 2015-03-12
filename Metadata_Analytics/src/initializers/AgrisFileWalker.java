@@ -84,10 +84,13 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 					if (sCurrentLine.contains("<ags:resource ")) {
 
 						resourceFound = true;
-						f = new File(sCurrentLine.substring(
-								sCurrentLine.lastIndexOf("=") + 2,
-								sCurrentLine.lastIndexOf(">") - 1)
-								+ ".xml");
+
+						// f = new File(sCurrentLine.substring(
+						// sCurrentLine.lastIndexOf("=") + 2,
+						// sCurrentLine.lastIndexOf(">") - 1)
+						// + ".xml");
+
+						f = new File("resource" + ".xml");
 
 						writer = new BufferedWriter(new FileWriter(f));
 						writer.append(sCurrentLine);
