@@ -22,6 +22,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
 
 import org.xml.sax.SAXException;
 
@@ -36,10 +37,11 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 	Filtering filterObject;
 	String[] elements2Analyze;
 	String[] elmtVoc;
+	SAXParser parser;
 
 	public AgrisFileWalker(String fileType, boolean filterFile,
 			String filterExpression, Filtering filterObject, Repository repo,
-			String[] elements2Analyze, String[] elementVocs) {
+			String[] elements2Analyze, String[] elementVocs, SAXParser parser) {
 		// TODO Auto-generated constructor stub
 		this.fileType = fileType;
 		this.repo = repo;
@@ -48,6 +50,7 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 		this.filterObject = filterObject;
 		this.elements2Analyze = elements2Analyze;
 		this.elmtVoc = elementVocs;
+		this.parser = parser;
 
 	}
 
@@ -121,7 +124,7 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 									repo.raiseFileSize(f.length());
 									try {
 										repo.parseXML(this.elements2Analyze,
-												this.elmtVoc);
+												this.elmtVoc, parser);
 									} catch (InstantiationException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
@@ -144,7 +147,7 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 								repo.setCurrentXmlFile(f);
 								try {
 									repo.parseXML(this.elements2Analyze,
-											this.elmtVoc);
+											this.elmtVoc, parser);
 									repo.raiseNumberOfFiles();
 									repo.raiseFileSize(f.length());
 								} catch (InstantiationException e) {

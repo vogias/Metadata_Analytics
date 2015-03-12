@@ -253,20 +253,19 @@ public class XMLHandler extends DefaultHandler {
 
 	}
 
-	public void parseDocument(InputStream is) throws SAXException, IOException,
-			ParserConfigurationException {
+	public void parseDocument(InputStream is, SAXParser parser)
+			throws SAXException, IOException, ParserConfigurationException {
 		// TODO Auto-generated method stub
 
-		SAXParserFactory spf = SAXParserFactory.newInstance();
+		// SAXParserFactory spf = SAXParserFactory.newInstance();
 
 		Reader reader = new InputStreamReader(is, "UTF-8");
 
 		InputSource inputStream = new InputSource(reader);
 		inputStream.setEncoding("UTF-8");
 
-		SAXParser parser = spf.newSAXParser();
+		// SAXParser parser = spf.newSAXParser();
 
-		// parser.parse(inputStream, this);
 		parser.parse(inputStream, this);
 	}
 }

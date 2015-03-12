@@ -14,6 +14,7 @@
 package xmlHandling;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
 
 import org.xml.sax.SAXException;
 
@@ -69,6 +70,6 @@ public abstract class XmlHandlerInput {
 	}
 
 	public abstract void getInputData(Repository repo,
-			String[] elements2Analyze, String[] elementsVocs)
+			String[] elements2Analyze, String[] elementsVocs,SAXParser parser)
 			throws SAXException, ParserConfigurationException;
 }

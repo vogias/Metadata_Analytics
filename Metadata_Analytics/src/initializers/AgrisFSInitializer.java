@@ -27,6 +27,8 @@ import java.util.Set;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
@@ -72,6 +74,10 @@ public class AgrisFSInitializer extends InitializeProcess {
 			ClassNotFoundException, SAXException, ParserConfigurationException {
 		// TODO Auto-generated method stub
 
+		SAXParserFactory spf = SAXParserFactory.newInstance();
+		SAXParser parser = spf.newSAXParser();
+		
+		
 		HashMap<String, Double> xmlElements = new HashMap<>();
 		Vector<String> xmlElementsDistinct = new Vector<>();
 		HashMap<String, Integer> attributes = new HashMap<>();
@@ -131,10 +137,10 @@ public class AgrisFSInitializer extends InitializeProcess {
 					System.out.println("Filtering is enabled.");
 
 					fileWalker = new AgrisFileWalker("xml", true, expression,
-							filtering, repo, elements2Analyze, elementVocs);
+							filtering, repo, elements2Analyze, elementVocs,parser);
 				} else
 					fileWalker = new AgrisFileWalker("xml", false, null, null, repo,
-							elements2Analyze, elementVocs);
+							elements2Analyze, elementVocs,parser);
 
 				if (fedFlag) {
 

@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
 
 import org.xml.sax.SAXException;
 
@@ -34,11 +35,11 @@ public class FS2XMLInput extends XmlHandlerInput {
 
 	@Override
 	public void getInputData(Repository repo, String[] elements2Analyze,
-			String[] elementsVocs) throws ParserConfigurationException {
+			String[] elementsVocs, SAXParser parser)
+			throws ParserConfigurationException {
 		// TODO Auto-generated method stub
 
 		File xml = repo.getCurrentXmlFile();
-
 
 		XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze,
 				elementsVocs);
@@ -52,7 +53,7 @@ public class FS2XMLInput extends XmlHandlerInput {
 
 			long start = System.currentTimeMillis();
 
-			xmlHandler.parseDocument(inS);
+			xmlHandler.parseDocument(inS, parser);
 			long end = System.currentTimeMillis();
 			long diff = end - start;
 			System.out.print(",Parsing time(ms):" + diff + "\n");
@@ -82,8 +83,6 @@ public class FS2XMLInput extends XmlHandlerInput {
 				}
 			}
 		}
-
-		
 
 	}
 }

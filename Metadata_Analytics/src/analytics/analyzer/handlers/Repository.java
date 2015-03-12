@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
 
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
@@ -193,11 +194,12 @@ public class Repository {
 		return completenessMap;
 	}
 
-	public void parseXML(String[] elements2Analyze, String[] elementsVocs)
-			throws InstantiationException, IllegalAccessException,
-			ClassNotFoundException, SAXException, ParserConfigurationException {
+	public void parseXML(String[] elements2Analyze, String[] elementsVocs,
+			SAXParser parser) throws InstantiationException,
+			IllegalAccessException, ClassNotFoundException, SAXException,
+			ParserConfigurationException {
 
-		handlerInput.getInputData(this, elements2Analyze, elementsVocs);
+		handlerInput.getInputData(this, elements2Analyze, elementsVocs, parser);
 
 	}
 
@@ -233,7 +235,6 @@ public class Repository {
 	public void setSchema(String schema) {
 		this.schema = schema;
 	}
-
 
 	private Storage createStorageClass() throws InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
@@ -309,9 +310,9 @@ public class Repository {
 			}
 
 			getVocabularies().put(element, data);
-			
+
 		}
-		
+
 	}
 
 	public void addEvalue2File(String name, String value) {
@@ -394,8 +395,6 @@ public class Repository {
 	public HashMap<String, Double> getEntropyData() {
 		return entropyData;
 	}
-
-
 
 	public HashMap<String, Double> computeElementEntropy() throws IOException,
 			InstantiationException, IllegalAccessException,
@@ -520,7 +519,7 @@ public class Repository {
 		HashMap<String, Double> data = new HashMap<>();
 		StringBuffer key = new StringBuffer();
 		while (iterator.hasNext()) {
-			
+
 			key.append(iterator.next());
 			data.put(key.toString(), (double) elementDims.get(key.toString()));
 			key.delete(0, key.length());
@@ -606,11 +605,8 @@ public class Repository {
 	/**
 	 * @return the attributes
 	 */
-	
 
 	public void addxmlElements(String elementName) {
-
-		
 
 		if (!xmlElements.containsKey(elementName)) {
 			xmlElements.put(elementName, (double) 1);
@@ -637,7 +633,6 @@ public class Repository {
 			attributes.put(name, attributes.get(name) + 1);
 		}
 
-		
 	}
 
 	/**
@@ -685,7 +680,7 @@ public class Repository {
 			ClassNotFoundException {
 
 		System.out.println("Computing elements' Frequency...");
-	
+
 		HashMap<String, Double> data = this.getXmlElements();
 
 		Storage storageClass = getStorageClass();
@@ -718,7 +713,6 @@ public class Repository {
 		ElementCompleteness completeness = new ElementCompleteness(
 				getNumberOfFiles());
 
-	
 		completenessMap = completeness.compute(getElementCompletnessMatrix());
 
 		Storage storageClass = getStorageClass();

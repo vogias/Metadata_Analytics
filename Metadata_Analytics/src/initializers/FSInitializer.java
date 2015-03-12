@@ -30,6 +30,8 @@ import java.util.Set;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.slf4j.Logger;
 import org.xml.sax.SAXException;
@@ -66,8 +68,6 @@ public class FSInitializer extends InitializeProcess {
 
 		if (dataProviders.isEmpty()) {
 
-		
-
 			return false;
 		} else
 			return true;
@@ -79,6 +79,10 @@ public class FSInitializer extends InitializeProcess {
 			throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, SAXException, ParserConfigurationException {
 		// TODO Auto-generated method stub
+
+		SAXParserFactory spf = SAXParserFactory.newInstance();
+		SAXParser parser = spf.newSAXParser();
+
 		HashMap<String, Double> xmlElements = new HashMap<>();
 		Vector<String> xmlElementsDistinct = new Vector<>();
 		HashMap<String, Integer> attributes = new HashMap<>();
@@ -138,10 +142,11 @@ public class FSInitializer extends InitializeProcess {
 					System.out.println("Filtering is enabled.");
 
 					fileWalker = new FileWalker("xml", true, expression,
-							filtering, repo, elements2Analyze, elementVocs);
+							filtering, repo, elements2Analyze, elementVocs,
+							parser);
 				} else
 					fileWalker = new FileWalker("xml", false, null, null, repo,
-							elements2Analyze, elementVocs);
+							elements2Analyze, elementVocs, parser);
 
 				if (fedFlag) {
 
