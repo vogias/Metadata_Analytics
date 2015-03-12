@@ -40,13 +40,15 @@ import analytics.constants.AnalyticsConstants;
  */
 public class XMLHandler extends DefaultHandler {
 
-	String tmpValue;
+	// String tmpValue;
+
+	StringBuffer tmpValue = new StringBuffer();
 	Repository repositoryHandler;
 	HashMap<String, Integer> dimensionalityMap;
 	Vector<String> elements;
 	AnalyticsConstants constants;
 	String branche;
-	String elPath;
+	// String elPath;
 	Stack<String> xPaths;
 	String[] elements2Analyze;
 	String[] elementsVocs;
@@ -69,7 +71,7 @@ public class XMLHandler extends DefaultHandler {
 		elements = new Vector<>();
 		constants = new AnalyticsConstants();
 		branche = "";
-		elPath = "";
+		// elPath = "";
 		xPaths = new Stack<>();
 		buffer = new StringBuffer();
 	}
@@ -99,11 +101,12 @@ public class XMLHandler extends DefaultHandler {
 			buffer.delete(0, buffer.capacity());
 		}
 
+		tmpValue.setLength(0);
+
 		branche += qName.toLowerCase();
 		xPaths.push(branche);
 
 		String elmt = "";
-		
 
 		for (int i = 0; i < attributes.getLength(); i++) {
 
@@ -116,20 +119,18 @@ public class XMLHandler extends DefaultHandler {
 				if (all == false) {
 					if (contains(elements2Analyze, branche)) {
 
-						
-						if(value.equals(""))
-							value="empty";
-						
-						elmt=name+"#"+branche+"#"+value;
+						if (value.equals(""))
+							value = "empty";
+
+						elmt = name + "#" + branche + "#" + value;
 
 						repositoryHandler.addAttributes(elmt);
 					}
 				} else {
 
-					
-					if(value.equals(""))
-						value="empty";
-					elmt=name+"#"+branche+"#"+value;
+					if (value.equals(""))
+						value = "empty";
+					elmt = name + "#" + branche + "#" + value;
 					repositoryHandler.addAttributes(elmt);
 				}
 			} else if (name.contains("xmlns")) {
@@ -157,7 +158,7 @@ public class XMLHandler extends DefaultHandler {
 					- 1);
 			elmt = xPaths.elementAt(xPaths.size() - 1);
 			xPaths.removeElementAt(xPaths.size() - 1);
-			
+
 		}
 
 		boolean controlFlag = false;
@@ -170,9 +171,8 @@ public class XMLHandler extends DefaultHandler {
 			if (contains(elementsVocs, elmt) && controlFlag == false) {
 				try {
 
-
 					if (!tmpValue.toString().equals(""))
-						repositoryHandler.addVoc(elmt, tmpValue);
+						repositoryHandler.addVoc(elmt, tmpValue.toString());
 					else
 						repositoryHandler.addVoc(elmt, "empty");
 
@@ -188,6 +188,8 @@ public class XMLHandler extends DefaultHandler {
 			doCalculations(elmt);
 
 		}
+
+		tmpValue.setLength(0);
 
 	}
 
@@ -211,14 +213,12 @@ public class XMLHandler extends DefaultHandler {
 		// entropy calculation
 		try {
 
-
 			if (!tmpValue.toString().equals(""))
-				repositoryHandler.addVoc(elmt, tmpValue);
+				repositoryHandler.addVoc(elmt, tmpValue.toString());
 			else
 				repositoryHandler.addVoc(elmt, "empty");
 		} catch (NullPointerException e) {
 			// TODO: handle exception
-
 
 			repositoryHandler.addVoc(elmt, "empty");
 
@@ -248,7 +248,8 @@ public class XMLHandler extends DefaultHandler {
 	public void characters(char ch[], int start, int length)
 			throws SAXException {
 
-		tmpValue = new String(ch, start, length);
+		// tmpValue = new String(ch, start, length);
+		tmpValue.append(ch, start, length);
 
 	}
 
