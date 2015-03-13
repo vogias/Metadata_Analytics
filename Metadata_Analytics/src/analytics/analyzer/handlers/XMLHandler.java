@@ -51,8 +51,9 @@ public class XMLHandler extends DefaultHandler {
 	Stack<String> xPaths;
 	String[] elements2Analyze;
 	String[] elementsVocs;
-	boolean all = false;
+	boolean all, allattributes = false;
 	StringBuffer buffer;
+	String[] attributes2analyze;
 
 	public XMLHandler(Repository repositoryHandler, String[] elements2Analyze,
 			String[] elementVocs, String[] attributes2analyze) {
@@ -73,6 +74,13 @@ public class XMLHandler extends DefaultHandler {
 		// elPath = "";
 		xPaths = new Stack<>();
 		buffer = new StringBuffer();
+
+		this.attributes2analyze = attributes2analyze;
+		if (contains(attributes2analyze, "*"))
+			allattributes = true;
+		else
+			allattributes = false;
+
 	}
 
 	private boolean contains(String[] els, String input) {
@@ -109,31 +117,66 @@ public class XMLHandler extends DefaultHandler {
 
 		for (int i = 0; i < attributes.getLength(); i++) {
 
-			String name = attributes.getLocalName(i);
+			if (allattributes) {
 
-			String value = attributes.getValue(i);
+				String name = attributes.getLocalName(i);
 
-			if (!name.contains("xsi:schemaLocation") && !name.contains("xmlns")) {
+				String value = attributes.getValue(i);
 
-				if (all == false) {
-					if (contains(elements2Analyze, branche)) {
+				if (!name.contains("xsi:schemaLocation")
+						&& !name.contains("xmlns")) {
+
+					if (all == false) {
+						if (contains(elements2Analyze, branche)) {
+
+							if (value.equals(""))
+								value = "empty";
+
+							elmt = name + "#" + branche + "#" + value;
+
+							repositoryHandler.addAttributes(elmt);
+						}
+					} else {
 
 						if (value.equals(""))
 							value = "empty";
-
 						elmt = name + "#" + branche + "#" + value;
-
 						repositoryHandler.addAttributes(elmt);
 					}
-				} else {
-
-					if (value.equals(""))
-						value = "empty";
-					elmt = name + "#" + branche + "#" + value;
-					repositoryHandler.addAttributes(elmt);
+				} else if (name.contains("xmlns")) {
+					repositoryHandler.setSchema(value);
 				}
-			} else if (name.contains("xmlns")) {
-				repositoryHandler.setSchema(value);
+			} else {
+				String name = attributes.getLocalName(i);
+
+				if (contains(this.attributes2analyze, name)) {
+
+					String value = attributes.getValue(i);
+
+					if (!name.contains("xsi:schemaLocation")
+							&& !name.contains("xmlns")) {
+
+						if (all == false) {
+							if (contains(elements2Analyze, branche)) {
+
+								if (value.equals(""))
+									value = "empty";
+
+								elmt = name + "#" + branche + "#" + value;
+
+								repositoryHandler.addAttributes(elmt);
+							}
+						} else {
+
+							if (value.equals(""))
+								value = "empty";
+							elmt = name + "#" + branche + "#" + value;
+							repositoryHandler.addAttributes(elmt);
+						}
+					} else if (name.contains("xmlns")) {
+						repositoryHandler.setSchema(value);
+					}
+				}
 			}
 		}
 
