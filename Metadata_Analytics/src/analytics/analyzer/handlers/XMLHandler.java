@@ -25,7 +25,6 @@ import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -147,6 +146,9 @@ public class XMLHandler extends DefaultHandler {
 
 		String elmt = "";
 		qName = qName.toLowerCase();
+		if (tmpValue.toString().trim().equals(""))
+			return;
+
 		if (qName.contains(":")) {
 			buffer.append(qName.substring(0, qName.indexOf(":") + 1));
 			qName = qName.replace(buffer.toString(), "");
@@ -211,7 +213,7 @@ public class XMLHandler extends DefaultHandler {
 		}
 
 		// entropy calculation
-		try {
+		/*try {
 
 			if (!tmpValue.toString().equals(""))
 				repositoryHandler.addVoc(elmt, tmpValue.toString());
@@ -222,7 +224,7 @@ public class XMLHandler extends DefaultHandler {
 
 			repositoryHandler.addVoc(elmt, "empty");
 
-		}
+		}*/
 
 	}
 
@@ -249,6 +251,7 @@ public class XMLHandler extends DefaultHandler {
 			throws SAXException {
 
 		// tmpValue = new String(ch, start, length);
+
 		tmpValue.append(ch, start, length);
 
 	}

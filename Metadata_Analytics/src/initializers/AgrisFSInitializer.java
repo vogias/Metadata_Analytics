@@ -219,7 +219,7 @@ public class AgrisFSInitializer extends InitializeProcess {
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
 					repo.getElementImportance();
-					repo.computeElementEntropy();
+					//repo.computeElementEntropy();
 
 					this.logElementAnalysis(loggerEl, repo.getRepoName(),
 							resultsPath);
