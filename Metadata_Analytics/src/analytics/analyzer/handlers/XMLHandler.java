@@ -213,7 +213,7 @@ public class XMLHandler extends DefaultHandler {
 		}
 
 		// entropy calculation
-		/*try {
+		try {
 
 			if (!tmpValue.toString().equals(""))
 				repositoryHandler.addVoc(elmt, tmpValue.toString());
@@ -224,7 +224,7 @@ public class XMLHandler extends DefaultHandler {
 
 			repositoryHandler.addVoc(elmt, "empty");
 
-		}*/
+		}
 
 	}
 

@@ -413,6 +413,7 @@ public class Repository {
 			HashMap<String, Integer> vocs = this.getVocabularies().get(
 					element.toString());
 
+			
 			RelativeEntropy entropy = new RelativeEntropy();
 
 			getEntropyData().put(element.toString(), entropy.compute(vocs));

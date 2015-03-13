@@ -39,6 +39,11 @@ public class AnalyticsConstants {
 	
 	public static String filteringEnabled="analytics.filtering";
 	public static String xpathExpression="analytics.filtering.xpath.expression";
+	
+	public static String analyzeAttributes="analytics.attributes.calculate";
+	public static String attributes2analyze="analytics.attributes";
+	
+	public static String computeEntropy="analytics.entropy";
 
 
 }
