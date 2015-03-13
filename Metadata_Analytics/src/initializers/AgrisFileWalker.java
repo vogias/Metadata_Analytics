@@ -39,11 +39,13 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 	String[] elmtVoc;
 	String[] attributes2analyze;
 	SAXParser parser;
+	boolean computeEntropy;
 
 	public AgrisFileWalker(String fileType, boolean filterFile,
 			String filterExpression, Filtering filterObject, Repository repo,
 			String[] elements2Analyze, String[] elementVocs,
-			String[] attributes2analyze, SAXParser parser) {
+			String[] attributes2analyze, boolean computeEntropy,
+			SAXParser parser) {
 		// TODO Auto-generated constructor stub
 		this.fileType = fileType;
 		this.repo = repo;
@@ -54,6 +56,7 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 		this.elmtVoc = elementVocs;
 		this.parser = parser;
 		this.attributes2analyze = attributes2analyze;
+		this.computeEntropy = computeEntropy;
 
 	}
 
@@ -128,7 +131,8 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 									try {
 										repo.parseXML(this.elements2Analyze,
 												this.elmtVoc,
-												this.attributes2analyze, parser);
+												this.attributes2analyze,
+												computeEntropy, parser);
 									} catch (InstantiationException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
@@ -152,7 +156,8 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 								try {
 									repo.parseXML(this.elements2Analyze,
 											this.elmtVoc,
-											this.attributes2analyze, parser);
+											this.attributes2analyze,
+											computeEntropy, parser);
 									repo.raiseNumberOfFiles();
 									repo.raiseFileSize(f.length());
 								} catch (InstantiationException e) {

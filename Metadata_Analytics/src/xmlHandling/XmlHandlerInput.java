@@ -68,6 +68,6 @@ public abstract class XmlHandlerInput {
 
 	public abstract void getInputData(Repository repo,
 			String[] elements2Analyze, String[] elementsVocs,
-			String[] attributes2analyze, SAXParser parser) throws SAXException,
+			String[] attributes2analyze,boolean computeEntropy, SAXParser parser) throws SAXException,
 			ParserConfigurationException;
 }

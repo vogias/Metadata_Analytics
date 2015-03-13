@@ -205,12 +205,13 @@ public class Repository {
 	}
 
 	public void parseXML(String[] elements2Analyze, String[] elementsVocs,
-			String[] attributes2analyze, SAXParser parser)
-			throws InstantiationException, IllegalAccessException,
-			ClassNotFoundException, SAXException, ParserConfigurationException {
+			String[] attributes2analyze, boolean computeEntropy,
+			SAXParser parser) throws InstantiationException,
+			IllegalAccessException, ClassNotFoundException, SAXException,
+			ParserConfigurationException {
 
 		handlerInput.getInputData(this, elements2Analyze, elementsVocs,
-				attributes2analyze, parser);
+				attributes2analyze, computeEntropy, parser);
 
 	}
 
@@ -300,7 +301,7 @@ public class Repository {
 		if (voc.equals(""))
 			voc = "empty";
 
-		HashMap<String,HashMap<String,Integer>> vocs= getVocabularies();
+		HashMap<String, HashMap<String, Integer>> vocs = getVocabularies();
 		if (!vocs.containsKey(element)) {
 
 			data.put(voc, 1);
@@ -336,8 +337,8 @@ public class Repository {
 		if (voc.equals(""))
 			voc = "empty";
 
-		HashMap<String,HashMap<String,Integer>> entropyData = getEntropyVocabularies();
-		
+		HashMap<String, HashMap<String, Integer>> entropyData = getEntropyVocabularies();
+
 		if (!entropyData.containsKey(element)) {
 
 			data.put(voc, 1);
@@ -346,7 +347,7 @@ public class Repository {
 			// data.clear();
 		} else {
 
-			data =entropyData.get(element);
+			data = entropyData.get(element);
 
 			if (!data.containsKey(voc)) {
 

@@ -135,6 +135,14 @@ public class FSInitializer extends InitializeProcess {
 
 				String filterXMLs = props
 						.getProperty(AnalyticsConstants.filteringEnabled);
+				String compEnt = props
+						.getProperty(AnalyticsConstants.computeEntropy);
+				boolean computeEntropy = false;
+
+				if (compEnt.equalsIgnoreCase("true")) {
+					computeEntropy = true;
+				} else
+					computeEntropy = false;
 
 				if (filterXMLs.equalsIgnoreCase("true")) {
 					Filtering filtering = new Filtering();
@@ -144,11 +152,11 @@ public class FSInitializer extends InitializeProcess {
 
 					fileWalker = new FileWalker("xml", true, expression,
 							filtering, repo, elements2Analyze, elementVocs,
-							attributes2analyze, parser);
+							attributes2analyze, computeEntropy, parser);
 				} else
 					fileWalker = new FileWalker("xml", false, null, null, repo,
 							elements2Analyze, elementVocs, attributes2analyze,
-							parser);
+							computeEntropy, parser);
 
 				if (fedFlag) {
 
@@ -184,8 +192,10 @@ public class FSInitializer extends InitializeProcess {
 					federation.appendDimensionalityElements(repo
 							.getElementDimensions());
 
-					federation.appendEntropyElements(
-							repo.computeElementEntropy(), dataProviders.size());
+					if (computeEntropy)
+						federation.appendEntropyElements(
+								repo.computeElementEntropy(),
+								dataProviders.size());
 
 					this.logElementAnalysis(loggerEl, repo.getRepoName(),
 							resultsPath);
@@ -227,7 +237,9 @@ public class FSInitializer extends InitializeProcess {
 					repo.getElementCompleteness();
 					repo.getElementDimensions();
 					repo.getElementImportance();
-					repo.computeElementEntropy();
+
+					if (computeEntropy)
+						repo.computeElementEntropy();
 
 					this.logElementAnalysis(loggerEl, repo.getRepoName(),
 							resultsPath);

@@ -54,9 +54,11 @@ public class XMLHandler extends DefaultHandler {
 	boolean all, allattributes = false;
 	StringBuffer buffer;
 	String[] attributes2analyze;
+	boolean computeEntropy = false;
 
 	public XMLHandler(Repository repositoryHandler, String[] elements2Analyze,
-			String[] elementVocs, String[] attributes2analyze) {
+			String[] elementVocs, String[] attributes2analyze,
+			boolean computeEntropy) {
 		// TODO Auto-generated constructor stub
 		this.repositoryHandler = repositoryHandler;
 		this.elements2Analyze = elements2Analyze;
@@ -74,6 +76,7 @@ public class XMLHandler extends DefaultHandler {
 		// elPath = "";
 		xPaths = new Stack<>();
 		buffer = new StringBuffer();
+		this.computeEntropy = computeEntropy;
 
 		this.attributes2analyze = attributes2analyze;
 		if (contains(attributes2analyze, "*"))
@@ -212,20 +215,20 @@ public class XMLHandler extends DefaultHandler {
 				// controlFlag = true;
 			}
 			// if (contains(elementsVocs, elmt) && controlFlag == false) {
-			if (contains(elementsVocs, elmt)) {
-				try {
-
-					if (!tmpValue.toString().equals(""))
-						repositoryHandler.addVoc(elmt, tmpValue.toString());
-					else
-						repositoryHandler.addVoc(elmt, "empty");
-
-				} catch (NullPointerException e) {
-					// TODO: handle exception
-
-					repositoryHandler.addVoc(elmt, "empty");
-				}
-			}
+			//
+			// try {
+			//
+			// if (!tmpValue.toString().equals(""))
+			// repositoryHandler.addVoc(elmt, tmpValue.toString());
+			// else
+			// repositoryHandler.addVoc(elmt, "empty");
+			//
+			// } catch (NullPointerException e) {
+			// // TODO: handle exception
+			//
+			// repositoryHandler.addVoc(elmt, "empty");
+			// }
+			// }
 
 		} else {
 
@@ -254,18 +257,37 @@ public class XMLHandler extends DefaultHandler {
 			repositoryHandler.addCompletenessElement(elmt);
 		}
 
+		// element vocs
+		if (contains(elementsVocs, elmt)) {
+
+			try {
+
+				if (!tmpValue.toString().equals(""))
+					repositoryHandler.addVoc(elmt, tmpValue.toString());
+				else
+					repositoryHandler.addVoc(elmt, "empty");
+
+			} catch (NullPointerException e) {
+				// TODO: handle exception
+
+				repositoryHandler.addVoc(elmt, "empty");
+			}
+		}
+
 		// entropy calculation
-		try {
+		if (computeEntropy) {
+			try {
 
-			if (!tmpValue.toString().equals(""))
-				repositoryHandler.addEntropyVoc(elmt, tmpValue.toString());
-			else
+				if (!tmpValue.toString().equals(""))
+					repositoryHandler.addEntropyVoc(elmt, tmpValue.toString());
+				else
+					repositoryHandler.addEntropyVoc(elmt, "empty");
+			} catch (NullPointerException e) {
+				// TODO: handle exception
+
 				repositoryHandler.addEntropyVoc(elmt, "empty");
-		} catch (NullPointerException e) {
-			// TODO: handle exception
 
-			repositoryHandler.addEntropyVoc(elmt, "empty");
-
+			}
 		}
 
 	}
