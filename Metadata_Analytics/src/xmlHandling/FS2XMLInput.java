@@ -35,14 +35,14 @@ public class FS2XMLInput extends XmlHandlerInput {
 
 	@Override
 	public void getInputData(Repository repo, String[] elements2Analyze,
-			String[] elementsVocs, SAXParser parser)
+			String[] elementsVocs, String[] attributes2analyze, SAXParser parser)
 			throws ParserConfigurationException {
 		// TODO Auto-generated method stub
 
 		File xml = repo.getCurrentXmlFile();
 
 		XMLHandler xmlHandler = new XMLHandler(repo, elements2Analyze,
-				elementsVocs);
+				elementsVocs, attributes2analyze);
 
 		InputStream inS = null;
 		try {

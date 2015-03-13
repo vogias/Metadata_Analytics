@@ -55,7 +55,7 @@ public class XMLHandler extends DefaultHandler {
 	StringBuffer buffer;
 
 	public XMLHandler(Repository repositoryHandler, String[] elements2Analyze,
-			String[] elementVocs) {
+			String[] elementVocs, String[] attributes2analyze) {
 		// TODO Auto-generated constructor stub
 		this.repositoryHandler = repositoryHandler;
 		this.elements2Analyze = elements2Analyze;
@@ -146,8 +146,6 @@ public class XMLHandler extends DefaultHandler {
 
 		String elmt = "";
 		qName = qName.toLowerCase();
-//		if (tmpValue.toString().trim().equals(""))
-//			return;
 
 		if (qName.contains(":")) {
 			buffer.append(qName.substring(0, qName.indexOf(":") + 1));
@@ -192,8 +190,6 @@ public class XMLHandler extends DefaultHandler {
 		}
 
 		tmpValue.setLength(0);
-		
-		System.out.println(elmt);
 
 	}
 
@@ -259,8 +255,6 @@ public class XMLHandler extends DefaultHandler {
 	public void parseDocument(InputStream is, SAXParser parser)
 			throws SAXException, IOException, ParserConfigurationException {
 		// TODO Auto-generated method stub
-
-		
 
 		Reader reader = new InputStreamReader(is, "UTF-8");
 

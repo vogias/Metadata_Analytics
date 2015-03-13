@@ -36,9 +36,9 @@ public abstract class InitializeProcess {
 
 	public abstract void doAnalysis(Federation federation,
 			List<?> dataProviders, boolean fedFlag, String[] elements2Analyze,
-			String elmtVoc) throws InstantiationException,
-			IllegalAccessException, ClassNotFoundException, SAXException,
-			ParserConfigurationException;
+			String elmtVoc, String[] attributes2analyze)
+			throws InstantiationException, IllegalAccessException,
+			ClassNotFoundException, SAXException, ParserConfigurationException;
 
 	public abstract void logElementAnalysis(Logger logger, String providerName,
 			String resultsPath);

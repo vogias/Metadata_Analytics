@@ -75,9 +75,10 @@ public class FSInitializer extends InitializeProcess {
 
 	@Override
 	public void doAnalysis(Federation federation, List<?> dataProviders,
-			boolean fedFlag, String[] elements2Analyze, String elmtVoc)
-			throws InstantiationException, IllegalAccessException,
-			ClassNotFoundException, SAXException, ParserConfigurationException {
+			boolean fedFlag, String[] elements2Analyze, String elmtVoc,
+			String attributes2analyze[]) throws InstantiationException,
+			IllegalAccessException, ClassNotFoundException, SAXException,
+			ParserConfigurationException {
 		// TODO Auto-generated method stub
 
 		SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -143,10 +144,11 @@ public class FSInitializer extends InitializeProcess {
 
 					fileWalker = new FileWalker("xml", true, expression,
 							filtering, repo, elements2Analyze, elementVocs,
-							parser);
+							attributes2analyze, parser);
 				} else
 					fileWalker = new FileWalker("xml", false, null, null, repo,
-							elements2Analyze, elementVocs, parser);
+							elements2Analyze, elementVocs, attributes2analyze,
+							parser);
 
 				if (fedFlag) {
 

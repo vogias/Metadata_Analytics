@@ -31,11 +31,13 @@ public class FileWalker extends SimpleFileVisitor<Path> {
 	Filtering filterObject;
 	String[] elements2Analyze;
 	String[] elmtVoc;
+	String[] attributes2analyze;
 	SAXParser parser;
 
 	public FileWalker(String fileType, boolean filterFile,
 			String filterExpression, Filtering filterObject, Repository repo,
-			String[] elements2Analyze, String[] elementVocs, SAXParser parser) {
+			String[] elements2Analyze, String[] elementVocs,
+			String[] attributes2analyze, SAXParser parser) {
 		// TODO Auto-generated constructor stub
 		this.fileType = fileType;
 		this.repo = repo;
@@ -45,6 +47,7 @@ public class FileWalker extends SimpleFileVisitor<Path> {
 		this.elements2Analyze = elements2Analyze;
 		this.elmtVoc = elementVocs;
 		this.parser = parser;
+		this.attributes2analyze = attributes2analyze;
 	}
 
 	@Override
@@ -83,7 +86,7 @@ public class FileWalker extends SimpleFileVisitor<Path> {
 					repo.raiseFileSize(f.length());
 					try {
 						repo.parseXML(this.elements2Analyze, this.elmtVoc,
-								parser);
+								this.attributes2analyze, parser);
 					} catch (InstantiationException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -105,7 +108,8 @@ public class FileWalker extends SimpleFileVisitor<Path> {
 			} else {
 				repo.setCurrentXmlFile(f);
 				try {
-					repo.parseXML(this.elements2Analyze, this.elmtVoc, parser);
+					repo.parseXML(this.elements2Analyze, this.elmtVoc,
+							this.attributes2analyze, parser);
 					repo.raiseNumberOfFiles();
 					repo.raiseFileSize(f.length());
 				} catch (InstantiationException e) {

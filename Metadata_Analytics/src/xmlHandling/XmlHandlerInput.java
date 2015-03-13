@@ -28,7 +28,6 @@ public abstract class XmlHandlerInput {
 
 	int count;
 	long startExp;
-	
 
 	public XmlHandlerInput() {
 		// TODO Auto-generated constructor stub
@@ -37,7 +36,6 @@ public abstract class XmlHandlerInput {
 		startExp = System.currentTimeMillis();
 	}
 
-	
 	/**
 	 * @return the startExp
 	 */
@@ -45,14 +43,13 @@ public abstract class XmlHandlerInput {
 		return startExp;
 	}
 
-
 	/**
-	 * @param startExp the startExp to set
+	 * @param startExp
+	 *            the startExp to set
 	 */
 	public void setStartExp(long startExp) {
 		this.startExp = startExp;
 	}
-
 
 	/**
 	 * @return the count
@@ -70,6 +67,7 @@ public abstract class XmlHandlerInput {
 	}
 
 	public abstract void getInputData(Repository repo,
-			String[] elements2Analyze, String[] elementsVocs,SAXParser parser)
-			throws SAXException, ParserConfigurationException;
+			String[] elements2Analyze, String[] elementsVocs,
+			String[] attributes2analyze, SAXParser parser) throws SAXException,
+			ParserConfigurationException;
 }

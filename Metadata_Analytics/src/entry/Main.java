@@ -132,10 +132,13 @@ public class Main {
 			String elementsVocs = props
 					.getProperty(AnalyticsConstants.elementVocaulary);
 
+			String[] attributes2analyze = props.getProperty(
+					AnalyticsConstants.attributes2analyze).split(",");
+
 			System.out.println("Analyzing...");
 
 			initProcess.doAnalysis(federation, dp, fedFlag, elements2Analyze,
-					elementsVocs);
+					elementsVocs, attributes2analyze);
 
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();

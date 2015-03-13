@@ -195,11 +195,12 @@ public class Repository {
 	}
 
 	public void parseXML(String[] elements2Analyze, String[] elementsVocs,
-			SAXParser parser) throws InstantiationException,
-			IllegalAccessException, ClassNotFoundException, SAXException,
-			ParserConfigurationException {
+			String[] attributes2analyze, SAXParser parser)
+			throws InstantiationException, IllegalAccessException,
+			ClassNotFoundException, SAXException, ParserConfigurationException {
 
-		handlerInput.getInputData(this, elements2Analyze, elementsVocs, parser);
+		handlerInput.getInputData(this, elements2Analyze, elementsVocs,
+				attributes2analyze, parser);
 
 	}
 
@@ -413,7 +414,6 @@ public class Repository {
 			HashMap<String, Integer> vocs = this.getVocabularies().get(
 					element.toString());
 
-			
 			RelativeEntropy entropy = new RelativeEntropy();
 
 			getEntropyData().put(element.toString(), entropy.compute(vocs));

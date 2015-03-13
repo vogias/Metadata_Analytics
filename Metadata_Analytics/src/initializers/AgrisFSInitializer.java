@@ -60,8 +60,6 @@ public class AgrisFSInitializer extends InitializeProcess {
 
 		if (dataProviders.isEmpty()) {
 
-			
-
 			return false;
 		} else
 			return true;
@@ -69,15 +67,15 @@ public class AgrisFSInitializer extends InitializeProcess {
 
 	@Override
 	public void doAnalysis(Federation federation, List<?> dataProviders,
-			boolean fedFlag, String[] elements2Analyze, String elmtVoc)
-			throws InstantiationException, IllegalAccessException,
-			ClassNotFoundException, SAXException, ParserConfigurationException {
+			boolean fedFlag, String[] elements2Analyze, String elmtVoc,
+			String[] attributes2analyze) throws InstantiationException,
+			IllegalAccessException, ClassNotFoundException, SAXException,
+			ParserConfigurationException {
 		// TODO Auto-generated method stub
 
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		SAXParser parser = spf.newSAXParser();
-		
-		
+
 		HashMap<String, Double> xmlElements = new HashMap<>();
 		Vector<String> xmlElementsDistinct = new Vector<>();
 		HashMap<String, Integer> attributes = new HashMap<>();
@@ -137,10 +135,12 @@ public class AgrisFSInitializer extends InitializeProcess {
 					System.out.println("Filtering is enabled.");
 
 					fileWalker = new AgrisFileWalker("xml", true, expression,
-							filtering, repo, elements2Analyze, elementVocs,parser);
+							filtering, repo, elements2Analyze, elementVocs,
+							attributes2analyze, parser);
 				} else
-					fileWalker = new AgrisFileWalker("xml", false, null, null, repo,
-							elements2Analyze, elementVocs,parser);
+					fileWalker = new AgrisFileWalker("xml", false, null, null,
+							repo, elements2Analyze, elementVocs,
+							attributes2analyze, parser);
 
 				if (fedFlag) {
 
