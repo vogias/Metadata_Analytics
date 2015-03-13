@@ -146,8 +146,8 @@ public class XMLHandler extends DefaultHandler {
 
 		String elmt = "";
 		qName = qName.toLowerCase();
-		if (tmpValue.toString().trim().equals(""))
-			return;
+//		if (tmpValue.toString().trim().equals(""))
+//			return;
 
 		if (qName.contains(":")) {
 			buffer.append(qName.substring(0, qName.indexOf(":") + 1));
