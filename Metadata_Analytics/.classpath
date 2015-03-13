@@ -7,8 +7,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Apache Math"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Dom4j"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Jaxen"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/OAI-PMH Client"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/OAI_PMH_CLIENT"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Logback"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SLF4J"/>
 	<classpathentry kind="output" path="bin"/>
