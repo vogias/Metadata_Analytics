@@ -192,6 +192,8 @@ public class XMLHandler extends DefaultHandler {
 		}
 
 		tmpValue.setLength(0);
+		
+		System.out.println(elmt);
 
 	}
 
