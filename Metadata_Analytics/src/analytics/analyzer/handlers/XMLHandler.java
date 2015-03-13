@@ -252,8 +252,6 @@ public class XMLHandler extends DefaultHandler {
 	public void characters(char ch[], int start, int length)
 			throws SAXException {
 
-		// tmpValue = new String(ch, start, length);
-
 		tmpValue.append(ch, start, length);
 
 	}
@@ -262,14 +260,12 @@ public class XMLHandler extends DefaultHandler {
 			throws SAXException, IOException, ParserConfigurationException {
 		// TODO Auto-generated method stub
 
-		// SAXParserFactory spf = SAXParserFactory.newInstance();
+		
 
 		Reader reader = new InputStreamReader(is, "UTF-8");
 
 		InputSource inputStream = new InputSource(reader);
 		inputStream.setEncoding("UTF-8");
-
-		// SAXParser parser = spf.newSAXParser();
 
 		parser.parse(inputStream, this);
 	}
