@@ -55,6 +55,7 @@ public class Repository {
 	HashMap<String, Double> entropyData;
 	Vector<String> elementEntropy;
 	HashMap<String, HashMap<String, Integer>> vocabularies;
+	HashMap<String, HashMap<String, Integer>> entropyVocabularies;
 	float avgRepoInformativeness;
 
 	String repoName;
@@ -107,7 +108,9 @@ public class Repository {
 
 		this.props = props;
 
-		vocabularies = new HashMap<>();
+		// vocabularies = new HashMap<>();
+		vocabularies = new HashMap<String, HashMap<String, Integer>>();
+		entropyVocabularies = new HashMap<String, HashMap<String, Integer>>();
 		handlerInput = (XmlHandlerInput) this.createXMLHandlerInputClass();
 		this.storage = this.createStorageClass();
 
@@ -170,6 +173,13 @@ public class Repository {
 	 */
 	public HashMap<String, HashMap<String, Integer>> getVocabularies() {
 		return vocabularies;
+	}
+
+	/**
+	 * @return the vocabularies
+	 */
+	public HashMap<String, HashMap<String, Integer>> getEntropyVocabularies() {
+		return entropyVocabularies;
 	}
 
 	/**
@@ -290,15 +300,16 @@ public class Repository {
 		if (voc.equals(""))
 			voc = "empty";
 
-		if (!getVocabularies().containsKey(element)) {
+		HashMap<String,HashMap<String,Integer>> vocs= getVocabularies();
+		if (!vocs.containsKey(element)) {
 
 			data.put(voc, 1);
 
-			getVocabularies().put(element, data);
+			vocs.put(element, data);
 			// data.clear();
 		} else {
 
-			data = getVocabularies().get(element);
+			data = vocs.get(element);
 
 			if (!data.containsKey(voc)) {
 
@@ -310,7 +321,44 @@ public class Repository {
 
 			}
 
-			getVocabularies().put(element, data);
+			vocs.put(element, data);
+
+		}
+
+	}
+
+	public void addEntropyVoc(String element, String voc) {
+
+		HashMap<String, Integer> data = new HashMap<>();
+
+		voc = voc.trim();
+
+		if (voc.equals(""))
+			voc = "empty";
+
+		HashMap<String,HashMap<String,Integer>> entropyData = getEntropyVocabularies();
+		
+		if (!entropyData.containsKey(element)) {
+
+			data.put(voc, 1);
+
+			entropyData.put(element, data);
+			// data.clear();
+		} else {
+
+			data =entropyData.get(element);
+
+			if (!data.containsKey(voc)) {
+
+				data.put(voc, 1);
+
+			} else {
+
+				data.put(voc, data.get(voc) + 1);
+
+			}
+
+			entropyData.put(element, data);
 
 		}
 
@@ -411,7 +459,7 @@ public class Repository {
 
 			element.append(elementsDistinct.elementAt(i));
 
-			HashMap<String, Integer> vocs = this.getVocabularies().get(
+			HashMap<String, Integer> vocs = this.getEntropyVocabularies().get(
 					element.toString());
 
 			RelativeEntropy entropy = new RelativeEntropy();

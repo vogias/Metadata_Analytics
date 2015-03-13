@@ -204,14 +204,15 @@ public class XMLHandler extends DefaultHandler {
 
 		}
 
-		boolean controlFlag = false;
+		// boolean controlFlag = false;
 
 		if (all == false) {
 			if (contains(elements2Analyze, elmt)) {
 				doCalculations(elmt);
-				controlFlag = true;
+				// controlFlag = true;
 			}
-			if (contains(elementsVocs, elmt) && controlFlag == false) {
+			// if (contains(elementsVocs, elmt) && controlFlag == false) {
+			if (contains(elementsVocs, elmt)) {
 				try {
 
 					if (!tmpValue.toString().equals(""))
@@ -257,13 +258,13 @@ public class XMLHandler extends DefaultHandler {
 		try {
 
 			if (!tmpValue.toString().equals(""))
-				repositoryHandler.addVoc(elmt, tmpValue.toString());
+				repositoryHandler.addEntropyVoc(elmt, tmpValue.toString());
 			else
-				repositoryHandler.addVoc(elmt, "empty");
+				repositoryHandler.addEntropyVoc(elmt, "empty");
 		} catch (NullPointerException e) {
 			// TODO: handle exception
 
-			repositoryHandler.addVoc(elmt, "empty");
+			repositoryHandler.addEntropyVoc(elmt, "empty");
 
 		}
 
