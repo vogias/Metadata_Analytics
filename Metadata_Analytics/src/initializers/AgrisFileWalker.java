@@ -111,6 +111,7 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 							writer.append(sCurrentLine);
 							writer.close();
 
+
 							if (filterFile) {
 								boolean keep = true;
 								if (!this.filterObject.filterXML(f,
@@ -153,6 +154,7 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 								}
 							} else {
 								repo.setCurrentXmlFile(f);
+
 								try {
 									repo.parseXML(this.elements2Analyze,
 											this.elmtVoc,
@@ -179,7 +181,7 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 							}
 
 							resourceFound = false;
-							f.delete();
+							//f.delete();
 						}
 
 					} else {
