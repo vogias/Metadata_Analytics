@@ -90,7 +90,7 @@ public class AgrisFileWalker extends SimpleFileVisitor<Path> {
 				BufferedWriter writer = null;
 				while ((sCurrentLine = reader.readLine()) != null) {
 
-					if (sCurrentLine.contains("<ags:resource ")) {
+					if (sCurrentLine.contains("<ags:resource")) {
 
 						resourceFound = true;
 
