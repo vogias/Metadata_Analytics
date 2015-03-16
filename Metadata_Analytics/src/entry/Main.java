@@ -48,12 +48,6 @@ public class Main {
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException, ClassNotFoundException, InstantiationException,
 			IllegalAccessException, SAXException, ParserConfigurationException {
-		//
-		// Scanner reader = new Scanner(System.in);
-		//
-		// int choice = reader.nextInt();
-		//
-		// if (choice == 1) {
 
 		// TODO Auto-generated method stub
 		Properties props = new Properties();
